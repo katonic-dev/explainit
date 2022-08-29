@@ -21,7 +21,7 @@ under the License.
 
 <p align="center">
     <a href="https://katonic.ai/">
-      <img src="./docs/assets/explainit-logo.png" width="250" hight="180">
+      <img src="https://raw.githubusercontent.com/katonic-dev/explainit/master/docs/assets/explainit-logo.png" width="250" hight="180">
     </a>
 </p>
 <br />
@@ -74,7 +74,7 @@ cancer_dataframe['target'] = cancer_data.target
 ref_data, cur_data = train_test_split(cancer_dataframe, train_size=0.80, shuffle=True)
 ```
 
-Once you prepared the both training and testing datasets, all you need to do is pass those datasets into the method that we imported along with the target column name and target column type.
+Once you prepared the both training and testing datasets, all you need to do is pass those datasets into the method that we imported along with the target column name and target column type (type should be `cat` for categorical column and `num` for numerical columns).
 
 ```python
 build(
