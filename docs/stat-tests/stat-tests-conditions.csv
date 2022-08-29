@@ -1,0 +1,8 @@
+﻿Tests,Data Length,Feature Type,Unique Values,Value returned,Threshold,Drift Detected
+Kolmogorov–Smirnov (K-S) test,<=1000,num,>5,p-value,0.05,p-value <= threshold
+chi_stat_test,<=1000,cat,">2, <=5",p-value,0.05,p-value <= threshold
+z_stat_test,<=1000,cat,<=2,p-value,0.05,p-value <= threshold
+Wasserstein distance (normed),> 1000,num,>5,distance,0.1,distance >= threshold
+Jensen-Shannon distance,> 1000,"num, cat",<=5,distance,0.1,distance >= threshold
+Population Stability Index (PSI),,"num, cat",,psi_value,0.1,psi_value >= threshold
+Kullback-Leibler divergence,,"num, cat",,divergence,0.1,divergence >= threshold
