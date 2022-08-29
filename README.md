@@ -21,7 +21,7 @@ under the License.
 
 <p align="center">
     <a href="https://katonic.ai/">
-      <img src="./docs/assets/explainit-logo.png" width="250" hight="180">
+      <img src="https://raw.githubusercontent.com/katonic-dev/explainit/master/docs/assets/explainit-logo.png" width="250" hight="180">
     </a>
 </p>
 <br />
