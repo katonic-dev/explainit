@@ -48,7 +48,7 @@ log = logging.getLogger("werkzeug")
 log.setLevel(logging.ERROR)
 
 
-def build(
+def Explainit(
     reference_data: pd.DataFrame,
     current_data: pd.DataFrame,
     target_column_name: str,
