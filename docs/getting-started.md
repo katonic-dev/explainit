@@ -25,7 +25,7 @@ Once you installed the Library, you'll need to import the functionalities inside
 import pandas as pd
 from sklearn import datasets
 
-from explainit.app import build
+from explainit.app import Explainit
 ```
 Once you imported the required libraries, you need to preprocess the data in a format so that it'll get suited with the library.
 
@@ -48,7 +48,7 @@ You can add your custom host id and port to the function in order to run the app
 # 4.Generate Dashboards.
 In order to Initialize the dash application, you need to pass both the dataframes along with target_column_name and target_column_type.
 ```python
-build(ref_data, cur_data, "target_column_name", "target_column_type", host[optional], port[optional])
+Explainit(ref_data, cur_data, "target_column_name", "target_column_type", host[optional], port[optional])
 ```
 Once you run the above cell you'll get to see the following output.
 
