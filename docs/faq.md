@@ -33,7 +33,7 @@ $ Explainit(reference_data, current_data, target_column_name, target_column_type
 
 If you already know what types of variables you’re dealing with, you can use the flowchart to choose the right statistical test for your data.
 <p align="center">
-    <img src="./assets/how-to-choose-statistical-test.png" width="500" hight="5000">
+    <img src="./assets/statistical-tests.png" width="500" hight="5000">
 </p>
 <br />
 
