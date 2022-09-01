@@ -41,4 +41,4 @@ The best way to learn Explainit is to use it. Head over to our [Getting-start](g
 Explore the following resources to get started with Explainit:
 
 * [Getting-started](getting-started.md) is the fastest way to get started with Explainit
-* [Architecture](architecture-and-components/) describes Explainit's overall architecture.
+* [Architecture](codebase-structure.md) describes Explainit's overall architecture.
