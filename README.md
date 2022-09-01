@@ -28,8 +28,25 @@ under the License.
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![PyPI version](https://img.shields.io/pypi/v/explainit.svg)](https://pypi.python.org/pypi/explainit)
-[![PyPI](https://img.shields.io/pypi/pyversions/explaintit.svg?maxAge=2592000)](https://pypi.python.org/pypi/explaintit)
+[![PyPI](https://img.shields.io/pypi/pyversions/explainit.svg?maxAge=2592000)](https://pypi.python.org/pypi/explainit)
 [![Docs Latest](https://img.shields.io/badge/docs-latest-blue.svg)](https://docs.katonic.ai/)
+
+## What is Explainit?
+Explainit is a modern, enterprise-ready business intelligence web application that re-uses existing frameworks to manage and serve dashboard features to machine learning project lifecycle.
+
+Explainit allows ML platform teams to:
+* Analyze Drift in the existing data stack (Features & Targets).
+* Prepare very short summary of productionized data.
+* Perform Quality Checks on the data.
+* Analyze relationship between features & target.
+* Understand more about intricasies of features and target.
+
+## Who is Explainit for?
+Explainit helps ML platform teams with DevOps experience monitor productionized batch data. Explainit can also help these teams build towards a explainability/monitoring platform that improves collaboration between engineers and data scientists.
+
+Explainit is likely not the right tool if you
+* are in an organization that’s just getting started with ML and is not yet sure what the business impact of ML is
+* rely primarily on unstructured data
 
 ## What is Model Drift?
 Model Drift (also known as model decay) refers to the degradation of a model’s prediction power due to changes in the environment, and thus the relationships between variables.
@@ -57,7 +74,7 @@ $ pip install explainit
 
 In order to generate the dashboards inside the application, you need to run the following commands.
 ```python
-from explainit.app import build
+from explainit.app import Explainit
 ```
 
 Apart from importing the methods, we need some data that should be passed to the application in order to generate the dashboards.
@@ -77,7 +94,7 @@ ref_data, cur_data = train_test_split(cancer_dataframe, train_size=0.80, shuffle
 Once you prepared the both training and testing datasets, all you need to do is pass those datasets into the method that we imported along with the target column name and target column type (type should be `cat` for categorical column and `num` for numerical columns).
 
 ```python
-build(
+Explainit(
   ref_data=ref_data,
   cur_data=cur_data,
   target_column_name="target",
