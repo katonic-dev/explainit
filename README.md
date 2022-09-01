@@ -130,3 +130,5 @@ A. With Drift Information from the app user can make some decisions:
 > * Look for the quality data for the usecase.
 > * Make changes or train new models for production.
 > * Update the domain specific concepts to understand the real-world better for new models.
+
+ - for more FAQs see [visit](./docs/faq.md)
