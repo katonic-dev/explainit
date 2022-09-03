@@ -75,7 +75,7 @@ $ pip install explainit
 
 In order to generate the dashboards inside the application, you need to run the following commands.
 ```python
-from explainit.app import Explainit
+from explainit.app import build
 ```
 
 Apart from importing the methods, we need some data that should be passed to the application in order to generate the dashboards.
@@ -95,7 +95,7 @@ ref_data, cur_data = train_test_split(cancer_dataframe, train_size=0.80, shuffle
 Once you prepared the both training and testing datasets, all you need to do is pass those datasets into the method that we imported along with the target column name and target column type (type should be `cat` for categorical column and `num` for numerical columns).
 
 ```python
-Explainit(
+build(
   ref_data=ref_data,
   cur_data=cur_data,
   target_column_name="target",
