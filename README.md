@@ -34,12 +34,12 @@ under the License.
 ## What is Explainit?
 Explainit is a modern, enterprise-ready business intelligence web application that re-uses existing frameworks to manage and serve dashboard features to machine learning project lifecycle.
 
+## Features
 Explainit allows ML platform teams to:
 * Analyze Drift in the existing data stack (Features & Targets).
 * Prepare very short summary of productionized data.
 * Perform Quality Checks on the data.
-* Analyze relationship between features & target.
-* Understand more about intricasies of features and target.
+* Analyze in-depth relationship between features & target.
 
 ## Who is Explainit for?
 Explainit helps ML platform teams with DevOps experience monitor productionized batch data. Explainit can also help these teams build towards a explainability/monitoring platform that improves collaboration between engineers and data scientists.
@@ -48,12 +48,13 @@ Explainit is likely not the right tool if you
 * are in an organization that’s just getting started with ML and is not yet sure what the business impact of ML is
 * rely primarily on unstructured data
 
-## What is Model Drift?
+## Quick Concepts on Drift
+### What is Model Drift?
 Model Drift (also known as model decay) refers to the degradation of a model’s prediction power due to changes in the environment, and thus the relationships between variables.
 
 Detects changes in feature distribution. Data Quality: provides the feature overview.
 
-## Types of Model Drift
+### Types of Model Drift
 There are three main types of model drift:
 
 - Concept drift
@@ -117,16 +118,16 @@ Below is a snapshot of the landing page of Explainit Dashboard.
 ## QnA
 
 ### Q. What exactly the scope of the app is?
-A. By this app users can calculate Dataset Drift, Target Drift and Data Quality metrics to understand the Production / Real-World Data along with Training / Reference Data better to come to a decision.
+**A**. By this app users can calculate Dataset Drift, Target Drift and Data Quality metrics to understand the Production / Real-World Data along with Training / Reference Data better to come to a decision.
 
 ### Q. What does the input data look like?
-A. Input Data is nothing but your training and testing data. The training data will be used for the distribution comparision for the testing data. These input data should be passed as pandas dataframes.
+**A**. Input Data is nothing but your training and testing data. The training data will be used for the distribution comparision for the testing data. These input data should be passed as pandas dataframes.
 
 ### Q. What outputs does the app produce?
-A. App shows / produces the Statistical Information about the complete data (features + target) for drift analysis, Distribution Plots for each of the features to understand the data better, Contribution of each features on the target along with Correlations metrics.
+**A**. App shows / produces the Statistical Information about the complete data (features + target) for drift analysis, Distribution Plots for each of the features to understand the data better, Contribution of each features on the target along with Correlations metrics.
 
 ### Q. What decisions can the user make by using the app?
-A. With Drift Information from the app user can make some decisions:
+**A**. With Drift Information from the app user can make some decisions:
 > * Look for the quality data for the usecase.
 > * Make changes or train new models for production.
 > * Update the domain specific concepts to understand the real-world better for new models.
