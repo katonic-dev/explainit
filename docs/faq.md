@@ -8,7 +8,7 @@ $ pip install explainit
 ```
 Once you completed the installation process, import the method in order to run the application.
 ```python
-from explainit.app import Explainit
+from explainit.app import build
 ```
 Explainit requires several parameters to be passed to the function in order to run the application.
  - reference_data: The data on which your machine learning model will get trained.
@@ -20,7 +20,7 @@ Explainit requires several parameters to be passed to the function in order to r
 
 Once you define the parameters for the Explainit, simply run the function in order to start the application.
 ```python
-$ Explainit(reference_data, current_data, target_column_name, target_column_type, host, port)
+build(reference_data, current_data, target_column_name, target_column_type, host, port)
 ```
 
 **Q2. How to decide the Statistical-tests and their significance?**
