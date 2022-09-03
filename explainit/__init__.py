@@ -11,6 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY aIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from explainit.app import Explainit
+from explainit.app import build
 
-__all__ = ["Explainit"]
+__all__ = ["build"]
