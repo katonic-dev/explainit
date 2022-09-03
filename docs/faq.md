@@ -11,12 +11,12 @@ Once you completed the installation process, import the method in order to run t
 from explainit.app import build
 ```
 Explainit requires several parameters to be passed to the function in order to run the application.
- - reference_data: The data on which your machine learning model will get trained.
- - current_data: The data for which you need the predictions from the model.
- - target_column_name: The dependent column name from your dataset.
- - target_column_type: what type of distribution that the target column is, use **cat** if your target column is a categorical or use **num** for continuous column.
- - host[optional]: if you want this application to be able to run on a different host, then define the host in string format.
- - port[optional]: if you want this application to be able to run on a different port, then define the port in integer format.
+ - `reference_data`: The data on which your machine learning model will get trained (training data).
+ - `current_data`: The data for which you need the predictions from the model (production data).
+ - `target_column_name`: The dependent column name from your dataset.
+ - `target_column_type`: What type of category that the target column is, use `cat` if your target column is a categorical or use `num` for continuous column.
+ - `host`: Optional host address where you want this application to run, in string format (default: 0.0.0.0 or localhost).
+ - `port`: Optional port where you want this application to run, in integer format (default: 8050).
 
 Once you define the parameters for the Explainit, simply run the function in order to start the application.
 ```python
@@ -25,7 +25,7 @@ build(reference_data, current_data, target_column_name, target_column_type, host
 
 **Q2. How to decide the Statistical-tests and their significance?**
 
-**A**: Statistical tests are used in hypothesis testing. They can be used to:
+**A**: Statistical tests are used in drift detection. They can be used to:
 
  - determine whether a predictor variable has a statistically significant relationship with an outcome variable.
     estimate the difference between two or more groups.
@@ -66,7 +66,7 @@ A particular value of the significance threshold is usually denoted in formulas 
 
 **A**: This Application majorly revolves around 3 main topics:
  - Data Drift: Data-drift is defined as a variation in the production data from the data that was used to test and validate the model before deploying it in production. 
- - Concept DRift: In machine learning, predictive modeling, and data mining, concept drift is the gradual change in the relationships between input data and output data in the underlying problem. The ‘concept’ in question is the unknown and hidden relationship between input and output variables.
+ - Concept Drift: In machine learning, predictive modeling, and data mining, concept drift is the gradual change in the relationships between input data and output data in the underlying problem. The ‘concept’ in question is the unknown and hidden relationship between input and output variables.
  - Data Quality: Data quality indicates how reliable a given dataset is. The data’s quality will affect the user’s ability to make accurate decisions regarding the subject of their study. For example, if the data is collected from incongruous sources at varying times, it may not actually function as a good indicator for planning and decision-making.
 
 High-quality data is collected and analyzed using a strict set of guidelines that ensure consistency and accuracy. Meanwhile, lower-quality data often does not track all of the affecting variables or has a high-degree of error. 
