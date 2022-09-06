@@ -35,10 +35,10 @@ Explainit is likely not the right tool if you
 
 ## How can I get started?
 
-The best way to learn Explainit is to use it. Head over to our [Getting-start](getting-started.md) and try it out!
+The best way to learn Explainit is to use it. Head over to our [Getting-started](getting-started.md) and try it out!
 {% endhint %}
 
 Explore the following resources to get started with Explainit:
 
 * [Getting-started](getting-started.md) is the fastest way to get started with Explainit
-* [Architecture](architecture-and-components/) describes Explainit's overall architecture.
+* [Architecture](../workflow/workflow.md) describes Explainit's overall architecture.
