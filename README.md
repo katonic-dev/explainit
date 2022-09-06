@@ -96,8 +96,8 @@ Once you prepared the both training and testing datasets, all you need to do is 
 
 ```python
 build(
-  ref_data=ref_data,
-  cur_data=cur_data,
+  reference_data=ref_data,
+  current_data=cur_data,
   target_column_name="target",
   target_column_type="cat",
   host="127.0.0.1",
