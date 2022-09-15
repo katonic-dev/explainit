@@ -116,7 +116,7 @@ Below is a snapshot of the landing page of Explainit Dashboard.
 <br />
 
 ## Contributor Guide
-Interested in contributing? Check out our [CONTRIBUTING.md](https://github.com/katonic-dev/explainit/blob/issue%237/CONTRIBUTION.md) to find resources around contributing along with a detailed guide on how to set up a development environment.
+Interested in contributing? Check out our [CONTRIBUTING.md](CONTRIBUTION.md) to find resources around contributing along with a detailed guide on how to set up a development environment.
 
 ## QnA
 
@@ -135,4 +135,4 @@ Interested in contributing? Check out our [CONTRIBUTING.md](https://github.com/k
 > * Make changes or train new models for production.
 > * Update the domain specific concepts to understand the real-world better for new models.
 
- - for more FAQs visit [faq.md](https://github.com/katonic-dev/explainit/blob/issue%237/docs/faq.md).
+ - for more FAQs visit [faq.md](./docs/faq.md).
