@@ -82,6 +82,7 @@ def jensenshannon_stat_test(
     Returns:
         jensenshannon: calculated Jensen-Shannon distance
         test_result: whether the drift is detected
+        threshold: threshold for reference
     """
     reference_percents, current_percents = get_binned_data(
         reference_data, current_data, feature_type, n_bins, False

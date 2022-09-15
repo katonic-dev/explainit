@@ -30,6 +30,7 @@ def wasserstein_distance_stat_test(
     Returns:
         wasserstein_distance_norm: normed Wasserstein distance
         test_result: whether the drift is detected
+        threshold: threshold for reference
     """
     norm = max(np.std(reference_data), 0.001)
     wd_norm_value = wasserstein_distance(reference_data, current_data) / norm

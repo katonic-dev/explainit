@@ -21,7 +21,7 @@ from scipy.stats import chisquare
 def chi_stat_test(
     reference_data: pd.Series, current_data: pd.Series, threshold: float
 ) -> Tuple[float, bool, float]:
-    #  TODO: simplify ignoring NaN values here, in z_stat_test and data_drift_analyzer
+    #  TODO: simplify ignoring NaN values here, in z_test and data_drift
     keys = list((set(reference_data) | set(current_data)) - {np.nan})
 
     ref_feature_dict = {**dict.fromkeys(keys, 0), **dict(reference_data.value_counts())}
