@@ -1,5 +1,5 @@
 import plotly.figure_factory as ff
-from additional_num_graphs import fig_to_json
+from explainit.graphs.additional_num_graphs import fig_to_json
 
 
 def num_target_main_graph(reference_data_to_plot, current_data_to_plot):
