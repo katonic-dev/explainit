@@ -57,6 +57,16 @@ def generate_additional_graph_num_feature(
         yaxis_title="Share",
     )
 
+    fig.update_layout(
+        title={
+            "text": f"{feature_name} Distribution".upper(),
+            "y": 0.9,
+            "x": 0.5,
+            "xanchor": "center",
+            "yanchor": "top",
+        }
+    )
+
     distr_figure = fig_to_json(fig)
 
     # Plot Drift
