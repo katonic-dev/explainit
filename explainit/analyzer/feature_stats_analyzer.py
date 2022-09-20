@@ -10,7 +10,6 @@ def feature_stats(feature, feature_type):
     def get_percentage_from_all_values(value: Union[int, float]):
         return np.round(100 * value / all_values_count, 2)
 
-    all_values_count = feature.shape[0]
     result: Dict[str, Any] = {}
 
     missing_count = int(feature.isnull().sum())
