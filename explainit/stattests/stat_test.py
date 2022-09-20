@@ -16,11 +16,11 @@ from typing import List
 
 import numpy as np
 import pandas as pd
-from chi2_test import chi_stat_test
-from jensenshannon_test import jensenshannon_stat_test
-from ks_test import ks_stat_test
-from wasserstein_distance_test import wasserstein_distance_stat_test
-from z_test import z_stat_test
+from explainit.stattests.chi2_test import chi_stat_test
+from explainit.stattests.jensenshannon_test import jensenshannon_stat_test
+from explainit.stattests.ks_test import ks_stat_test
+from explainit.stattests.wasserstein_distance_test import wasserstein_distance_stat_test
+from explainit.stattests.z_test import z_stat_test
 
 
 def get_statistical_info(
