@@ -15,10 +15,13 @@ import copy
 import json
 import logging
 import os
+import warnings
 
 import dash
+import numpy as np
 import pandas as pd
 import plotly
+import plotly.express as px
 from colorama import Fore
 from colorama import Style
 from dash import dash_table
@@ -26,23 +29,45 @@ from dash import dcc
 from dash import html
 from dash.dependencies import Input
 from dash.dependencies import Output
+from explainit.analyzer.data_summary import df_stats
+from explainit.analyzer.feature_stats_analyzer import additional_cur_cat_stats
+from explainit.analyzer.feature_stats_analyzer import feature_stats
+from explainit.analyzer.feature_stats_analyzer import make_feature_stats_dataframe
 from explainit.banner import build_banner
 from explainit.banner import generate_section_banner
 from explainit.correlation import correlation_data_table
-from explainit.dashboard import DriftDashboard
+from explainit.correlations.correlation_heatmaps import plot_correlation_figure
+from explainit.correlations.correlation_table import make_metrics
+from explainit.correlations.correlations import calculate_correlations
+from explainit.graphs.additional_cat_graphs import generate_additional_graph_cat_feature
+from explainit.graphs.additional_num_graphs import fig_to_json
+from explainit.graphs.additional_num_graphs import generate_additional_graph_num_feature
+from explainit.graphs.cat_target_plot import cat_target_main_graph
+from explainit.graphs.feature_stats_plots import plot_feature_stats
+from explainit.graphs.num_target_plot import num_target_main_graph
+from explainit.graphs.numerical_target_behaviour import (
+    numerical_target_behaviour_on_features,
+)
 from explainit.header import generate_metric_list_header
 from explainit.header import generate_metric_row_helper
+from explainit.stattests.stat_test import get_statistical_info
+from explainit.stattests.stat_test import get_stattest
 from explainit.tabs import build_tabs
 from explainit.tabs import data_quality_tabs
-from explainit.utils import get_distr_graph_data
-from explainit.utils import get_drift_graph_data
-from explainit.utils import get_json_data
-from explainit.utils import get_small_hist_data
-from explainit.utils import get_stats_data
-from explainit.utils import target_data_copy
 from explainit.workflow import generate_modal
 from explainit.workflow import generate_workflow
 from plotly.graph_objects import Figure
+
+# import functools
+
+# from explainit.utils import get_distr_graph_data
+# from explainit.utils import get_drift_graph_data
+# from explainit.utils import get_json_data
+# from explainit.utils import get_small_hist_data
+# from explainit.utils import get_stats_data
+# from explainit.utils import target_data_copy
+
+warnings.filterwarnings("ignore")
 
 log = logging.getLogger("werkzeug")
 log.setLevel(logging.ERROR)
@@ -68,33 +93,281 @@ def build(
     app.server
     app.config["suppress_callback_exceptions"] = True
 
-    JSON_DATA = DriftDashboard(
-        reference_data,
-        current_data,
-        target_column_name,
-        target_column_type,
-    ).calculate()
+    reference_data.rename(columns={target_column_name: "target"}, inplace=True)
+    current_data.rename(columns={target_column_name: "target"}, inplace=True)
 
-    (
-        drift_data,
-        target_data,
-        data_summary,
-        feature_summary,
-        correlation_data,
-    ) = get_json_data(JSON_DATA)
-
-    del JSON_DATA
+    ref_data_columns = reference_data.columns.to_list()
+    cur_data_columns = current_data.columns.to_list()
+    total_columns = ref_data_columns + cur_data_columns
+    # if functools.reduce(
+    #     lambda x, y: x and y,
+    #     map(lambda p, q: p == q, sorted(ref_data_columns), sorted(cur_data_columns)),
+    #     True,
+    # ):
+    #     print("The lists cur_data_columns and ref_data_columns are the same")
+    # else:
+    #     print("ERROR: The lists cur_data_columns and ref_data_columns are not the same")
 
     print(
         f"Initiating {Style.BRIGHT + Fore.GREEN}Explainit App{Style.RESET_ALL}...[5/5]"
     )
 
-    small_hist_data_cur = get_small_hist_data(drift_data, "f4")
-    small_hist_data_ref = get_small_hist_data(drift_data, "f3")
-    stats_data = get_stats_data(drift_data)
-    drift_graph_data = get_drift_graph_data(drift_data)
-    distr_graph_data = get_distr_graph_data(drift_data)
-    tdd_copy = target_data_copy(target_data)
+    num_feature_names = sorted(
+        list(set(reference_data.select_dtypes([np.number]).columns))
+    )
+    cat_feature_names = sorted(
+        list(
+            set(reference_data.select_dtypes(exclude=[np.number, "datetime"]).columns)
+            - set(num_feature_names)
+        )
+    )
+
+    # Finding appropriate Statistical test for Individual feature.
+    num_feature_test = {}
+
+    for num_feature_name in num_feature_names:
+        feature_type = "num"
+        ref_feature = (
+            reference_data[num_feature_name].replace([-np.inf, np.inf], np.nan).dropna()
+        )
+        cur_feature = (
+            current_data[num_feature_name].replace([-np.inf, np.inf], np.nan).dropna()
+        )
+        num_feature_test[num_feature_name] = [
+            get_stattest(num_feature_name, feature_type, ref_feature, cur_feature),
+            feature_type,
+        ]
+
+    cat_feature_test = {}
+
+    for cat_feature_name in cat_feature_names:
+        feature_type = "cat"
+        ref_feature = reference_data[cat_feature_name].dropna()
+        cur_feature = current_data[cat_feature_name].dropna()
+        cat_feature_test[cat_feature_name] = [
+            get_stattest(cat_feature_name, feature_type, ref_feature, cur_feature),
+            feature_type,
+        ]
+
+    feature_test = {**num_feature_test, **cat_feature_test}
+
+    # Statistical Information
+    statstical_data = get_statistical_info(feature_test, reference_data, current_data)
+    target_drift_title = f"""
+                        Target Drift: {"Detected" if statstical_data["target"]["drift"] == True else "Not Detected"},
+                        drift score={round(statstical_data["target"]["p_value"], 3)}
+                        ({statstical_data["target"]["stattest"][0]})"""
+
+    additional_graphs_data = {}
+    for feature in feature_test:
+        # plot distributions
+        if feature_test[feature][1] == "num":
+            additional_graphs_data[feature] = generate_additional_graph_num_feature(
+                feature,
+                reference_data[feature],
+                current_data[feature],
+            )
+        elif feature_test[feature][1] == "cat":
+            additional_graphs_data[feature] = generate_additional_graph_cat_feature(
+                feature, reference_data[feature], current_data[feature]
+            )
+
+    # Categorical Target Main Graph.
+
+    if target_column_type == "cat":
+
+        categorical_target_main_figure_data = cat_target_main_graph(
+            reference_data[target_column_name], current_data[target_column_name]
+        )
+
+        reference_data_copy = reference_data.copy()
+        reference_data_copy["dataset"] = "Reference"
+
+        current_data_copy = current_data.copy()
+        current_data_copy["dataset"] = "Current"
+
+        merged_data = pd.concat([reference_data_copy, current_data_copy])
+        cat_target_behaviour_graphs = {
+            feature: fig_to_json(
+                px.histogram(
+                    merged_data,
+                    x=feature,
+                    color=target_column_name,
+                    facet_col="dataset",
+                    barmode="overlay",
+                    category_orders={"dataset": ["Reference", "Current"]},
+                )
+            )
+            for feature in list(feature_test.keys())
+        }
+
+    if target_column_type == "num":
+        reference_data_to_plot = reference_data[target_column_name].tolist()
+        current_data_to_plot = current_data[target_column_name].tolist()
+
+        numerical_target_main_figure_data = num_target_main_graph(
+            reference_data_to_plot, current_data_to_plot
+        )
+
+        reference_data_copy = reference_data.copy()
+        current_data_copy = current_data.copy()
+        num_target_behaviour_graphs = {
+            feature: numerical_target_behaviour_on_features(
+                reference_data[feature],
+                current_data[feature],
+                reference_data[target_column_name],
+                current_data[target_column_name],
+            )
+            for feature in total_columns
+        }
+
+    # Data Summary
+
+    reference_data_summary = df_stats(
+        reference_data, list(reference_data.columns), target_column=target_column_name
+    )
+    reference_data_summary["categorical features"] = len(cat_feature_names)
+    reference_data_summary["numeric features"] = len(num_feature_names)
+
+    current_data_summary = df_stats(
+        current_data, list(current_data.columns), target_column=target_column_name
+    )
+    current_data_summary["categorical features"] = len(cat_feature_names)
+    current_data_summary["numeric features"] = len(num_feature_names)
+
+    data_summary_df = pd.concat(
+        [
+            pd.DataFrame(reference_data_summary, index=[0]),
+            pd.DataFrame(current_data_summary, index=[0]),
+        ]
+    ).T
+    data_summary_df.columns = ["Reference", "Current"]
+    data_summary_df.reset_index(inplace=True)
+
+    # Feature Summary
+    cur_cat_feature_stats = {}
+    for feature in cat_feature_names:
+        feature_type = "cat"
+        cur_cat_feature_stats[feature] = feature_stats(
+            current_data[feature], feature_type
+        )
+
+    ref_cat_feature_stats = {}
+    for feature in cat_feature_names:
+        feature_type = "cat"
+        ref_cat_feature_stats[feature] = feature_stats(
+            reference_data[feature], feature_type
+        )
+
+    cur_num_feature_stats = {}
+    for feature in num_feature_names:
+        feature_type = "num"
+        cur_num_feature_stats[feature] = feature_stats(
+            current_data[feature], feature_type
+        )
+
+    ref_num_feature_stats = {}
+    for feature in num_feature_names:
+        feature_type = "num"
+        ref_num_feature_stats[feature] = feature_stats(
+            reference_data[feature], feature_type
+        )
+
+    for feature in cat_feature_names:
+        cur_cat_feature_stats = additional_cur_cat_stats(
+            reference_data[feature], current_data[feature], cur_cat_feature_stats
+        )
+
+    for feature in cat_feature_names:
+        ref_cat_feature_stats = additional_cur_cat_stats(
+            reference_data[feature], current_data[feature], ref_cat_feature_stats
+        )
+
+    feature_stats_dataframes = {
+        feature: make_feature_stats_dataframe(
+            feature,
+            cur_cat_feature_stats,
+            cur_num_feature_stats,
+            ref_cat_feature_stats,
+            ref_num_feature_stats,
+        )
+        for feature in list(feature_test.keys())
+    }
+
+    # Feature Summary Graphs.
+    feature_stats_graphs = {
+        **{
+            feature: plot_feature_stats(reference_data, current_data, feature, "cat")
+            for feature in cat_feature_names
+        },
+        **{
+            feature: plot_feature_stats(reference_data, current_data, feature, "num")
+            for feature in num_feature_names
+        },
+    }
+
+    # Correlations
+
+    reference_feature_stats = {**ref_cat_feature_stats, **ref_num_feature_stats}
+
+    num_for_corr = []
+    for feature in num_feature_names:
+        if reference_feature_stats[feature]["unique_count"] > 1:
+            num_for_corr.append(feature)
+
+    cat_for_corr = []
+    for feature in cat_feature_names:
+        if reference_feature_stats[feature]["unique_count"] > 1:
+            cat_for_corr.append(feature)
+
+    reference_correlations = {}
+    current_correlations = {}
+    for kind in ["pearson", "spearman", "kendall", "cramer_v"]:
+        reference_correlations[kind] = calculate_correlations(
+            reference_data, num_for_corr, cat_for_corr, kind
+        )
+        if current_data is not None:
+            current_correlations[kind] = calculate_correlations(
+                current_data, num_for_corr, cat_for_corr, kind
+            )
+
+    metrics = make_metrics(reference_correlations, current_correlations)
+    metrics_values_headers = [
+        "top 5 correlation diff category (Cramer_V)",
+        "value ref",
+        "value curr",
+        "difference",
+        "top 5 correlation diff numerical (Spearman)",
+        "value ref",
+        "value curr",
+        "difference",
+    ]
+
+    # Correlations Dataframe
+    correlations_df = pd.DataFrame(columns=metrics_values_headers)
+    for metric in metrics:
+        a_series = pd.Series(metric["values"], index=correlations_df.columns)
+        correlations_df = correlations_df.append(a_series, ignore_index=True)
+    # correlations_df = correlations_df.reset_index()
+
+    # Correlations Heatmaps.
+    correlation_graphs = {}
+    parts = {}
+    for kind in ["pearson", "spearman", "kendall", "cramer_v"]:
+        if reference_correlations[kind].shape[0] > 1:
+            correlation_figure = plot_correlation_figure(
+                kind, reference_correlations, current_correlations
+            )
+            correlation_graphs.update(
+                {
+                    kind: {
+                        "data": correlation_figure["data"],
+                        "layout": correlation_figure["layout"],
+                    }
+                }
+            )
+
+            parts.update({"title": kind, "id": kind})
 
     @app.callback(
         Output("graph1", "figure"),
@@ -120,26 +393,17 @@ def build(
         fig2: Figure
 
         # Distribution Plot
-        for key in list(distr_graph_data.keys()):
+        for key in list(additional_graphs_data.keys()):
             if item in key:
-                graph_data_distr = copy.deepcopy(distr_graph_data[key])
+                graph_data_distr = copy.deepcopy(additional_graphs_data[key][0])
                 json_object = json.dumps(graph_data_distr)
                 json_object = json_object.replace("#4d4d4d", "#1E90FF")
                 fig1 = plotly.io.from_json(json_object)
-                fig1.update_layout(
-                    title={
-                        "text": f"{item} Distribution".upper(),
-                        "y": 0.9,
-                        "x": 0.5,
-                        "xanchor": "center",
-                        "yanchor": "top",
-                    }
-                )
 
         # Drift plot
-        for key in list(drift_graph_data.keys()):
+        for key in list(additional_graphs_data.keys()):
             if item in key:
-                graph_data = copy.deepcopy(drift_graph_data[key])
+                graph_data = copy.deepcopy(additional_graphs_data[key][1])
                 mean = graph_data["layout"]["shapes"][1]["y0"]
                 std = mean - graph_data["layout"]["shapes"][0]["y0"]
                 graph_data["layout"]["shapes"][0]["y0"] = mean + (
@@ -174,27 +438,25 @@ def build(
         Returns:
             Returns a graph which contains the target behaviour based on the choosen feature for both Reference and Current data.
         """
-        if not dropdown:
-            return html.Div(
-                dcc.Graph(
-                    id="basic-interactions",
-                    figure=tdd_copy[0]["params"],
-                    config={"displayModeBar": False},
-                )
-            )
-        for feature in tdd_copy:
-            if dropdown in feature["id"]:
-                json_object = json.dumps(feature["params"])
-                json_object = json_object.replace("#636efa", "#00BFFF")
-                json_object = json_object.replace("#EF553B", "#FF1493")
-                json_object = json.loads(json_object)
-                return html.Div(
-                    dcc.Graph(
-                        id="basic-interactions",
-                        figure=json_object,
-                        config={"displayModeBar": False},
-                    ),
-                )
+        feature_data = (
+            copy.deepcopy(cat_target_behaviour_graphs[dropdown])
+            if target_column_type == "cat"
+            else copy.deepcopy(num_target_behaviour_graphs[dropdown])
+        )
+        if target_column_type == "cat":
+            for i in range(0, 4):
+                feature_data["data"][i]["x"] = feature_data["data"][i]["x"].tolist()
+        json_object = json.dumps(feature_data)
+        json_object = json_object.replace("#636efa", "#00BFFF")
+        json_object = json_object.replace("#EF553B", "#FF1493")
+        json_object = json.loads(json_object)
+        return html.Div(
+            dcc.Graph(
+                id="basic-interactions",
+                figure=json_object,
+                config={"displayModeBar": False},
+            ),
+        )
 
     app.layout = html.Div(
         id="big-app-container",
@@ -276,20 +538,8 @@ def build(
             Provides two types of info in the summary. Feature summary as a data table and a graph which contains the distribution of the choosen feature.
         """
 
-        for feature in feature_summary:
-            if feature_summary_dropdown == feature["params"]["header"]:
-                feat_summary_df = pd.DataFrame(feature["params"]["metrics"])
-                feat_summary_df = pd.concat(
-                    [
-                        feat_summary_df,
-                        pd.DataFrame(
-                            feat_summary_df["values"].to_list(),
-                            columns=["Reference Data", "Current Data"],
-                        ),
-                    ],
-                    axis=1,
-                )[["label", "Reference Data", "Current Data"]]
-                graph_data = feature["params"]["graph"]
+        feature_df = feature_stats_dataframes[feature_summary_dropdown]
+        feature_df = feature_df.reset_index()
         return [
             html.Div(
                 html.H6(
@@ -304,10 +554,9 @@ def build(
                         className="six columns",
                         children=[
                             dash_table.DataTable(
-                                data=feat_summary_df.to_dict("records"),
+                                data=feature_df.to_dict("records"),
                                 columns=[
-                                    {"id": c, "name": c}
-                                    for c in feat_summary_df.columns
+                                    {"id": c, "name": c} for c in feature_df.columns
                                 ],
                                 style_cell={"textAlign": "left"},
                                 style_as_list_view=True,
@@ -346,7 +595,7 @@ def build(
                         children=[
                             dcc.Graph(
                                 id="basic-interactions",
-                                figure=graph_data,
+                                figure=feature_stats_graphs[feature_summary_dropdown],
                                 config={"displayModeBar": False},
                                 style={"width": "110vh", "height": "70vh"},
                             )
@@ -394,22 +643,21 @@ def build(
         Returns:
             Heatmap which contains the correlation information of the Reference and Current data for the selected correlation type.
         """
-        for key in correlation_data["additionalGraphs"]:
-            if radio_item.lower() == key["id"]:
-                return html.Div(
-                    children=[
-                        html.H6(
-                            f"{radio_item.capitalize()} Correlation Heatmap",
-                            style={"textAlign": "center"},
-                        ),
-                        dcc.Graph(
-                            id="correlation-id",
-                            figure=key["params"],
-                            style={"width": "180vh", "height": "100vh"},
-                            config={"displayModeBar": False},
-                        ),
-                    ]
-                )
+        correlation_graph_data = correlation_graphs[radio_item.lower()]
+        return html.Div(
+            children=[
+                html.H6(
+                    f"{radio_item.capitalize()} Correlation Heatmap",
+                    style={"textAlign": "center"},
+                ),
+                dcc.Graph(
+                    id="correlation-id",
+                    figure=correlation_graph_data,
+                    style={"width": "180vh", "height": "100vh"},
+                    config={"displayModeBar": False},
+                ),
+            ]
+        )
 
     @app.callback(Output("quality-content", "children"), Input("quality-tabs", "value"))
     def render_quality_content(quality_tab_switch):
@@ -433,8 +681,8 @@ def build(
                         html.Div(
                             dcc.Dropdown(
                                 id="feature-dropdown",
-                                options=list(stats_data.keys()),
-                                value=list(stats_data.keys())[0],
+                                options=total_columns,
+                                value=total_columns[0],
                                 placeholder="Choose data",
                                 clearable=False,
                                 searchable=True,
@@ -454,7 +702,7 @@ def build(
             return [
                 html.Div(
                     id="correlation-data-table",
-                    children=correlation_data_table(correlation_data),
+                    children=correlation_data_table(correlations_df),
                     style={
                         "margin-top": "25px",
                         "margin-right": "35px",
@@ -474,10 +722,8 @@ def build(
         return [
             html.Div(
                 dash_table.DataTable(
-                    data=data_summary[0],
-                    columns=[
-                        {"name": c, "id": c} for c in list(data_summary[0][0].keys())
-                    ],
+                    data=data_summary_df.to_dict("records"),
+                    columns=[{"name": i, "id": i} for i in data_summary_df.columns],
                     style_cell={"textAlign": "left"},
                     style_as_list_view=True,
                     style_cell_conditional=[
@@ -534,11 +780,9 @@ def build(
                             children=[
                                 generate_metric_row_helper(
                                     key,
-                                    stats_data,
-                                    small_hist_data_cur,
-                                    small_hist_data_ref,
+                                    statstical_data,
                                 )
-                                for key in list(stats_data.keys())
+                                for key in list(statstical_data.keys())
                             ],
                         ),
                         html.Hr(),
@@ -582,8 +826,8 @@ def build(
                                     children=[
                                         dcc.Dropdown(
                                             id="feature",
-                                            options=list(stats_data.keys())[1:],
-                                            value=list(stats_data.keys())[1:][0],
+                                            options=total_columns,
+                                            value=total_columns[0],
                                             placeholder="Choose feature",
                                             clearable=False,
                                             searchable=True,
@@ -640,11 +884,13 @@ def build(
                 html.Div(
                     id="target-drift-content",
                     children=[
-                        html.H6(target_data["widgets"][0]["title"]),
+                        html.H6(target_drift_title),
                         html.Div(
                             dcc.Graph(
                                 id="target-main-graph",
-                                figure=target_data["widgets"][0]["params"],
+                                figure=categorical_target_main_figure_data
+                                if target_column_type == "cat"
+                                else numerical_target_main_figure_data,
                                 config={"displayModeBar": False},
                             ),
                             style={
@@ -667,15 +913,8 @@ def build(
                                 ),
                                 dcc.Dropdown(
                                     id="my_dropdown",
-                                    options=[
-                                        data["id"][:-14]
-                                        if "target" in data["id"]
-                                        else data["id"][:-7]
-                                        for data in tdd_copy
-                                    ],
-                                    value=tdd_copy[0]["id"][:-14]
-                                    if "target" in tdd_copy[0]["id"]
-                                    else tdd_copy[0]["id"][:-7],
+                                    options=total_columns,
+                                    value=total_columns[0],
                                     multi=False,
                                     clearable=True,
                                     style={"width": "50%"},
