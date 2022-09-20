@@ -1,5 +1,5 @@
 import plotly.graph_objs as go
-from additional_num_graphs import fig_to_json
+from explainit.graphs.additional_num_graphs import fig_to_json
 
 
 def cat_target_main_graph(ref_target_data, cur_target_data):
