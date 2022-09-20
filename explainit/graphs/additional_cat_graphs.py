@@ -12,15 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import plotly.graph_objs as go
-from additional_num_graphs import fig_to_json
+from explainit.graphs.additional_num_graphs import fig_to_json
+
 
 def generate_additional_graph_cat_feature(name, reference_data, current_data):
-    
+
     fig = go.Figure()
     feature_ref_data = reference_data.dropna()
     feature_cur_data = current_data.dropna()
-    reference_data_to_plot = list(reversed(list(map(list, zip(*feature_ref_data.value_counts().items())))))
-    current_data_to_plot = list(reversed(list(map(list, zip(*feature_cur_data.value_counts().items())))))
+    reference_data_to_plot = list(
+        reversed(list(map(list, zip(*feature_ref_data.value_counts().items()))))
+    )
+    current_data_to_plot = list(
+        reversed(list(map(list, zip(*feature_cur_data.value_counts().items()))))
+    )
     fig.add_trace(
         go.Bar(
             x=reference_data_to_plot[1],
