@@ -33,7 +33,7 @@ def generate_additional_graph_cat_feature(name, reference_data, current_data):
             y=reference_data_to_plot[0],
             marker_color="#4d4d4d",
             opacity=0.6,
-            name="Reference",
+            name="Training",
         )
     )
 
@@ -43,7 +43,7 @@ def generate_additional_graph_cat_feature(name, reference_data, current_data):
             y=current_data_to_plot[0],
             marker_color="#ed0400",
             opacity=0.6,
-            name="Current",
+            name="Testing",
         )
     )
     fig.update_layout(
@@ -71,8 +71,8 @@ def generate_additional_graph_cat_feature(name, reference_data, current_data):
     fig = make_subplots(
         rows=1, cols=2, specs=[[{"type": "domain"}, {"type": "domain"}]]
     )
-    fig.add_trace(go.Pie(labels=labels, values=ref_values, name="Reference"), 1, 1)
-    fig.add_trace(go.Pie(labels=labels, values=cur_values, name="Current"), 1, 2)
+    fig.add_trace(go.Pie(labels=labels, values=ref_values, name="Training"), 1, 1)
+    fig.add_trace(go.Pie(labels=labels, values=cur_values, name="Testing"), 1, 2)
 
     # Use `hole` to create a donut-like pie chart
     fig.update_traces(hole=0.4, hoverinfo="label+percent+name")
@@ -81,8 +81,8 @@ def generate_additional_graph_cat_feature(name, reference_data, current_data):
         #     title_text="Grade ",
         # Add annotations in the center of the donut pies.
         annotations=[
-            dict(text="Reference", x=0.125, y=0.5, font_size=20, showarrow=False),
-            dict(text="Current", x=0.825, y=0.5, font_size=20, showarrow=False),
+            dict(text="Training", x=0.135, y=0.5, font_size=20, showarrow=False),
+            dict(text="Testing", x=0.835, y=0.5, font_size=20, showarrow=False),
         ]
     )
 

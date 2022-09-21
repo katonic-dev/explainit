@@ -35,7 +35,7 @@ def generate_additional_graph_num_feature(
             opacity=0.6,
             xbins=None,
             nbinsx=10,
-            name="Reference",
+            name="Training",
             histnorm="probability",
         )
     )
@@ -47,7 +47,7 @@ def generate_additional_graph_num_feature(
             opacity=0.6,
             xbins=None,
             nbinsx=10,
-            name="Current",
+            name="Testing",
             histnorm="probability",
         )
     )
@@ -82,7 +82,7 @@ def generate_additional_graph_num_feature(
             x=date_column.to_list() if date_column else current_data.index.tolist(),
             y=current_data.tolist(),
             mode="markers",
-            name="Current",
+            name="Testing Data Points",
             marker=dict(size=6, color="#ed0400"),
         )
     )
@@ -100,7 +100,7 @@ def generate_additional_graph_num_feature(
                 reference_mean + DEFAULT_CONF_INTERVAL_SIZE * reference_std,
             ],
             mode="markers",
-            name="Current",
+            name="Testing",
             marker=dict(size=0.01, color="white", opacity=0.005),
             showlegend=False,
         )
@@ -129,7 +129,7 @@ def generate_additional_graph_num_feature(
             ),
             dict(
                 type="line",
-                name="Reference",
+                name="Training",
                 xref="paper",
                 yref="y",
                 x0=0,  # min(testset_agg_by_date.index),

@@ -11,7 +11,7 @@ def cat_target_main_graph(ref_target_data, cur_target_data):
             marker_color="#4d4d4d",
             opacity=0.6,
             nbinsx=10,
-            name="Reference",
+            name="Training",
             histnorm="probability",
         )
     )
@@ -22,7 +22,7 @@ def cat_target_main_graph(ref_target_data, cur_target_data):
             marker_color="#ed0400",
             opacity=0.6,
             nbinsx=10,
-            name="Current",
+            name="Testing",
             histnorm="probability",
         )
     )

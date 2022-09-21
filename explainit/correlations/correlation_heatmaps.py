@@ -16,7 +16,7 @@ def plot_correlation_figure(
     heatmap_text = None
     heatmap_texttemplate = None
     cols = 2
-    subplot_titles = ["reference", "current"]
+    subplot_titles = ["training", "testing"]
 
     fig = make_subplots(
         rows=1, cols=cols, subplot_titles=subplot_titles, shared_yaxes=True

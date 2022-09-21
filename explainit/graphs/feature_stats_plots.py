@@ -83,7 +83,7 @@ def plot_feature_stats(
             trace1 = go.Histogram(
                 x=reference_data[feature_name],
                 marker_color="#4d4d4d",
-                name="reference",
+                name="training",
             )
             trace2 = go.Histogram(
                 x=np.log10(
@@ -91,7 +91,7 @@ def plot_feature_stats(
                 ),
                 marker_color="#4d4d4d",
                 visible=False,
-                name="reference",
+                name="traininig",
             )
             trace3 = go.Histogram(
                 x=current_data[feature_name], marker_color="#ed0400", name="current"
@@ -102,7 +102,7 @@ def plot_feature_stats(
                 ),
                 marker_color="#ed0400",
                 visible=False,
-                name="current",
+                name="testing",
             )
             data = [trace1, trace2, trace3, trace4]
 
@@ -147,14 +147,14 @@ def plot_feature_stats(
                 go.Histogram(
                     x=reference_data[feature_name],
                     marker_color="#4d4d4d",
-                    name="reference",
+                    name="traininig",
                 )
             )
             fig.add_trace(
                 go.Histogram(
                     x=current_data[feature_name],
                     marker_color="#ed0400",
-                    name="current",
+                    name="testing",
                 )
             )
         fig.update_xaxes(categoryorder="array", categoryarray=cats)
@@ -220,7 +220,7 @@ def plot_feature_stats(
                     x=tmp_ref.sort_values(feature_name)[feature_name],
                     y=tmp_ref.sort_values(feature_name)["number_of_items"],
                     line=dict(color="#4d4d4d", shape="spline"),
-                    name="reference",
+                    name="training",
                 )
             )
             fig.add_trace(
@@ -228,7 +228,7 @@ def plot_feature_stats(
                     x=tmp_curr.sort_values(feature_name)[feature_name],
                     y=tmp_curr.sort_values(feature_name)["number_of_items"],
                     line=dict(color="#ed0400", shape="spline"),
-                    name="current",
+                    name="testing",
                 )
             )
     else:

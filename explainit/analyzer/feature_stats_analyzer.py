@@ -84,7 +84,7 @@ def make_feature_stats_dataframe(
                 pd.DataFrame(cur_cat_stats[column_name], index=[0]),
             ]
         ).T
-        feats_df.columns = ["Reference", "Current"]
+        feats_df.columns = ["Training", "Testing"]
         return feats_df
     if column_name in cur_num_stats.keys() and ref_num_stats.keys():
         feats_df = pd.concat(
@@ -93,5 +93,5 @@ def make_feature_stats_dataframe(
                 pd.DataFrame(cur_num_stats[column_name], index=[0]),
             ]
         ).T
-        feats_df.columns = ["Reference", "Current"]
+        feats_df.columns = ["Training", "Testing"]
         return feats_df
