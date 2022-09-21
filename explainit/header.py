@@ -203,6 +203,14 @@ def generate_metric_row_helper(item, stats_info):
     for feature_data in stats_info.values():
         if feature_data["feature_name"] == item:
             feature_stats_data = feature_data
+            ref_x = feature_stats_data["ref_hist_data"][1]
+            ref_y = feature_stats_data["ref_hist_data"][0]
+            if len(feature_stats_data["cur_hist_data"]) == 1:
+                cur_x = feature_stats_data["cur_hist_data"][0][1]
+                cur_y = feature_stats_data["cur_hist_data"][0][0]
+            else:
+                cur_x = feature_stats_data["cur_hist_data"][1]
+                cur_y = feature_stats_data["cur_hist_data"][0]
 
     if "target" not in item:
         div_id = item + SUFFIX_ROW
@@ -240,8 +248,8 @@ def generate_metric_row_helper(item, stats_info):
                         {
                             "data": [
                                 {
-                                    "x": feature_stats_data["ref_hist_data"][1],
-                                    "y": feature_stats_data["ref_hist_data"][0],
+                                    "x": ref_x,
+                                    "y": ref_y,
                                     "type": "bar",
                                     "name": item,
                                 },
@@ -283,8 +291,8 @@ def generate_metric_row_helper(item, stats_info):
                         {
                             "data": [
                                 {
-                                    "x": feature_stats_data["cur_hist_data"][0][1],
-                                    "y": feature_stats_data["cur_hist_data"][0][0],
+                                    "x": cur_x,
+                                    "y": cur_y,
                                     "type": "bar",
                                     "name": item,
                                 },
