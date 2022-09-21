@@ -181,10 +181,10 @@ def build(
         )
 
         reference_data_copy = reference_data.copy()
-        reference_data_copy["dataset"] = "Reference"
+        reference_data_copy["dataset"] = "Training"
 
         current_data_copy = current_data.copy()
-        current_data_copy["dataset"] = "Current"
+        current_data_copy["dataset"] = "Testing"
 
         merged_data = pd.concat([reference_data_copy, current_data_copy])
         cat_target_behaviour_graphs = {
@@ -195,7 +195,7 @@ def build(
                     color=target_column_name,
                     facet_col="dataset",
                     barmode="overlay",
-                    category_orders={"dataset": ["Reference", "Current"]},
+                    category_orders={"dataset": ["Training", "Testing"]},
                 )
             )
             for feature in list(feature_test.keys())
@@ -241,7 +241,7 @@ def build(
             pd.DataFrame(current_data_summary, index=[0]),
         ]
     ).T
-    data_summary_df.columns = ["Reference", "Current"]
+    data_summary_df.columns = ["Training", "Testing"]
     data_summary_df.reset_index(inplace=True)
 
     # Feature Summary
@@ -334,12 +334,12 @@ def build(
     metrics = make_metrics(reference_correlations, current_correlations)
     metrics_values_headers = [
         "top 5 correlation diff category (Cramer_V)",
-        "value ref",
-        "value curr",
+        "value train",
+        "value test",
         "difference",
         "top 5 correlation diff numerical (Spearman)",
-        "value ref",
-        "value curr",
+        "value train",
+        "value test",
         "difference",
     ]
 
