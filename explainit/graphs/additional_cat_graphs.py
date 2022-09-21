@@ -13,6 +13,7 @@
 # limitations under the License.
 import plotly.graph_objs as go
 from explainit.graphs.additional_num_graphs import fig_to_json
+from plotly.subplots import make_subplots
 
 
 def generate_additional_graph_cat_feature(name, reference_data, current_data):
@@ -50,5 +51,41 @@ def generate_additional_graph_cat_feature(name, reference_data, current_data):
         xaxis_title=name,
         yaxis_title="Share",
     )
+    fig.update_layout(
+        title={
+            "text": f"{name} Distribution".upper(),
+            "y": 0.9,
+            "x": 0.5,
+            "xanchor": "center",
+            "yanchor": "top",
+        }
+    )
 
-    return fig_to_json(fig)
+    distr_graph = fig_to_json(fig)
+
+    # Pie Chart Graph.
+    labels = current_data.value_counts().sort_index().index.tolist()
+    cur_values = current_data.value_counts().sort_index().values.tolist()
+    ref_values = reference_data.value_counts().sort_index().values.tolist()
+
+    fig = make_subplots(
+        rows=1, cols=2, specs=[[{"type": "domain"}, {"type": "domain"}]]
+    )
+    fig.add_trace(go.Pie(labels=labels, values=ref_values, name="Reference"), 1, 1)
+    fig.add_trace(go.Pie(labels=labels, values=cur_values, name="Current"), 1, 2)
+
+    # Use `hole` to create a donut-like pie chart
+    fig.update_traces(hole=0.4, hoverinfo="label+percent+name")
+
+    fig.update_layout(
+        #     title_text="Grade ",
+        # Add annotations in the center of the donut pies.
+        annotations=[
+            dict(text="Reference", x=0.125, y=0.5, font_size=20, showarrow=False),
+            dict(text="Current", x=0.825, y=0.5, font_size=20, showarrow=False),
+        ]
+    )
+
+    pie_graph = fig_to_json(fig)
+
+    return distr_graph, pie_graph
