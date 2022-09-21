@@ -31,7 +31,7 @@ def generate_additional_graph_cat_feature(name, reference_data, current_data):
         go.Bar(
             x=reference_data_to_plot[1],
             y=reference_data_to_plot[0],
-            marker_color="#4d4d4d",
+            marker_color="#2ECC71",
             opacity=0.6,
             name="Training",
         )

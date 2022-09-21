@@ -31,7 +31,7 @@ def generate_additional_graph_num_feature(
     fig.add_trace(
         go.Histogram(
             x=reference_data.tolist(),
-            marker_color="#4d4d4d",
+            marker_color="#2ECC71",
             opacity=0.6,
             xbins=None,
             nbinsx=10,
