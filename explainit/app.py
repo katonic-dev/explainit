@@ -193,6 +193,7 @@ def build(
                     merged_data,
                     x=feature,
                     color=target_column_name,
+                    # color_discrete_sequence=["goldenrod", "magenta"],
                     facet_col="dataset",
                     barmode="overlay",
                     category_orders={"dataset": ["Training", "Testing"]},
@@ -630,7 +631,7 @@ def build(
             HTML header(H6) with the given column name.
         """
         return html.H6(
-            f"Target behaviour based on {dropdown.capitalize()}",
+            f"{target_column_name.upper()} behaviour based on {dropdown.capitalize()}",
             style={"textAlign": "center"},
         )
 
@@ -686,8 +687,8 @@ def build(
                         html.Div(
                             dcc.Dropdown(
                                 id="feature-dropdown",
-                                options=total_columns,
-                                value=total_columns[0],
+                                options=sorted(total_columns),
+                                value=sorted(total_columns)[0],
                                 placeholder="Choose data",
                                 clearable=False,
                                 searchable=True,
@@ -831,8 +832,8 @@ def build(
                                     children=[
                                         dcc.Dropdown(
                                             id="feature",
-                                            options=total_columns,
-                                            value=total_columns[0],
+                                            options=sorted(total_columns),
+                                            value=sorted(total_columns)[0],
                                             placeholder="Choose feature",
                                             clearable=False,
                                             searchable=True,
@@ -918,8 +919,8 @@ def build(
                                 ),
                                 dcc.Dropdown(
                                     id="my_dropdown",
-                                    options=total_columns,
-                                    value=total_columns[0],
+                                    options=sorted(total_columns),
+                                    value=sorted(total_columns)[0],
                                     multi=False,
                                     clearable=True,
                                     style={"width": "50%"},
