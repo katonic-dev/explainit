@@ -8,7 +8,7 @@ def cat_target_main_graph(ref_target_data, cur_target_data):
     fig.add_trace(
         go.Histogram(
             x=ref_target_data.tolist(),
-            marker_color="#4d4d4d",
+            marker_color="#48DD2D",
             opacity=0.6,
             nbinsx=10,
             name="Training",
