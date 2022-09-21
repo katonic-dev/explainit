@@ -93,12 +93,11 @@ def build(
     app.server
     app.config["suppress_callback_exceptions"] = True
 
-    reference_data.rename(columns={target_column_name: "target"}, inplace=True)
-    current_data.rename(columns={target_column_name: "target"}, inplace=True)
+    # reference_data.rename(columns={target_column_name: "target"}, inplace=True)
+    # current_data.rename(columns={target_column_name: "target"}, inplace=True)
 
-    ref_data_columns = reference_data.columns.to_list()
-    cur_data_columns = current_data.columns.to_list()
-    total_columns = ref_data_columns + cur_data_columns
+    # ref_data_columns = reference_data.columns.to_list()
+    # cur_data_columns = current_data.columns.to_list()
     # if functools.reduce(
     #     lambda x, y: x and y,
     #     map(lambda p, q: p == q, sorted(ref_data_columns), sorted(cur_data_columns)),
@@ -108,9 +107,7 @@ def build(
     # else:
     #     print("ERROR: The lists cur_data_columns and ref_data_columns are not the same")
 
-    print(
-        f"Initiating {Style.BRIGHT + Fore.GREEN}Explainit App{Style.RESET_ALL}...[5/5]"
-    )
+    print(f"Initiating {Style.BRIGHT + Fore.GREEN}Explainit App{Style.RESET_ALL}...")
 
     num_feature_names = sorted(
         list(set(reference_data.select_dtypes([np.number]).columns))
@@ -121,6 +118,7 @@ def build(
             - set(num_feature_names)
         )
     )
+    total_columns = num_feature_names + cat_feature_names
 
     # Finding appropriate Statistical test for Individual feature.
     num_feature_test = {}
@@ -154,9 +152,9 @@ def build(
     # Statistical Information
     statstical_data = get_statistical_info(feature_test, reference_data, current_data)
     target_drift_title = f"""
-                        Target Drift: {"Detected" if statstical_data["target"]["drift"] == True else "Not Detected"},
-                        drift score={round(statstical_data["target"]["p_value"], 3)}
-                        ({statstical_data["target"]["stattest"][0]})"""
+                        Target Drift: {"Detected" if statstical_data[target_column_name]["drift"] == True else "Not Detected"},
+                        drift score={round(statstical_data[target_column_name]["p_value"], 3)}
+                        ({statstical_data[target_column_name]["stattest"][0]})"""
 
     additional_graphs_data = {}
     for feature in feature_test:
@@ -164,12 +162,14 @@ def build(
         if feature_test[feature][1] == "num":
             additional_graphs_data[feature] = generate_additional_graph_num_feature(
                 feature,
-                reference_data[feature],
-                current_data[feature],
+                reference_data[feature].dropna(),
+                current_data[feature].dropna(),
             )
         elif feature_test[feature][1] == "cat":
             additional_graphs_data[feature] = generate_additional_graph_cat_feature(
-                feature, reference_data[feature], current_data[feature]
+                feature,
+                reference_data[feature].dropna(),
+                current_data[feature].dropna(),
             )
 
     # Categorical Target Main Graph.
@@ -393,37 +393,42 @@ def build(
         fig2: Figure
 
         # Distribution Plot
-        for key in list(additional_graphs_data.keys()):
-            if item in key:
-                graph_data_distr = copy.deepcopy(additional_graphs_data[key][0])
-                json_object = json.dumps(graph_data_distr)
-                json_object = json_object.replace("#4d4d4d", "#1E90FF")
-                fig1 = plotly.io.from_json(json_object)
+        graph_data_distr = copy.deepcopy(additional_graphs_data[item][0])
+        json_object = json.dumps(graph_data_distr)
+        fig1 = plotly.io.from_json(json_object)
 
         # Drift plot
-        for key in list(additional_graphs_data.keys()):
-            if item in key:
-                graph_data = copy.deepcopy(additional_graphs_data[key][1])
-                mean = graph_data["layout"]["shapes"][1]["y0"]
-                std = mean - graph_data["layout"]["shapes"][0]["y0"]
-                graph_data["layout"]["shapes"][0]["y0"] = mean + (
-                    float(std_dropdown) * std
-                )
-                graph_data["layout"]["shapes"][0]["y1"] = mean - (
-                    float(std_dropdown) * std
-                )
+        if item in num_feature_names:
+            graph_data = copy.deepcopy(additional_graphs_data[item][1])
+            mean = graph_data["layout"]["shapes"][1]["y0"]
+            std = mean - graph_data["layout"]["shapes"][0]["y0"]
+            graph_data["layout"]["shapes"][0]["y0"] = mean + (float(std_dropdown) * std)
+            graph_data["layout"]["shapes"][0]["y1"] = mean - (float(std_dropdown) * std)
 
-                json_object = json.dumps(graph_data)
-                fig2 = plotly.io.from_json(json_object)
-                fig2.update_layout(
-                    title={
-                        "text": f"{item} Drift".upper(),
-                        "y": 0.9,
-                        "x": 0.5,
-                        "xanchor": "center",
-                        "yanchor": "top",
-                    }
-                )
+            json_object = json.dumps(graph_data)
+            fig2 = plotly.io.from_json(json_object)
+            fig2.update_layout(
+                title={
+                    "text": f"{item} Drift".upper(),
+                    "y": 0.9,
+                    "x": 0.5,
+                    "xanchor": "center",
+                    "yanchor": "top",
+                }
+            )
+        if item in cat_feature_names:
+            pie_chart_graph = copy.deepcopy(additional_graphs_data[item][1])
+            json_object = json.dumps(pie_chart_graph)
+            fig2 = plotly.io.from_json(json_object)
+            fig2.update_layout(
+                title={
+                    "text": f"{item} Pie Chart".upper(),
+                    "y": 0.9,
+                    "x": 0.5,
+                    "xanchor": "center",
+                    "yanchor": "top",
+                }
+            )
         return fig1, fig2
 
     @app.callback(
