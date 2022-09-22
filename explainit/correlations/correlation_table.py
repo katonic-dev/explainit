@@ -40,7 +40,6 @@ def make_metrics(
     current_correlations: Dict[str, pd.DataFrame],
 ):
     metrics = []
-    # if current_correlations is not None:
     if reference_correlations["spearman"].shape[0] > 1:
         com_num_corr = get_rel_diff_corr_features_sorted(
             reference_correlations["spearman"], current_correlations["spearman"]
@@ -68,28 +67,4 @@ def make_metrics(
         metrics.append(
             {"label": "", "values": values},
         )
-    # else:
-    #     if reference_correlations["spearman"].shape[0] > 0:
-    #         ref_num_corr = get_df_corr_features_sorted(
-    #             reference_correlations["spearman"]
-    #         )
-    #     else:
-    #         ref_num_corr = pd.DataFrame()
-    #     if reference_correlations["cramer_v"].shape[0] > 0:
-    #         ref_cat_corr = get_df_corr_features_sorted(
-    #             reference_correlations["cramer_v"]
-    #         )
-    #     else:
-    #         ref_cat_corr = pd.DataFrame()
-    #     for i in range(5):
-    #         values = ["-", "-", "-", "-"]
-    #         if i < ref_cat_corr.shape[0]:
-    #             values[0] = ref_cat_corr.iloc[i, 0]
-    #             values[1] = ref_cat_corr.iloc[i, 1]
-    #         if i < ref_num_corr.shape[0]:
-    #             values[2] = ref_num_corr.iloc[i, 0]
-    #             values[3] = ref_num_corr.iloc[i, 1]
-    #         metrics.append(
-    #             {"label": "", "values": values},
-    #         )
     return metrics

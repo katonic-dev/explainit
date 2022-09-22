@@ -60,13 +60,6 @@ from plotly.graph_objects import Figure
 
 # import functools
 
-# from explainit.utils import get_distr_graph_data
-# from explainit.utils import get_drift_graph_data
-# from explainit.utils import get_json_data
-# from explainit.utils import get_small_hist_data
-# from explainit.utils import get_stats_data
-# from explainit.utils import target_data_copy
-
 warnings.filterwarnings("ignore")
 
 log = logging.getLogger("werkzeug")

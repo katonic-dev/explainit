@@ -172,25 +172,6 @@ def stat_test_full_name(stattest_name):
         return "Wasserstein Distance"
 
 
-# def stat_threshold(key, stats_info):
-#     """
-#     Args:
-#         stats_info: Statistical test name.
-
-#     Returns:
-#         threshold value for the provided statistical test.
-#     """
-#     testname = stats_info[key]["stats_test"]
-#     if testname == "K-S p_value":
-#         return 0.05
-#     if testname == "chi-square p_value":
-#         return 0.05
-#     if testname == "Z-test p_value":
-#         return 0.05
-#     if testname in ["Jensen-Shannon distance", "Wasserstein distance (normed)"]:
-#         return 0.1
-
-
 def generate_metric_row_helper(item, stats_info):
     """
     Args:

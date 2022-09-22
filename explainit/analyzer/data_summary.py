@@ -28,9 +28,6 @@ def df_stats(ref_data, columns, target_column=None, date_column=None):
         2,
     )
     result["missing cells"] = f"{missing_cells} ({missing_cells_percentage}%)"
-    #     result['categorical features'] = len(cat_feature_names)
-    #     result['numeric features'] = len(num_feature_names)
-    #     result['datetime features'] = len(data_quality_results.columns.datetime_feature_names)
 
     constant_values = pd.Series(
         [
