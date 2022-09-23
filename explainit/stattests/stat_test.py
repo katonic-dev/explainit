@@ -94,26 +94,26 @@ def get_statistical_info(
                     ref_counts[key] = 0
                 if key not in cur_counts:
                     cur_counts[key] = 0
-            ref_small_hist = list(
+            test_info[feature]["ref_hist_data"] = list(
                 reversed(
                     list(
                         map(list, zip(*sorted(ref_counts.items(), key=lambda x: x[0])))  # type: ignore
                     )
                 )
             )
-            cur_small_hist = list(
+            test_info[feature]["cur_hist_data"] = list(
                 reversed(
                     list(
                         map(list, zip(*sorted(cur_counts.items(), key=lambda x: x[0])))  # type: ignore
                     )
                 )
             )
-            test_info[feature]["cur_hist_data"] = cur_small_hist
-            test_info[feature]["ref_hist_data"] = ref_small_hist
+            # test_info[feature]["cur_hist_data"] = cur_small_hist
+            # test_info[feature]["ref_hist_data"] = ref_small_hist
     return test_info
 
 
-def get_stattest(feature_name, feature_type, ref_feature, cur_feature):
+def get_stattest(feature_type, ref_feature, cur_feature):
     n_values = pd.concat([ref_feature, cur_feature]).nunique()
     if ref_feature.shape[0] <= 1000:
         if feature_type == "num":
@@ -125,7 +125,6 @@ def get_stattest(feature_name, feature_type, ref_feature, cur_feature):
             return "chi_stat_test" if n_values > 2 else "z_stat_test"
     elif ref_feature.shape[0] > 1000:
         if feature_type == "num":
-            n_values = pd.concat([ref_feature, cur_feature]).nunique()
             if n_values <= 5:
                 return "jensenshannon_stat_test"
             elif n_values > 5:

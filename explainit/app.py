@@ -16,6 +16,8 @@ import json
 import logging
 import os
 import warnings
+from typing import Any
+from typing import Dict
 
 import dash
 import numpy as np
@@ -29,10 +31,10 @@ from dash import dcc
 from dash import html
 from dash.dependencies import Input
 from dash.dependencies import Output
-from explainit.analyzer.data_summary import df_stats
-from explainit.analyzer.feature_stats_analyzer import additional_cur_cat_stats
-from explainit.analyzer.feature_stats_analyzer import feature_stats
-from explainit.analyzer.feature_stats_analyzer import make_feature_stats_dataframe
+from explainit.analyzer.data_summary import data_summary_stats
+from explainit.analyzer.feature_summary import additional_cat_stats
+from explainit.analyzer.feature_summary import feature_summary_stats
+from explainit.analyzer.feature_summary import make_feature_stats_dataframe
 from explainit.banner import build_banner
 from explainit.banner import generate_section_banner
 from explainit.correlation import correlation_data_table
@@ -125,7 +127,11 @@ def build(
             current_data[num_feature_name].replace([-np.inf, np.inf], np.nan).dropna()
         )
         num_feature_test[num_feature_name] = [
-            get_stattest(num_feature_name, feature_type, ref_feature, cur_feature),
+            get_stattest(
+                feature_type=feature_type,
+                ref_feature=ref_feature,
+                cur_feature=cur_feature,
+            ),
             feature_type,
         ]
 
@@ -136,7 +142,11 @@ def build(
         ref_feature = reference_data[cat_feature_name].dropna()
         cur_feature = current_data[cat_feature_name].dropna()
         cat_feature_test[cat_feature_name] = [
-            get_stattest(cat_feature_name, feature_type, ref_feature, cur_feature),
+            get_stattest(
+                feature_type=feature_type,
+                ref_feature=ref_feature,
+                cur_feature=cur_feature,
+            ),
             feature_type,
         ]
 
@@ -146,7 +156,7 @@ def build(
     statstical_data = get_statistical_info(feature_test, reference_data, current_data)
     target_drift_title = f"""
                         Target Drift: {"Detected" if statstical_data[target_column_name]["drift"] == True else "Not Detected"},
-                        drift score={round(statstical_data[target_column_name]["p_value"], 3)}
+                        drift score={round(statstical_data[target_column_name]["p_value"], 4)}
                         ({statstical_data[target_column_name]["stattest"][0]})"""
 
     additional_graphs_data = {}
@@ -173,6 +183,7 @@ def build(
             reference_data[target_column_name], current_data[target_column_name]
         )
 
+        # Categorical target behaviour based on individual features
         reference_data_copy = reference_data.copy()
         reference_data_copy["dataset"] = "Training"
 
@@ -203,6 +214,7 @@ def build(
             reference_data_to_plot, current_data_to_plot
         )
 
+        # Numerical target behaviour based on individual features
         reference_data_copy = reference_data.copy()
         current_data_copy = current_data.copy()
         num_target_behaviour_graphs = {
@@ -217,14 +229,14 @@ def build(
 
     # Data Summary
 
-    reference_data_summary = df_stats(
-        reference_data, list(reference_data.columns), target_column=target_column_name
+    reference_data_summary = data_summary_stats(
+        reference_data, target_column=target_column_name
     )
     reference_data_summary["categorical features"] = len(cat_feature_names)
     reference_data_summary["numeric features"] = len(num_feature_names)
 
-    current_data_summary = df_stats(
-        current_data, list(current_data.columns), target_column=target_column_name
+    current_data_summary = data_summary_stats(
+        current_data, target_column=target_column_name
     )
     current_data_summary["categorical features"] = len(cat_feature_names)
     current_data_summary["numeric features"] = len(num_feature_names)
@@ -239,41 +251,33 @@ def build(
     data_summary_df.reset_index(inplace=True)
 
     # Feature Summary
-    cur_cat_feature_stats = {}
+    cur_cat_feature_stats: Dict[str, Dict[str, Any]] = {}
+    ref_cat_feature_stats: Dict[str, Dict[str, Any]] = {}
     for feature in cat_feature_names:
         feature_type = "cat"
-        cur_cat_feature_stats[feature] = feature_stats(
+        cur_cat_feature_stats[feature] = feature_summary_stats(
             current_data[feature], feature_type
         )
-
-    ref_cat_feature_stats = {}
-    for feature in cat_feature_names:
-        feature_type = "cat"
-        ref_cat_feature_stats[feature] = feature_stats(
+        ref_cat_feature_stats[feature] = feature_summary_stats(
             reference_data[feature], feature_type
         )
 
-    cur_num_feature_stats = {}
+    cur_num_feature_stats: Dict[str, Dict[str, Any]] = {}
+    ref_num_feature_stats: Dict[str, Dict[str, Any]] = {}
     for feature in num_feature_names:
         feature_type = "num"
-        cur_num_feature_stats[feature] = feature_stats(
+        cur_num_feature_stats[feature] = feature_summary_stats(
             current_data[feature], feature_type
         )
-
-    ref_num_feature_stats = {}
-    for feature in num_feature_names:
-        feature_type = "num"
-        ref_num_feature_stats[feature] = feature_stats(
+        ref_num_feature_stats[feature] = feature_summary_stats(
             reference_data[feature], feature_type
         )
 
     for feature in cat_feature_names:
-        cur_cat_feature_stats = additional_cur_cat_stats(
+        cur_cat_feature_stats[feature] = additional_cat_stats(
             reference_data[feature], current_data[feature], cur_cat_feature_stats
         )
-
-    for feature in cat_feature_names:
-        ref_cat_feature_stats = additional_cur_cat_stats(
+        ref_cat_feature_stats[feature] = additional_cat_stats(
             reference_data[feature], current_data[feature], ref_cat_feature_stats
         )
 
@@ -342,7 +346,6 @@ def build(
     for metric in metrics:
         a_series = pd.Series(metric["values"], index=correlations_df.columns)
         correlations_df = correlations_df.append(a_series, ignore_index=True)
-    # correlations_df = correlations_df.reset_index()
 
     # Correlations Heatmaps.
     correlation_graphs = {}
@@ -352,15 +355,10 @@ def build(
             correlation_figure = plot_correlation_figure(
                 kind, reference_correlations, current_correlations
             )
-            correlation_graphs.update(
-                {
-                    kind: {
-                        "data": correlation_figure["data"],
-                        "layout": correlation_figure["layout"],
-                    }
-                }
-            )
-
+            correlation_graphs[kind] = {
+                "data": correlation_figure["data"],
+                "layout": correlation_figure["layout"],
+            }
             parts.update({"title": kind, "id": kind})
 
     @app.callback(
@@ -443,7 +441,7 @@ def build(
             else copy.deepcopy(num_target_behaviour_graphs[dropdown])
         )
         if target_column_type == "cat":
-            for i in range(0, 4):
+            for i in range(4):
                 feature_data["data"][i]["x"] = feature_data["data"][i]["x"].tolist()
         json_object = json.dumps(feature_data)
         json_object = json_object.replace("#636efa", "#00BFFF")
