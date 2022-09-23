@@ -18,6 +18,7 @@ import os
 import warnings
 from typing import Any
 from typing import Dict
+from typing import Optional
 
 import dash
 import numpy as np
@@ -73,7 +74,7 @@ def build(
     current_data: pd.DataFrame,
     target_column_name: str,
     target_column_type: str,
-    datetime_column_name: str,
+    datetime_column_name: Optional[str] = "",
     host: str = "0.0.0.0",
     port: int = 8050,
 ):
@@ -114,7 +115,9 @@ def build(
             - set(num_feature_names)
         )
     )
-    cat_feature_names.remove(datetime_column_name)
+    cat_feature_names.remove(
+        datetime_column_name
+    ) if datetime_column_name else cat_feature_names
     total_columns = num_feature_names + cat_feature_names
     reference_data = reference_data[total_columns]
     current_data = current_data[total_columns]
