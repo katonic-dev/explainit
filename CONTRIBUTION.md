@@ -52,13 +52,13 @@ To use the cloned version in the virtual environment as an app, you need to inst
 
 #### MacOS / Linux
 ```sh
-cd /path/to/evidently_repo
+cd /path/to/explainit_repo
 pip install -e .[dev]
 ```
 
 #### Windows
 ```sh
-cd C:\path\to\evidently_repo
+cd C:\path\to\explainit_repo
 pip install -e .[dev]
 ```
 
