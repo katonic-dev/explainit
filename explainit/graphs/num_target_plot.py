@@ -1,10 +1,22 @@
+# Copyright 2022 The Explainit Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY aIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 import plotly.figure_factory as ff
 from explainit.graphs.additional_num_graphs import fig_to_json
 
 
 def num_target_main_graph(reference_data_to_plot, current_data_to_plot):
-    #     reference_data_to_plot =reference_data_to_plot.tolist()
-    #     current_data_to_plot = current_data_to_plot.tolist()
+
     output_distr = ff.create_distplot(
         [reference_data_to_plot, current_data_to_plot],
         ["Reference", "Current"],
