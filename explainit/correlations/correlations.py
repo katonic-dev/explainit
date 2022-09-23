@@ -1,3 +1,16 @@
+# Copyright 2022 The Explainit Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY aIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 from typing import Any
 from typing import Callable
 from typing import List
@@ -48,12 +61,11 @@ def cramer_v(x: pd.Series, y: pd.Series) -> Union[float, Any]:
     chi2_stat = chi2_contingency(arr, correction=False)
     phi2 = chi2_stat[0] / arr.sum()
     n_rows, n_cols = arr.shape
-    if min(n_cols - 1, n_rows - 1) == 0:
-        value = np.nan
-    else:
-        value = np.sqrt(phi2 / min(n_cols - 1, n_rows - 1))
-
-    return value
+    return (
+        np.nan
+        if min(n_cols - 1, n_rows - 1) == 0
+        else np.sqrt(phi2 / min(n_cols - 1, n_rows - 1))
+    )
 
 
 def corr_matrix(
@@ -66,24 +78,25 @@ def corr_matrix(
     Returns:
         Correlation matrix.
     """
-    columns = df.columns
     K = df.shape[1]
     if K <= 1:
         return pd.DataFrame()
-    else:
-        corr_array = np.eye(K)
 
-        for i in range(K):
-            for j in range(K):
-                if i <= j:
-                    continue
-                c = func(df[columns[i]], df[columns[j]])
-                corr_array[i, j] = c
-                corr_array[j, i] = c
-        return pd.DataFrame(data=corr_array, columns=columns, index=columns)
+    corr_array = np.eye(K)
+    columns = df.columns
+    for i in range(K):
+        for j in range(K):
+            if i <= j:
+                continue
+            c = func(df[columns[i]], df[columns[j]])
+            corr_array[i, j] = c
+            corr_array[j, i] = c
+    return pd.DataFrame(data=corr_array, columns=columns, index=columns)
 
 
-def calculate_correlations(df, num_for_corr, cat_for_corr, kind):
+def calculate_correlations(
+    df: pd.DataFrame, num_for_corr: List[str], cat_for_corr: List[str], kind: str
+):
     """Calculate correlation matrix depending on the kind parameter
     Args:
         df: initial data frame.
@@ -97,11 +110,11 @@ def calculate_correlations(df, num_for_corr, cat_for_corr, kind):
     Returns:
         Correlation matrix.
     """
-    if kind == "pearson":
+    if kind == "cramer_v":
+        return corr_matrix(df[cat_for_corr], cramer_v)
+    elif kind == "kendall":
+        return df[num_for_corr].corr("kendall")
+    elif kind == "pearson":
         return df[num_for_corr].corr("pearson")
     elif kind == "spearman":
         return df[num_for_corr].corr("spearman")
-    elif kind == "kendall":
-        return df[num_for_corr].corr("kendall")
-    elif kind == "cramer_v":
-        return corr_matrix(df[cat_for_corr], cramer_v)
