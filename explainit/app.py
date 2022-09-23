@@ -73,6 +73,7 @@ def build(
     current_data: pd.DataFrame,
     target_column_name: str,
     target_column_type: str,
+    datetime_column_name: str,
     host: str = "0.0.0.0",
     port: int = 8050,
 ):
@@ -113,7 +114,10 @@ def build(
             - set(num_feature_names)
         )
     )
+    cat_feature_names.remove(datetime_column_name)
     total_columns = num_feature_names + cat_feature_names
+    reference_data = reference_data[total_columns]
+    current_data = current_data[total_columns]
 
     # Finding appropriate Statistical test for Individual feature.
     num_feature_test = {}
