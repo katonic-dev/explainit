@@ -32,9 +32,7 @@ def feature_summary_stats(feature: pd.Series, feature_type: str) -> Dict[str, An
     result["count"] = int(feature.count())
     result["missing"] = f"{missing_count} ({missing_percentage}%)"
     result["unique_count"] = feature.nunique()
-    result[
-        "unique"
-    ] = f"{feature.nunique()} ({get_percentage_from_all_values(feature.nunique())}%)"
+    result["unique_count (%)"] = f"{get_percentage_from_all_values(feature.nunique())}%"
     most_common_value = value_counts.index[0]
     result[
         "most_common"
@@ -49,7 +47,6 @@ def feature_summary_stats(feature: pd.Series, feature_type: str) -> Dict[str, An
         # round most common feature value for numeric features to 1e-5
         if not np.issubdtype(feature, np.number):
             feature = feature.astype(float)
-        result["most_common_value"] = np.round(most_common_value, 5)
         infinite_count = int(np.sum(np.isinf(feature)))
         infinite_percentage = get_percentage_from_all_values(infinite_count)
         result["infinite"] = f"{infinite_count} ({infinite_percentage}%)"
