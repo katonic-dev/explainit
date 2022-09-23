@@ -80,8 +80,8 @@ def generate_additional_graph_cat_feature(name, reference_data, current_data):
         #     title_text="Grade ",
         # Add annotations in the center of the donut pies.
         annotations=[
-            dict(text="Training", x=0.135, y=0.5, font_size=20, showarrow=False),
-            dict(text="Testing", x=0.835, y=0.5, font_size=20, showarrow=False),
+            dict(text="Training", x=0.16, y=0.5, font_size=20, showarrow=False),
+            dict(text="Testing", x=0.825, y=0.5, font_size=20, showarrow=False),
         ]
     )
 
