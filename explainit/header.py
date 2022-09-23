@@ -148,7 +148,7 @@ def drift_indicator(drift):
     Returns:
         Colorscale for the given value.
     """
-    return "#00FF00" if drift is False else "#FF0000"
+    return "#FF0000" if drift else "#00FF00"
 
 
 def stat_test_full_name(stattest_name):
@@ -306,7 +306,7 @@ def generate_metric_row_helper(item, stats_info):
                 "id": test_id,
                 "children": stat_test_full_name(feature_stats_data["stattest"][0]),
             },
-            {"id": pvalue_id, "children": round(feature_stats_data["p_value"], 2)},
+            {"id": pvalue_id, "children": round(feature_stats_data["p_value"], 4)},
             {
                 "id": f"{item}_pf",
                 "children": Indicator(
