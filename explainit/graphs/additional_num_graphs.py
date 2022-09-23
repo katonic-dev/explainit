@@ -26,9 +26,9 @@ def fig_to_json(figure: go.Figure):
 def generate_additional_graph_num_feature(
     feature_name, reference_data, current_data, date_column=None
 ):
-    fig = go.Figure()
+    fig1 = go.Figure()
 
-    fig.add_trace(
+    fig1.add_trace(
         go.Histogram(
             x=reference_data.tolist(),
             marker_color="#2ECC71",
@@ -40,7 +40,7 @@ def generate_additional_graph_num_feature(
         )
     )
 
-    fig.add_trace(
+    fig1.add_trace(
         go.Histogram(
             x=current_data.tolist(),
             marker_color="#ed0400",
@@ -51,13 +51,13 @@ def generate_additional_graph_num_feature(
             histnorm="probability",
         )
     )
-    fig.update_layout(
+    fig1.update_layout(
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         xaxis_title=feature_name,
         yaxis_title="Share",
     )
 
-    fig.update_layout(
+    fig1.update_layout(
         title={
             "text": f"{feature_name} Distribution".upper(),
             "y": 0.9,
@@ -67,17 +67,15 @@ def generate_additional_graph_num_feature(
         }
     )
 
-    distr_figure = fig_to_json(fig)
-
     # Plot Drift
 
     reference_mean = np.mean(reference_data[np.isfinite(reference_data)])
     reference_std = np.std(reference_data[np.isfinite(reference_data)], ddof=1)
     x_title = "Timestamp" if date_column else "Index"
 
-    fig = go.Figure()
+    fig2 = go.Figure()
 
-    fig.add_trace(
+    fig2.add_trace(
         go.Scattergl(
             x=date_column.to_list() if date_column else current_data.index.tolist(),
             y=current_data.tolist(),
@@ -92,7 +90,7 @@ def generate_additional_graph_num_feature(
     else:
         x0 = current_data.index.sort_values()[1].tolist()
 
-    fig.add_trace(
+    fig2.add_trace(
         go.Scattergl(
             x=[x0, x0],
             y=[
@@ -106,7 +104,7 @@ def generate_additional_graph_num_feature(
         )
     )
 
-    fig.update_layout(
+    fig2.update_layout(
         xaxis_title=x_title,
         yaxis_title=feature_name,
         showlegend=True,
@@ -141,5 +139,5 @@ def generate_additional_graph_num_feature(
         ],
     )
 
-    drift_figure = fig_to_json(fig)
-    return distr_figure, drift_figure
+    # distr_figure, drift_figure
+    return fig_to_json(fig1), fig_to_json(fig2)

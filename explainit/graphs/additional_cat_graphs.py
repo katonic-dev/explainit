@@ -18,7 +18,7 @@ from plotly.subplots import make_subplots
 
 def generate_additional_graph_cat_feature(name, reference_data, current_data):
 
-    fig = go.Figure()
+    fig1 = go.Figure()
     feature_ref_data = reference_data.dropna()
     feature_cur_data = current_data.dropna()
     reference_data_to_plot = list(
@@ -27,7 +27,7 @@ def generate_additional_graph_cat_feature(name, reference_data, current_data):
     current_data_to_plot = list(
         reversed(list(map(list, zip(*feature_cur_data.value_counts().items()))))
     )
-    fig.add_trace(
+    fig1.add_trace(
         go.Bar(
             x=reference_data_to_plot[1],
             y=reference_data_to_plot[0],
@@ -37,7 +37,7 @@ def generate_additional_graph_cat_feature(name, reference_data, current_data):
         )
     )
 
-    fig.add_trace(
+    fig1.add_trace(
         go.Bar(
             x=current_data_to_plot[1],
             y=current_data_to_plot[0],
@@ -46,12 +46,12 @@ def generate_additional_graph_cat_feature(name, reference_data, current_data):
             name="Testing",
         )
     )
-    fig.update_layout(
+    fig1.update_layout(
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         xaxis_title=name,
         yaxis_title="Share",
     )
-    fig.update_layout(
+    fig1.update_layout(
         title={
             "text": f"{name} Distribution".upper(),
             "y": 0.9,
@@ -61,23 +61,22 @@ def generate_additional_graph_cat_feature(name, reference_data, current_data):
         }
     )
 
-    distr_graph = fig_to_json(fig)
-
     # Pie Chart Graph.
-    labels = current_data.value_counts().sort_index().index.tolist()
+    cur_labels = current_data.value_counts().sort_index().index.tolist()
     cur_values = current_data.value_counts().sort_index().values.tolist()
+    ref_labels = reference_data.value_counts().sort_index().index.tolist()
     ref_values = reference_data.value_counts().sort_index().values.tolist()
 
-    fig = make_subplots(
+    fig2 = make_subplots(
         rows=1, cols=2, specs=[[{"type": "domain"}, {"type": "domain"}]]
     )
-    fig.add_trace(go.Pie(labels=labels, values=ref_values, name="Training"), 1, 1)
-    fig.add_trace(go.Pie(labels=labels, values=cur_values, name="Testing"), 1, 2)
+    fig2.add_trace(go.Pie(labels=ref_labels, values=ref_values, name="Training"), 1, 1)
+    fig2.add_trace(go.Pie(labels=cur_labels, values=cur_values, name="Testing"), 1, 2)
 
     # Use `hole` to create a donut-like pie chart
-    fig.update_traces(hole=0.4, hoverinfo="label+percent+name")
+    fig2.update_traces(hole=0.4, hoverinfo="label+percent+name")
 
-    fig.update_layout(
+    fig2.update_layout(
         #     title_text="Grade ",
         # Add annotations in the center of the donut pies.
         annotations=[
@@ -86,6 +85,5 @@ def generate_additional_graph_cat_feature(name, reference_data, current_data):
         ]
     )
 
-    pie_graph = fig_to_json(fig)
-
-    return distr_graph, pie_graph
+    # distr_graph, pie_graph
+    return fig_to_json(fig1), fig_to_json(fig2)
