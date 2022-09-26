@@ -17,7 +17,7 @@ Here is the general workflow:
 * Clone the repository
 * Make the changes and commit them
 * Push the branch to your local fork
-* Make sure that all the tests are passing sucessfully
+* Make sure that all the tests are passing successfully
 * Submit a Pull Request with described changes
 
 ### Additional information
