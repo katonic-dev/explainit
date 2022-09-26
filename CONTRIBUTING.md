@@ -62,7 +62,13 @@ cd C:\path\to\explainit_repo
 pip install -e .[dev]
 ```
 
-## 4. Run the tests
+## 4. Code-Style--linting
+
+### Conforms to [Black code style](https://black.readthedocs.io/en/stable/the_black_code_style/index.html)
+```sh
+black explainit
+```
+
 ### Running flake8
 We use flake8 for code style checks.
 ```sh
@@ -76,7 +82,7 @@ We use mypy for object types checks.
 mypy
 ```
 
-### Running unit tests
+## 5. Running unit tests
 Currently, the project is not fully covered by unit tests, but we are going to add more soon and expect to receive PRs with some unit tests 🙂
 ```sh
 pytest -v
