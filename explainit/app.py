@@ -121,6 +121,10 @@ def build(
     total_columns = num_feature_names + cat_feature_names
     reference_data = reference_data[total_columns]
     current_data = current_data[total_columns]
+    if target_column_name not in total_columns:
+        print(
+            f"Given target column name {Style.BRIGHT + Fore.RED}{target_column_name}{Style.RESET_ALL} does not exist in the data..."
+        )
 
     # Finding appropriate Statistical test for Individual feature.
     num_feature_test = {}
@@ -449,8 +453,12 @@ def build(
             else copy.deepcopy(num_target_behaviour_graphs[dropdown])
         )
         if target_column_type == "cat":
-            for i in range(4):
-                feature_data["data"][i]["x"] = feature_data["data"][i]["x"].tolist()
+            if len(feature_data["data"]) == 4:
+                for i in range(4):
+                    feature_data["data"][i]["x"] = feature_data["data"][i]["x"].tolist()
+            if len(feature_data["data"]) == 6:
+                for i in range(6):
+                    feature_data["data"][i]["x"] = feature_data["data"][i]["x"].tolist()
         json_object = json.dumps(feature_data)
         json_object = json_object.replace("#636efa", "#00BFFF")
         json_object = json_object.replace("#EF553B", "#FF1493")
