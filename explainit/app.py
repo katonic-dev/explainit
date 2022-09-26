@@ -61,8 +61,6 @@ from explainit.workflow import generate_modal
 from explainit.workflow import generate_workflow
 from plotly.graph_objects import Figure
 
-# import functools
-
 warnings.filterwarnings("ignore")
 
 log = logging.getLogger("werkzeug")
@@ -122,7 +120,7 @@ def build(
     reference_data = reference_data[total_columns]
     current_data = current_data[total_columns]
     if target_column_name not in total_columns:
-        print(
+        raise ValueError(
             f"Given target column name {Style.BRIGHT + Fore.RED}{target_column_name}{Style.RESET_ALL} does not exist in the data..."
         )
 
