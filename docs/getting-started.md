@@ -53,17 +53,17 @@ build(ref_data, cur_data, "target_column_name", "target_column_type", host[optio
 Once you run the above cell you'll get to see the following output.
 
 ```bash
-Analyzing Data Drift...[1/5]
-Analyzing Target Drift...[2/5]
-Analyzing Data Quality...[3/5]
-Analyzing the results...[4/5]
-Initializing the applicataion...[5/5]
-Dash is running on http://0.0.0.0:8050/
+Initiating Explainit App...
+Calculating Statistical information...
+Analyzing Target Drift...
+Analyzing Data summary...
+Dash is running on http://127.0.0.1:8050/
 
-* Serving Flask app "app" (lazy loading)
-* Environment: production
-* Debug mode: off
-* Running on all addresses.
+ * Serving Flask app "explainit.app" (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: off
 ```
 Once your application is up and running. Go to the location that you've provided while running the app, go to localhost if you've not specified any host or port.
 
