@@ -87,3 +87,15 @@ Currently, the project is not fully covered by unit tests, but we are going to a
 ```sh
 pytest -v
 ```
+
+## 6. Signing off commits
+>  :warning: Warning: using the default integrations with IDEs like VSCode or IntelliJ will not sign commits. When you submit a PR, you'll have to re-sign commits to pass the DCO check.
+
+Use git signoffs to sign your commits. See https://docs.github.com/en/github/authenticating-to-github/managing-commit-signature-verification for details.
+
+Then, you can sign off commits with the `-s` flag:
+```sh
+git commit -s -m "My first commit"
+```
+
+GPG-signing commits with -S is optional.
