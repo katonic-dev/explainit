@@ -23,8 +23,8 @@ The list below contains the functionality that we are planning to develop for Ex
 * [x] Z Score
 * [x] Wasserstein Distance (normed)
 * [x] Jensen-Shannon Distance
-* [x] Population Stability Index (PSI)
-* [x] kullback leibler divergence (KL Div)
+* [ ] Population Stability Index (PSI)
+* [ ] kullback leibler divergence (KL Div)
 ## Data Sources
   * [x] DataFrame Source
     * [x] Pandas
