@@ -6,7 +6,7 @@ In this getting started guide, we will explore the Explainit library and use it 
 
 In order to use the Explainit library, we suggest you to go through the complete guide and understand the funcctionalities.
 
-You need basic knowledge of Python, Pandas[https://pandas.pydata.org/docs/] and data preprocessing steps.
+You need basic knowledge of Python, [Pandas](https://pandas.pydata.org/docs/) and data preprocessing steps.
 
 In this getting started, you will accomplish the following things:
 
