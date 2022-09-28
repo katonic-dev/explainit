@@ -129,8 +129,8 @@ def generate_metric_list_header():
         },
         {"id": "m_header_1", "children": html.Div("Column")},
         {"id": "m_header_2", "children": html.Div("Type")},
-        {"id": "m_header_3", "children": html.Div("Reference Distribution")},
-        {"id": "m_header_4", "children": html.Div("Current Distribution")},
+        {"id": "m_header_3", "children": html.Div("Training Distribution")},
+        {"id": "m_header_4", "children": html.Div("Testing Distribution")},
         {"id": "m_header_5", "children": html.Div("Threshold")},
         {"id": "m_header_6", "children": html.Div("Stat-test")},
         {"id": "m_header_7", "children": html.Div("P-Value")},
@@ -138,7 +138,7 @@ def generate_metric_list_header():
     )
 
 
-def drift_indicator(key, stats_info):
+def drift_indicator(drift):
     """
     Generates a colorscale for the given value.
 
@@ -148,10 +148,10 @@ def drift_indicator(key, stats_info):
     Returns:
         Colorscale for the given value.
     """
-    return "#00FF00" if stats_info[key]["drift"] == "Not Detected" else "#FF0000"
+    return "#FF0000" if drift else "#00FF00"
 
 
-def stat_test_full_name(key, stats_info):
+def stat_test_full_name(stattest_name):
     """
     Provides the full statistical test name for the given short-form.
 
@@ -160,45 +160,38 @@ def stat_test_full_name(key, stats_info):
     Returns:
         Full name of the provided statistical test.
     """
-
-    testname = stats_info[key]["stats_test"]
-    if testname == "K-S p_value":
+    if stattest_name == "ks_stat_test":
         return "Kolmogorov–Smirnov (K-S)"
-    if testname == "chi-square p_value":
-        return "Chi-Square"
-    return "Z-test" if testname == "Z-test p_value" else testname
+    if stattest_name == "z_stat_test":
+        return "Z-Test"
+    if stattest_name == "chi_stat_test":
+        return "Chi-Square Test"
+    if stattest_name == "jensenshannon_stat_test":
+        return "Jensen–Shannon divergence"
+    if stattest_name == "wasserstein_stat_test":
+        return "Wasserstein Distance"
 
 
-def stat_threshold(key, stats_info):
-    """
-    Args:
-        stats_info: Statistical test name.
-
-    Returns:
-        threshold value for the provided statistical test.
-    """
-    testname = stats_info[key]["stats_test"]
-    if testname == "K-S p_value":
-        return 0.05
-    if testname == "chi-square p_value":
-        return 0.05
-    if testname == "Z-test p_value":
-        return 0.05
-    if testname in ["Jensen-Shannon distance", "Wasserstein distance (normed)"]:
-        return 0.1
-
-
-def generate_metric_row_helper(item, stats_info, small_hist_cur, small_hist_ref):
+def generate_metric_row_helper(item, stats_info):
     """
     Args:
         item: name of the feature inside the dataframe.
         stats_info: Statistical information about the data.
-        small_hist_cur: Information needed to generate the histogram graphs for the current data.
-        small_hist_ref: Information needed to generate the histogram graphs for the reference data.
 
     Returns:
         HTML division element with the provided content.
     """
+    for feature_data in stats_info.values():
+        if feature_data["feature_name"] == item:
+            feature_stats_data = feature_data
+            ref_x = feature_stats_data["ref_hist_data"][1]
+            ref_y = feature_stats_data["ref_hist_data"][0]
+            if len(feature_stats_data["cur_hist_data"]) == 1:
+                cur_x = feature_stats_data["cur_hist_data"][0][1]
+                cur_y = feature_stats_data["cur_hist_data"][0][0]
+            else:
+                cur_x = feature_stats_data["cur_hist_data"][1]
+                cur_y = feature_stats_data["cur_hist_data"][0]
 
     if "target" not in item:
         div_id = item + SUFFIX_ROW
@@ -220,7 +213,7 @@ def generate_metric_row_helper(item, stats_info, small_hist_cur, small_hist_ref)
             },
             {
                 "id": column_type_id,
-                "children": stats_info[item]["column_type"].upper(),
+                "children": feature_stats_data["stattest"][1].upper(),
             },
             {
                 "id": f"{item}_sparkline",
@@ -236,8 +229,8 @@ def generate_metric_row_helper(item, stats_info, small_hist_cur, small_hist_ref)
                         {
                             "data": [
                                 {
-                                    "x": small_hist_ref[item]["x"],
-                                    "y": small_hist_ref[item]["y"],
+                                    "x": ref_x,
+                                    "y": ref_y,
                                     "type": "bar",
                                     "name": item,
                                 },
@@ -279,8 +272,8 @@ def generate_metric_row_helper(item, stats_info, small_hist_cur, small_hist_ref)
                         {
                             "data": [
                                 {
-                                    "x": small_hist_cur[item]["x"],
-                                    "y": small_hist_cur[item]["y"],
+                                    "x": cur_x,
+                                    "y": cur_y,
                                     "type": "bar",
                                     "name": item,
                                 },
@@ -308,15 +301,18 @@ def generate_metric_row_helper(item, stats_info, small_hist_cur, small_hist_ref)
                     ).update_traces(marker_color="rgb(255,0,0)"),
                 ),
             },
-            {"id": threshold_id, "children": stat_threshold(item, stats_info)},
-            {"id": test_id, "children": stat_test_full_name(item, stats_info)},
-            {"id": pvalue_id, "children": stats_info[item]["P-Value"]},
+            {"id": threshold_id, "children": feature_stats_data["threshold"]},
+            {
+                "id": test_id,
+                "children": stat_test_full_name(feature_stats_data["stattest"][0]),
+            },
+            {"id": pvalue_id, "children": round(feature_stats_data["p_value"], 4)},
             {
                 "id": f"{item}_pf",
                 "children": Indicator(
                     id=indicator_id,
                     value=True,
-                    color=drift_indicator(item, stats_info),
+                    color=drift_indicator(feature_stats_data["drift"]),
                     size=12,
                     style={"justify": "center"},
                 ),

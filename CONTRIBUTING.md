@@ -17,7 +17,7 @@ Here is the general workflow:
 * Clone the repository
 * Make the changes and commit them
 * Push the branch to your local fork
-* Make sure that all the tests are passing sucessfully
+* Make sure that all the tests are passing successfully
 * Submit a Pull Request with described changes
 
 ### Additional information
@@ -52,17 +52,23 @@ To use the cloned version in the virtual environment as an app, you need to inst
 
 #### MacOS / Linux
 ```sh
-cd /path/to/evidently_repo
+cd /path/to/explainit_repo
 pip install -e .[dev]
 ```
 
 #### Windows
 ```sh
-cd C:\path\to\evidently_repo
+cd C:\path\to\explainit_repo
 pip install -e .[dev]
 ```
 
-## 4. Run the tests
+## 4. Code-Style--linting
+
+### Conforms to [Black code style](https://black.readthedocs.io/en/stable/the_black_code_style/index.html)
+```sh
+black explainit
+```
+
 ### Running flake8
 We use flake8 for code style checks.
 ```sh
@@ -76,8 +82,20 @@ We use mypy for object types checks.
 mypy
 ```
 
-### Running unit tests
+## 5. Running unit tests
 Currently, the project is not fully covered by unit tests, but we are going to add more soon and expect to receive PRs with some unit tests 🙂
 ```sh
 pytest -v
 ```
+
+## 6. Signing off commits
+>  :warning: Warning: using the default integrations with IDEs like VSCode or IntelliJ will not sign commits. When you submit a PR, you'll have to re-sign commits to pass the DCO check.
+
+Use git signoffs to sign your commits. See https://docs.github.com/en/github/authenticating-to-github/managing-commit-signature-verification for details.
+
+Then, you can sign off commits with the `-s` flag:
+```sh
+git commit -s -m "My first commit"
+```
+
+GPG-signing commits with -S is optional.

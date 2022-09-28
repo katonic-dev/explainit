@@ -11,12 +11,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY aIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import pandas as pd
 from dash import dash_table
 from dash import html
 
 
-def correlation_data_table(data):
+def correlation_data_table(corr_df):
     """
     A method which will generate a Dash data table with correlation data.
 
@@ -26,11 +25,6 @@ def correlation_data_table(data):
     Returns:
         Dash Data table with correlation data.
     """
-    corr_df = pd.DataFrame(data["params"]["metrics"])
-    corr_df = pd.DataFrame(
-        corr_df["values"].to_list(),
-        columns=data["params"]["metricsValuesHeaders"],
-    )
 
     return [
         html.Div(html.H6("Correlations", style={"textAlign": "center"})),

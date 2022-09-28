@@ -6,7 +6,6 @@ dash-core-components>=2.0.0
 dash-daq>=0.5.0
 dash-html-components>=2.0.0
 dash-table>=5.0.0
-evidently>=0.1.54.dev0
 Flask>=2.2.2
 Flask-Compress>=1.12
 importlib-metadata==4.12.0
@@ -19,6 +18,7 @@ pandas>=1.4.3, <2
 plotly>=5.10.0
 python-dateutil>=2.8.2
 pytz>=2022.2.1
+scipy>=1.5.4
 six>=1.16.0
 tenacity>7, <9
 Werkzeug>=2.2.2

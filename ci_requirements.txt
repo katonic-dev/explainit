@@ -1,7 +1,6 @@
 colorama
 dash>=2.6.1
 dash-daq>=0.5.0
-evidently>=0.1.54.dev0
 flake8==3.9.2
 mypy===0.910
 numpy>1.22, <3
@@ -9,5 +8,6 @@ orjson>=3.7.12
 pandas>=1.4.3, <2
 pytest==6.2.5
 pytest-cov==3.0.0
+scipy>=1.5.4
 tox==3.14.6
 virtualenv==20.0.33

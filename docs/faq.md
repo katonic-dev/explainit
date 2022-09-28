@@ -2,7 +2,7 @@
 
 **Q1. How to run the Application?**
 
-**A**: In order to run the application you need install the library from the [pypi](https://pypi.org/project/explainit/).
+**A**: In order to run the application you need install the library from the [PyPI](https://pypi.org/project/explainit/).
 ```python
 $ pip install explainit
 ```
@@ -15,12 +15,13 @@ Explainit requires several parameters to be passed to the function in order to r
  - `current_data`: The data for which you need the predictions from the model (production data).
  - `target_column_name`: The dependent column name from your dataset.
  - `target_column_type`: What type of category that the target column is, use `cat` if your target column is a categorical or use `num` for continuous column.
+ - `datetime_column_name`: Optional datetime column name present in the `reference` & `current` data.
  - `host`: Optional host address where you want this application to run, in string format (default: 0.0.0.0 or localhost).
  - `port`: Optional port where you want this application to run, in integer format (default: 8050).
 
 Once you define the parameters for the Explainit, simply run the function in order to start the application.
 ```python
-build(reference_data, current_data, target_column_name, target_column_type, host, port)
+build(reference_data, current_data, target_column_name, target_column_type, datetime_column_name, host, port)
 ```
 
 **Q2. How to decide the Statistical-tests and their significance?**
@@ -65,8 +66,8 @@ A particular value of the significance threshold is usually denoted in formulas 
 **Q7. Topics that are gonna covered using the Application?**
 
 **A**: This Application majorly revolves around 3 main topics:
- - Data Drift: Data-drift is defined as a variation in the production data from the data that was used to test and validate the model before deploying it in production. 
+ - Data Drift: Data-drift is defined as a variation in the production data from the data that was used to test and validate the model before deploying it in production.
  - Concept Drift: In machine learning, predictive modeling, and data mining, concept drift is the gradual change in the relationships between input data and output data in the underlying problem. The ‘concept’ in question is the unknown and hidden relationship between input and output variables.
  - Data Quality: Data quality indicates how reliable a given dataset is. The data’s quality will affect the user’s ability to make accurate decisions regarding the subject of their study. For example, if the data is collected from incongruous sources at varying times, it may not actually function as a good indicator for planning and decision-making.
 
-High-quality data is collected and analyzed using a strict set of guidelines that ensure consistency and accuracy. Meanwhile, lower-quality data often does not track all of the affecting variables or has a high-degree of error. 
+High-quality data is collected and analyzed using a strict set of guidelines that ensure consistency and accuracy. Meanwhile, lower-quality data often does not track all of the affecting variables or has a high-degree of error.

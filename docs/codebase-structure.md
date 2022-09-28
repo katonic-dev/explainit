@@ -16,8 +16,11 @@ $ tree -L 1 -d
 ## Python SDK
 
 The Python SDK lives in `explainit`.
-The majority of Explainit logic lives in these Python files:
-* The core Drift object (`dashboard.py`).
+The majority of Explainit logic lives in these Python files/folders:
+* The core Drift objects defined in (`stattest`).
+* The core Graph objects defined in (`graphs`).
+* The core correlation objects defined in (`correlations`).
+* The core data summary objects defined in (`analyzer`).
 * The main app functions is defined in `app.py`.
 * The `tabs` functions is defined in `tabs.py`.
 * The `stat info` functions is defined in `utils.py`.
@@ -28,7 +31,10 @@ The majority of Explainit logic lives in these Python files:
 
 ```
 $ tree --dirsfirst -L 1 explainit
+├───analyzer
 ├───assets
+├───correlations
+├───stattests
 ├───__init__.py
 ├───app.py
 ├───banner.py
