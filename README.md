@@ -27,8 +27,10 @@ under the License.
 <br />
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/katonic-dev/explainit?sort=semver)](https://github.com/katonic-dev/explainit/tree/latest)
 [![PyPI version](https://img.shields.io/pypi/v/explainit.svg)](https://pypi.python.org/pypi/explainit)
 [![PyPI](https://img.shields.io/pypi/pyversions/explainit.svg?maxAge=2592000)](https://pypi.python.org/pypi/explainit)
+[![test](https://github.com/katonic-dev/explainit/actions/workflows/tests.yml/badge.svg?branch=master&event=push)](https://github.com/katonic-dev/explainit/actions/workflows/tests.yml)
 [![Docs Latest](https://img.shields.io/badge/docs-latest-blue.svg)](https://docs.katonic.ai/)
 
 ## What is Explainit?
