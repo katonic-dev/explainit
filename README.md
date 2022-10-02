@@ -46,9 +46,9 @@ Explainit allows ML platform teams to:
 ## Who is Explainit for?
 Explainit helps ML platform teams with DevOps experience monitor productionized batch data. Explainit can also help these teams build towards a explainability/monitoring platform that improves collaboration between engineers and data scientists.
 
-Explainit is likely not the right tool if you
-* are in an organization that’s just getting started with ML and is not yet sure what the business impact of ML is
-* rely primarily on unstructured data
+Explainit is likely not the right tool if you:
+* Are in an organization that’s just getting started with ML and is not yet sure what the business impact of ML is.
+* Rely primarily on unstructured data.
 
 ## Quick Concepts on Drift
 ### What is Model Drift?
@@ -63,15 +63,22 @@ There are three main types of model drift:
 - Data drift
 - Upstream data changes
 
-***Concept drift*** is a type of model drift where the properties of the dependent variable changes. The fraudulent model above is an example of concept drift, where the classification of what is ‘fraudulent’ changes.
+***Concept drift*** is a type of model drift where the relationship between the input and target changes over time. It usually occurs when real-world environments change in contrast to the training data the model learned from. For example, the behaviour of customers can change over time, lowering the accuracy of a model trained on historic customer datasets.
 
 ***Data drift*** is a type of model drift where the properties of the independent variable(s) change(s). Examples of data drift include changes in the data due to seasonality, changes in consumer preferences, the addition of new products, etc…
 
 ***Upstream data changes*** refer to operational data changes in the data pipeline. An example of this is when a feature is no longer being generated, resulting in missing values. Another example is a change in measurement (eg. miles to kilometers).
 
 ## Installation guide
+Install the Explainit Package:
 ```commandline
 $ pip install explainit
+```
+
+Install the Scikit-learn Package for example dataset:
+
+```commandline
+$ pip install scikit-learn
 ```
 ## Run the App
 
@@ -118,7 +125,7 @@ Below is a snapshot of the landing page of Explainit Dashboard.
 <br />
 
 ## Contributor Guide
-Interested in contributing? Check out our [CONTRIBUTING.md](CONTRIBUTION.md) to find resources around contributing along with a detailed guide on how to set up a development environment.
+Interested in contributing? Check out our [CONTRIBUTING.md](CONTRIBUTING.md) to find resources around contributing along with a detailed guide on how to set up a development environment.
 
 ## QnA
 
