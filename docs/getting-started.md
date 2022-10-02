@@ -53,7 +53,7 @@ You can add your custom host id and port to the function in order to run the app
 # 4.Generate Dashboards.
 In order to Initialize the dash application, you need to pass both the dataframes along with target_column_name and target_column_type.
 ```python
-build(ref_data, cur_data, "target_column_name", "target_column_type", host[optional], port[optional])
+build(ref_data, cur_data, "target_column_name", "target_column_type", datetime_column_name[optional], host[optional], port[optional])
 ```
 Once you run the above cell you'll get to see the following output.
 
