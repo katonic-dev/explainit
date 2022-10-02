@@ -13,11 +13,16 @@ In this getting started, you will accomplish the following things:
 # 1. Install Explainit
 To install the explainit library you need to run the following command in terminal or Notebook cell.
 
-```python
+```commandline
 $ pip install explainit
 ```
 
-These dashboards are build on top of PythonDash, So you'll see them inside your browser on the host and port you provided while initializing the Dashboards.
+Install scikit-learn for example dataset.
+```commandline
+$ pip install scikit-learn
+```
+
+These dashboards are build on top of Python Dash, So you'll see them inside your browser on the host and port you provided while initializing the Dashboards.
 
 # 2. Import Explainit
 Once you installed the Library, you'll need to import the functionalities inside your work environment i.e, python .py file or Jupyter Notebook.
