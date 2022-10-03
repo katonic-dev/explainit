@@ -21,7 +21,7 @@ Explainit is likely not the right tool if you:
 
 ### Explainit is not:
 
-* **An** **BI** / [**ETL**](https://en.wikipedia.org/wiki/Extract,\_transform,\_load) / [**ELT**](https://en.wikipedia.org/wiki/Extract,\_load,\_transform) **system:** Explainit is not (and does not plan to become) a general purpose data transformation or pipelining system. Users often leverage tools like [dbt](https://www.getdbt.com) to manage upstream data transformations.
+* **A BI** / [**ETL**](https://en.wikipedia.org/wiki/Extract,\_transform,\_load) / [**ELT**](https://en.wikipedia.org/wiki/Extract,\_load,\_transform) **system:** Explainit is not (and does not plan to become) a general purpose data transformation or pipelining system. Users often leverage tools like [dbt](https://www.getdbt.com) to manage upstream data transformations.
 * **A data orchestration tool:** Explainit does not manage or orchestrate complex workflow DAGs. It relies on upstream data pipelines to produce feature values and integrations with tools like [Airflow](https://airflow.apache.org) to make features consistently available.
 * **A dashboard engine:** Explainit is not a replacement for your data dashboard engine or the source of truth for all dashboarding system in your organization. Rather, Explainit is a light-weight downstream layer that can monitor data from an existing batch data warehouse (or other data sources) in production.
 * **A real-time dashboard:** Explainit is not a real-time dashboard, but helps monitor data stored in batch systems (e.g. local) to make features & target consistently checks at production.
