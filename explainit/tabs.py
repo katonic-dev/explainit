@@ -63,6 +63,7 @@ def data_quality_tabs():
         id="data-quality-tabs",
         className="tabs",
         children=[
+            html.Hr(),
             dcc.Tabs(
                 id="quality-tabs",
                 value="quality-tab1",
@@ -90,6 +91,6 @@ def data_quality_tabs():
                         selected_className="custom-tab--selected",
                     ),
                 ],
-            )
+            ),
         ],
     )
