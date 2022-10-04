@@ -148,7 +148,7 @@ def drift_indicator(drift):
     Returns:
         Colorscale for the given value.
     """
-    return "#FF0000" if drift else "#00FF00"
+    return "#e5b310" if drift else "#00b25d"
 
 
 def stat_test_full_name(stattest_name):
@@ -255,7 +255,26 @@ def generate_metric_row_helper(item, stats_info):
                                 "plot_bgcolor": "rgba(0,0,0,0)",
                             },
                         },
-                    ).update_traces(marker_color="rgb(255,0,0)"),
+                    )
+                    .add_traces(
+                        go.Scatter(
+                            x=ref_x,
+                            y=ref_y,
+                            mode="lines",
+                            line=dict(
+                                color="rgba(64, 83, 211, 1)",
+                                # dash = 'dash'
+                                width=1,
+                            ),
+                            name="normal",
+                        )
+                    )
+                    .update_traces(
+                        marker_color="rgba(229,179,16,1)"
+                        if feature_stats_data["drift"]
+                        else "rgb(0,178,93)"
+                    )
+                    .update_traces(showlegend=False),
                 ),
             },
             {
@@ -298,7 +317,26 @@ def generate_metric_row_helper(item, stats_info):
                                 "plot_bgcolor": "rgba(0,0,0,0)",
                             },
                         },
-                    ).update_traces(marker_color="rgb(255,0,0)"),
+                    )
+                    .add_traces(
+                        go.Scatter(
+                            x=cur_x,
+                            y=cur_y,
+                            mode="lines",
+                            line=dict(
+                                color="rgba(64, 83, 211,1)",
+                                # dash = 'dash'
+                                width=1,
+                            ),
+                            name="normal",
+                        )
+                    )
+                    .update_traces(
+                        marker_color="rgba(229,179,16,1)"
+                        if feature_stats_data["drift"]
+                        else "rgb(0,178,93)"
+                    )
+                    .update_traces(showlegend=False),
                 ),
             },
             {"id": threshold_id, "children": feature_stats_data["threshold"]},
