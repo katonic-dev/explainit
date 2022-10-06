@@ -40,7 +40,7 @@ Explainit is a modern, enterprise-ready business intelligence web application th
 Explainit allows ML platform teams to:
 * Analyze Drift in the existing data stack (Features & Targets).
 * Prepare very short summary of productionized data.
-* Perform Quality Checks on the data.
+* Perform Quality Checks on the data to provide the feature overview.
 * Analyze in-depth relationship between features & target.
 
 ## Who is Explainit for?
@@ -52,9 +52,7 @@ Explainit is likely not the right tool if you:
 
 ## Quick Concepts on Drift
 ### What is Model Drift?
-Model Drift (also known as model decay) refers to the degradation of a model’s prediction power due to changes in the environment, and thus the relationships between variables.
-
-Detects changes in feature distribution. Data Quality: provides the feature overview.
+Model Drift (also known as model decay) refers to the degradation of a model’s prediction power due to changes in the environment or changes in feature distribution, and thus the relationships between variables.
 
 ### Types of Model Drift
 There are three main types of model drift:
