@@ -27,7 +27,7 @@ under the License.
 <br />
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/katonic-dev/explainit?sort=semver)](https://github.com/katonic-dev/explainit/tree/latest)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/katonic-dev/explainit?sort=semver)](https://github.com/katonic-dev/explainit/releases)
 [![PyPI version](https://img.shields.io/pypi/v/explainit.svg)](https://pypi.python.org/pypi/explainit)
 [![PyPI](https://img.shields.io/pypi/pyversions/explainit.svg?maxAge=2592000)](https://pypi.python.org/pypi/explainit)
 [![test](https://github.com/katonic-dev/explainit/actions/workflows/tests.yml/badge.svg?branch=master&event=push)](https://github.com/katonic-dev/explainit/actions/workflows/tests.yml)
@@ -125,7 +125,7 @@ Below is a snapshot of the landing page of Explainit Dashboard.
 <br />
 
 ## Contributor Guide
-Interested in contributing? Check out our [CONTRIBUTING.md](CONTRIBUTING.md) to find resources around contributing along with a detailed guide on how to set up a development environment.
+Interested in contributing? Check out our [CONTRIBUTING.md](https://github.com/katonic-dev/explainit/blob/master/CONTRIBUTING.md) to find resources around contributing along with a detailed guide on how to set up a development environment.
 
 ## QnA
 
@@ -144,4 +144,4 @@ Interested in contributing? Check out our [CONTRIBUTING.md](CONTRIBUTING.md) to 
 > * Make changes or train new models for production.
 > * Update the domain specific concepts to understand the real-world better for new models.
 
- - for more FAQs visit [faq.md](./docs/faq.md).
+ - for more FAQs visit [faq.md](https://github.com/katonic-dev/explainit/blob/master/docs/faq.md).
