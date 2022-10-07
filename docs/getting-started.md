@@ -13,11 +13,16 @@ In this getting started, you will accomplish the following things:
 # 1. Install Explainit
 To install the explainit library you need to run the following command in terminal or Notebook cell.
 
-```python
+```commandline
 $ pip install explainit
 ```
 
-These dashboards are build on top of PythonDash, So you'll see them inside your browser on the host and port you provided while initializing the Dashboards.
+Install scikit-learn for example dataset.
+```commandline
+$ pip install scikit-learn
+```
+
+These dashboards are build on top of Python Dash, So you'll see them inside your browser on the host and port you provided while initializing the Dashboards.
 
 # 2. Import Explainit
 Once you installed the Library, you'll need to import the functionalities inside your work environment i.e, python .py file or Jupyter Notebook.
@@ -46,18 +51,30 @@ Apart from the two dataframes, we also need couple of parameters you need to pas
 You can add your custom host id and port to the function in order to run the application on different locations.
 
 # 4.Generate Dashboards.
-In order to Initialize the dash application, you need to pass both the dataframes along with target_column_name and target_column_type.
+In order to Initialize the dash application, you need to pass following parameters in `build` function:
+- `reference_data`: Reference dataset (pandas dataframe)
+- `production_data`: Production dataset (pandas dataframe)
+- `target_col_name`: Target column name
+- `target_col_type`: Target column nype (`"num"`: Numerical or `"cat"`: Categorical)
+- `datetime_col_name`: Optional datetime column name (default: None)
+- `host`: Optional host address where you want to deploy/run the app eg: `"127.0.0.1"` or `"localhost"` (default: `"0.0.0.0"`)
+- `port`: Optional port where you want to deploy/run the app eg: `"8000"` (default: `"8050"`)
+
 ```python
-build(ref_data, cur_data, "target_column_name", "target_column_type", host[optional], port[optional])
+build(
+    reference_data=ref_data,
+    production_data=cur_data,
+    target_col_name="target",
+    target_col_type="cat",
+    host='127.0.0.1',
+    port='8000'
+)
 ```
 Once you run the above cell you'll get to see the following output.
 
 ```bash
 Initiating Explainit App...
-Calculating Statistical information...
-Analyzing Target Drift...
-Analyzing Data summary...
-Dash is running on http://127.0.0.1:8050/
+Dash is running on http://127.0.0.1:8000/
 
  * Serving Flask app "explainit.app" (lazy loading)
  * Environment: production
@@ -90,7 +107,7 @@ Following can be found in the above section:
 
 Choose the desired column and the standard deviation from the dropdowns, In order to visualize the Distribution and Drift in comparision with reference data.
 
-In the Drift Garph(Right Graph) will helps you understand the production data distribution. Red coloured points are the production data points, light green coloured area is the range of your reference data and the dark green line is the median of your reference data.
+In the Drift Garph (Right Graph) will helps you understand the production data distribution. Red coloured points are the production data points, light green coloured area is the range of your reference data and the dark green line is the median of your reference data.
 
 More the Red colured points are outside the light green area, that much drift is existed in your production data.
 

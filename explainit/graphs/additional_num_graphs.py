@@ -31,7 +31,7 @@ def generate_additional_graph_num_feature(
     fig1.add_trace(
         go.Histogram(
             x=reference_data.tolist(),
-            marker_color="#2ECC71",
+            marker_color="#48DD2D",
             opacity=0.6,
             xbins=None,
             nbinsx=10,
@@ -120,7 +120,7 @@ def generate_additional_graph_num_feature(
                 y0=reference_mean - DEFAULT_CONF_INTERVAL_SIZE * reference_std,
                 x1=1,
                 y1=reference_mean + DEFAULT_CONF_INTERVAL_SIZE * reference_std,
-                fillcolor="LightGreen",
+                fillcolor="#48DD2D",
                 opacity=0.5,
                 layer="below",
                 line_width=0,

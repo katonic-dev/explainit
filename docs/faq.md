@@ -28,8 +28,7 @@ build(reference_data, current_data, target_column_name, target_column_type, date
 
 **A**: Statistical tests are used in drift detection. They can be used to:
 
- - determine whether a predictor variable has a statistically significant relationship with an outcome variable.
-    estimate the difference between two or more groups.
+ - Determine whether a predictor variable has a statistically significant relationship with an outcome variable. Estimate the difference between two or more groups.
  - Statistical tests assume a null hypothesis of no relationship or no difference between groups. Then they determine whether the observed data fall outside of the range of values predicted by the null hypothesis.
 
 If you already know what types of variables you’re dealing with, you can use the flowchart to choose the right statistical test for your data.
@@ -50,7 +49,8 @@ A particular value of the significance threshold is usually denoted in formulas 
 
 **Q4. Supported types for using Explainit?**
 
-**A**: Right now, Explainit supports [Pandas](https://pandas.pydata.org/) Dataframe. Which is used by enormous number of data scientists in order to manipulate the data.
+**A**: Currently, Explainit supports:
+- [Pandas](https://pandas.pydata.org/) Dataframe. Which is used by enormous number of data scientists in order to manipulate the data.
 
 **Q5. Decisions that we can take from the Application?**
 

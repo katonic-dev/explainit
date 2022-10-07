@@ -477,7 +477,7 @@ def build(
                 id="app-container",
                 children=[
                     build_tabs(),
-                    html.Hr(),
+                    # html.Hr(),
                     html.Div(id="app-content"),
                     generate_workflow(),
                     generate_modal(),

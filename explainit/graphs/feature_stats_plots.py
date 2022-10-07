@@ -59,13 +59,13 @@ def plot_feature_stats(
     if feature_type == "num":
         if current_data is None:
             trace1 = go.Histogram(
-                x=reference_data[feature_name], marker_color="#ed0400"
+                x=reference_data[feature_name], marker_color="#48DD2D"
             )
             trace2 = go.Histogram(
                 x=np.log10(
                     reference_data.loc[reference_data[feature_name] > 0, feature_name]
                 ),
-                marker_color="#ed0400",
+                marker_color="#48DD2D",
                 visible=False,
             )
             data = [trace1, trace2]
@@ -95,14 +95,14 @@ def plot_feature_stats(
         else:
             trace1 = go.Histogram(
                 x=reference_data[feature_name],
-                marker_color="#4d4d4d",
+                marker_color="#48DD2D",
                 name="training",
             )
             trace2 = go.Histogram(
                 x=np.log10(
                     reference_data.loc[reference_data[feature_name] > 0, feature_name]
                 ),
-                marker_color="#4d4d4d",
+                marker_color="#48DD2D",
                 visible=False,
                 name="traininig",
             )
@@ -159,7 +159,7 @@ def plot_feature_stats(
             fig.add_trace(
                 go.Histogram(
                     x=reference_data[feature_name],
-                    marker_color="#4d4d4d",
+                    marker_color="#48DD2D",
                     name="traininig",
                 )
             )
