@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import numpy as np
+import pandas as pd
 import plotly.graph_objs as go
 
 DEFAULT_CONF_INTERVAL_SIZE = 1
@@ -24,7 +25,10 @@ def fig_to_json(figure: go.Figure):
 
 
 def generate_additional_graph_num_feature(
-    feature_name, reference_data, production_data, date_column=None
+    feature_name: str,
+    reference_data: pd.Series,
+    production_data: pd.Series,
+    date_column: pd.Series = None,
 ):
     fig1 = go.Figure()
 

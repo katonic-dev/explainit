@@ -18,7 +18,9 @@ import os
 import warnings
 from typing import Any
 from typing import Dict
+from typing import List
 from typing import Optional
+from typing import Tuple
 
 import dash
 import numpy as np
@@ -104,10 +106,10 @@ def build(
 
     print(f"Initiating {Style.BRIGHT + Fore.GREEN}Explainit App{Style.RESET_ALL}...")
 
-    num_feature_names = sorted(
+    num_feature_names: List[str] = sorted(
         list(set(reference_data.select_dtypes([np.number]).columns))
     )
-    cat_feature_names = sorted(
+    cat_feature_names: List[str] = sorted(
         list(
             set(reference_data.select_dtypes(exclude=[np.number, "datetime"]).columns)
             - set(num_feature_names)
@@ -125,7 +127,7 @@ def build(
         )
 
     # Finding appropriate Statistical test for Individual feature.
-    num_feature_test = {}
+    num_feature_test: Dict[str, List[str]] = {}
 
     for num_feature_name in num_feature_names:
         feature_type = "num"
@@ -146,7 +148,7 @@ def build(
             feature_type,
         ]
 
-    cat_feature_test = {}
+    cat_feature_test: Dict[str, List[str]] = {}
 
     for cat_feature_name in cat_feature_names:
         feature_type = "cat"
@@ -173,7 +175,7 @@ def build(
                         ({statstical_data[target_col_name]["stattest"][0]})"""
 
     # Additional Feature Graphs
-    additional_graphs_data = {}
+    additional_graphs_data: Dict[str, Tuple[Dict[str, Any], Dict[str, Any]]] = {}
     for feature in feature_test:
         # plot distributions
         if feature_test[feature][1] == "num":

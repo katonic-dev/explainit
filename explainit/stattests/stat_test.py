@@ -115,7 +115,9 @@ def get_statistical_info(
     return test_info
 
 
-def get_stattest(feature_type, ref_feature, prod_feature):
+def get_stattest(
+    feature_type: str, ref_feature: pd.Series, prod_feature: pd.Series
+) -> str:
     n_values = pd.concat([ref_feature, prod_feature]).nunique()
     if ref_feature.shape[0] <= 1000:
         if feature_type == "num":

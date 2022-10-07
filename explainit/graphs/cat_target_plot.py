@@ -11,11 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY aIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import pandas as pd
 import plotly.graph_objs as go
 from explainit.graphs.additional_num_graphs import fig_to_json
 
 
-def cat_target_main_graph(ref_target_data, prod_target_data):
+def cat_target_main_graph(ref_target_data: pd.Series, prod_target_data: pd.Series):
     fig = go.Figure()
 
     fig.add_trace(

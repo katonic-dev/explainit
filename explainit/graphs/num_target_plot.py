@@ -11,11 +11,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY aIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from typing import Any
+from typing import List
+
 import plotly.figure_factory as ff
 from explainit.graphs.additional_num_graphs import fig_to_json
 
 
-def num_target_main_graph(reference_data_to_plot, production_data_to_plot):
+def num_target_main_graph(
+    reference_data_to_plot: List[Any], production_data_to_plot: List[Any]
+):
 
     output_distr = ff.create_distplot(
         [reference_data_to_plot, production_data_to_plot],

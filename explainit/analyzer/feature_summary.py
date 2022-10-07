@@ -86,9 +86,13 @@ def additional_cat_stats(
 
 
 def make_feature_stats_dataframe(
-    column_name, prod_cat_stats, prod_num_stats, ref_cat_stats, ref_num_stats
+    column_name: str,
+    prod_cat_stats: Dict[str, Dict[str, Any]],
+    prod_num_stats: Dict[str, Dict[str, Any]],
+    ref_cat_stats: Dict[str, Dict[str, Any]],
+    ref_num_stats: Dict[str, Dict[str, Any]],
 ) -> pd.DataFrame:
-    if column_name in prod_cat_stats.keys() and ref_cat_stats.keys():
+    if column_name in prod_cat_stats and column_name in ref_cat_stats:
         feats_df = pd.concat(
             [
                 pd.DataFrame(ref_cat_stats[column_name], index=[0]),
@@ -97,7 +101,7 @@ def make_feature_stats_dataframe(
         ).T
         feats_df.columns = ["Reference", "Production"]
         return feats_df
-    if column_name in prod_num_stats.keys() and ref_num_stats.keys():
+    if column_name in prod_num_stats and column_name in ref_num_stats:
         feats_df = pd.concat(
             [
                 pd.DataFrame(ref_num_stats[column_name], index=[0]),
@@ -106,3 +110,5 @@ def make_feature_stats_dataframe(
         ).T
         feats_df.columns = ["Reference", "Production"]
         return feats_df
+
+    # TODO: Add else condition for feature stats.
