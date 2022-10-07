@@ -69,10 +69,10 @@ log.setLevel(logging.ERROR)
 
 def build(
     reference_data: pd.DataFrame,
-    current_data: pd.DataFrame,
-    target_column_name: str,
-    target_column_type: str,
-    datetime_column_name: Optional[str] = "",
+    production_data: pd.DataFrame,
+    target_col_name: str,
+    target_col_type: str,
+    datetime_col_name: Optional[str] = "",
     host: str = "0.0.0.0",
     port: int = 8050,
 ):
@@ -88,11 +88,11 @@ def build(
     app.server
     app.config["suppress_callback_exceptions"] = True
 
-    # reference_data.rename(columns={target_column_name: "target"}, inplace=True)
-    # current_data.rename(columns={target_column_name: "target"}, inplace=True)
+    # reference_data.rename(columns={target_col_name: "target"}, inplace=True)
+    # production_data.rename(columns={target_col_name: "target"}, inplace=True)
 
     # ref_data_columns = reference_data.columns.to_list()
-    # cur_data_columns = current_data.columns.to_list()
+    # cur_data_columns = production_data.columns.to_list()
     # if functools.reduce(
     #     lambda x, y: x and y,
     #     map(lambda p, q: p == q, sorted(ref_data_columns), sorted(cur_data_columns)),
@@ -114,14 +114,14 @@ def build(
         )
     )
     cat_feature_names.remove(
-        datetime_column_name
-    ) if datetime_column_name else cat_feature_names
+        datetime_col_name
+    ) if datetime_col_name else cat_feature_names
     total_columns = num_feature_names + cat_feature_names
     reference_data = reference_data[total_columns]
-    current_data = current_data[total_columns]
-    if target_column_name not in total_columns:
+    production_data = production_data[total_columns]
+    if target_col_name not in total_columns:
         raise ValueError(
-            f"Given target column name {Style.BRIGHT + Fore.RED}{target_column_name}{Style.RESET_ALL} does not exist in the data..."
+            f"Given target column name {Style.BRIGHT + Fore.RED}{target_col_name}{Style.RESET_ALL} does not exist in the data..."
         )
 
     # Finding appropriate Statistical test for Individual feature.
@@ -133,7 +133,9 @@ def build(
             reference_data[num_feature_name].replace([-np.inf, np.inf], np.nan).dropna()
         )
         cur_feature = (
-            current_data[num_feature_name].replace([-np.inf, np.inf], np.nan).dropna()
+            production_data[num_feature_name]
+            .replace([-np.inf, np.inf], np.nan)
+            .dropna()
         )
         num_feature_test[num_feature_name] = [
             get_stattest(
@@ -149,7 +151,7 @@ def build(
     for cat_feature_name in cat_feature_names:
         feature_type = "cat"
         ref_feature = reference_data[cat_feature_name].dropna()
-        cur_feature = current_data[cat_feature_name].dropna()
+        cur_feature = production_data[cat_feature_name].dropna()
         cat_feature_test[cat_feature_name] = [
             get_stattest(
                 feature_type=feature_type,
@@ -162,11 +164,13 @@ def build(
     feature_test = {**num_feature_test, **cat_feature_test}
 
     # Statistical Information
-    statstical_data = get_statistical_info(feature_test, reference_data, current_data)
+    statstical_data = get_statistical_info(
+        feature_test, reference_data, production_data
+    )
     target_drift_title = f"""
-                        Target Drift: {"Detected" if statstical_data[target_column_name]["drift"] == True else "Not Detected"},
-                        drift score={round(statstical_data[target_column_name]["p_value"], 4)}
-                        ({statstical_data[target_column_name]["stattest"][0]})"""
+                        Target Drift: {"Detected" if statstical_data[target_col_name]["drift"] == True else "Not Detected"},
+                        drift score={round(statstical_data[target_col_name]["p_value"], 4)}
+                        ({statstical_data[target_col_name]["stattest"][0]})"""
 
     # Additional Feature Graphs
     additional_graphs_data = {}
@@ -176,37 +180,37 @@ def build(
             additional_graphs_data[feature] = generate_additional_graph_num_feature(
                 feature,
                 reference_data[feature].dropna(),
-                current_data[feature].dropna(),
+                production_data[feature].dropna(),
             )
         elif feature_test[feature][1] == "cat":
             additional_graphs_data[feature] = generate_additional_graph_cat_feature(
                 feature,
                 reference_data[feature].dropna(),
-                current_data[feature].dropna(),
+                production_data[feature].dropna(),
             )
 
     # Categorical Target Main Graph.
 
-    if target_column_type == "cat":
+    if target_col_type == "cat":
 
         categorical_target_main_figure_data = cat_target_main_graph(
-            reference_data[target_column_name], current_data[target_column_name]
+            reference_data[target_col_name], production_data[target_col_name]
         )
 
         # Categorical target behaviour based on individual features
         reference_data_copy = reference_data.copy()
         reference_data_copy["dataset"] = "Training"
 
-        current_data_copy = current_data.copy()
-        current_data_copy["dataset"] = "Testing"
+        production_data_copy = production_data.copy()
+        production_data_copy["dataset"] = "Testing"
 
-        merged_data = pd.concat([reference_data_copy, current_data_copy])
+        merged_data = pd.concat([reference_data_copy, production_data_copy])
         cat_target_behaviour_graphs = {
             feature: fig_to_json(
                 px.histogram(
                     merged_data,
                     x=feature,
-                    color=target_column_name,
+                    color=target_col_name,
                     # color_discrete_sequence=["goldenrod", "magenta"],
                     facet_col="dataset",
                     barmode="overlay",
@@ -216,23 +220,23 @@ def build(
             for feature in list(feature_test.keys())
         }
 
-    if target_column_type == "num":
-        reference_data_to_plot = reference_data[target_column_name].tolist()
-        current_data_to_plot = current_data[target_column_name].tolist()
+    if target_col_type == "num":
+        reference_data_to_plot = reference_data[target_col_name].tolist()
+        production_data_to_plot = production_data[target_col_name].tolist()
 
         numerical_target_main_figure_data = num_target_main_graph(
-            reference_data_to_plot, current_data_to_plot
+            reference_data_to_plot, production_data_to_plot
         )
 
         # Numerical target behaviour based on individual features
         reference_data_copy = reference_data.copy()
-        current_data_copy = current_data.copy()
+        production_data_copy = production_data.copy()
         num_target_behaviour_graphs = {
             feature: numerical_target_behaviour_on_features(
                 reference_data[feature],
-                current_data[feature],
-                reference_data[target_column_name],
-                current_data[target_column_name],
+                production_data[feature],
+                reference_data[target_col_name],
+                production_data[target_col_name],
             )
             for feature in total_columns
         }
@@ -240,21 +244,21 @@ def build(
     # Data Summary
 
     reference_data_summary = data_summary_stats(
-        reference_data, target_column=target_column_name
+        reference_data, target_column=target_col_name
     )
     reference_data_summary["categorical features"] = len(cat_feature_names)
     reference_data_summary["numeric features"] = len(num_feature_names)
 
-    current_data_summary = data_summary_stats(
-        current_data, target_column=target_column_name
+    production_data_summary = data_summary_stats(
+        production_data, target_column=target_col_name
     )
-    current_data_summary["categorical features"] = len(cat_feature_names)
-    current_data_summary["numeric features"] = len(num_feature_names)
+    production_data_summary["categorical features"] = len(cat_feature_names)
+    production_data_summary["numeric features"] = len(num_feature_names)
 
     data_summary_df = pd.concat(
         [
             pd.DataFrame(reference_data_summary, index=[0]),
-            pd.DataFrame(current_data_summary, index=[0]),
+            pd.DataFrame(production_data_summary, index=[0]),
         ]
     ).T
     data_summary_df.columns = ["Training", "Testing"]
@@ -266,7 +270,7 @@ def build(
     for feature in cat_feature_names:
         feature_type = "cat"
         cur_cat_feature_stats[feature] = feature_summary_stats(
-            current_data[feature], feature_type
+            production_data[feature], feature_type
         )
         ref_cat_feature_stats[feature] = feature_summary_stats(
             reference_data[feature], feature_type
@@ -277,7 +281,7 @@ def build(
     for feature in num_feature_names:
         feature_type = "num"
         cur_num_feature_stats[feature] = feature_summary_stats(
-            current_data[feature], feature_type
+            production_data[feature], feature_type
         )
         ref_num_feature_stats[feature] = feature_summary_stats(
             reference_data[feature], feature_type
@@ -285,10 +289,10 @@ def build(
 
     for feature in cat_feature_names:
         cur_cat_feature_stats[feature] = additional_cat_stats(
-            reference_data[feature], current_data[feature], cur_cat_feature_stats
+            reference_data[feature], production_data[feature], cur_cat_feature_stats
         )
         ref_cat_feature_stats[feature] = additional_cat_stats(
-            reference_data[feature], current_data[feature], ref_cat_feature_stats
+            reference_data[feature], production_data[feature], ref_cat_feature_stats
         )
 
     feature_stats_dataframes = {
@@ -305,11 +309,11 @@ def build(
     # Feature Summary Graphs.
     feature_stats_graphs = {
         **{
-            feature: plot_feature_stats(reference_data, current_data, feature, "cat")
+            feature: plot_feature_stats(reference_data, production_data, feature, "cat")
             for feature in cat_feature_names
         },
         **{
-            feature: plot_feature_stats(reference_data, current_data, feature, "num")
+            feature: plot_feature_stats(reference_data, production_data, feature, "num")
             for feature in num_feature_names
         },
     }
@@ -334,9 +338,9 @@ def build(
         reference_correlations[kind] = calculate_correlations(
             reference_data, num_for_corr, cat_for_corr, kind
         )
-        if current_data is not None:
+        if production_data is not None:
             current_correlations[kind] = calculate_correlations(
-                current_data, num_for_corr, cat_for_corr, kind
+                production_data, num_for_corr, cat_for_corr, kind
             )
 
     metrics = make_metrics(reference_correlations, current_correlations)
@@ -447,10 +451,10 @@ def build(
         """
         feature_data = (
             copy.deepcopy(cat_target_behaviour_graphs[dropdown])
-            if target_column_type == "cat"
+            if target_col_type == "cat"
             else copy.deepcopy(num_target_behaviour_graphs[dropdown])
         )
-        if target_column_type == "cat":
+        if target_col_type == "cat":
             if len(feature_data["data"]) == 4:
                 for i in range(4):
                     feature_data["data"][i]["x"] = feature_data["data"][i]["x"].tolist()
@@ -636,7 +640,7 @@ def build(
             HTML header(H6) with the given column name.
         """
         return html.H6(
-            f"{target_column_name.upper()} behaviour based on {dropdown.capitalize()}",
+            f"{target_col_name.upper()} behaviour based on {dropdown.capitalize()}",
             style={"textAlign": "center"},
         )
 
@@ -900,7 +904,7 @@ def build(
                             dcc.Graph(
                                 id="target-main-graph",
                                 figure=categorical_target_main_figure_data
-                                if target_column_type == "cat"
+                                if target_col_type == "cat"
                                 else numerical_target_main_figure_data,
                                 config={"displayModeBar": False},
                             ),
