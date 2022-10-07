@@ -20,7 +20,7 @@ def correlation_data_table(corr_df):
     A method which will generate a Dash data table with correlation data.
 
     Args:
-        Data which contains all the information correlation inside the reference and current data.
+        Data which contains all the information correlation inside the reference and production data.
 
     Returns:
         Dash Data table with correlation data.

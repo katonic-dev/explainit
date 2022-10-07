@@ -65,44 +65,44 @@ def feature_summary_stats(feature: pd.Series, feature_type: str) -> Dict[str, An
 
 def additional_cat_stats(
     ref_feature_data: pd.Series,
-    cur_feature_data: pd.Series,
+    prod_feature_data: pd.Series,
     cat_feature_stats: Dict[str, Dict[str, Any]],
 ) -> Dict[str, Any]:
     feature_stats: Dict[str, Any] = cat_feature_stats[ref_feature_data.name]
 
-    current_values_set = set(cur_feature_data.unique())
+    production_values_set = set(prod_feature_data.unique())
     reference_values_set = set(ref_feature_data.unique())
-    unique_in_current = current_values_set - reference_values_set
-    unique_in_reference = reference_values_set - current_values_set
+    unique_in_production = production_values_set - reference_values_set
+    unique_in_reference = reference_values_set - production_values_set
 
-    feature_stats["new_in_current_values_count"] = len(
-        unique_in_current
-    )  # new_in_current_values_count
-    feature_stats["unused_in_current_values_count"] = len(
+    feature_stats["new_in_production_values_count"] = len(
+        unique_in_production
+    )  # new_in_production_values_count
+    feature_stats["unused_in_production_values_count"] = len(
         unique_in_reference
-    )  # unused_in_current_values_count
+    )  # unused_in_production_values_count
 
     return feature_stats
 
 
 def make_feature_stats_dataframe(
-    column_name, cur_cat_stats, cur_num_stats, ref_cat_stats, ref_num_stats
+    column_name, prod_cat_stats, prod_num_stats, ref_cat_stats, ref_num_stats
 ) -> pd.DataFrame:
-    if column_name in cur_cat_stats.keys() and ref_cat_stats.keys():
+    if column_name in prod_cat_stats.keys() and ref_cat_stats.keys():
         feats_df = pd.concat(
             [
                 pd.DataFrame(ref_cat_stats[column_name], index=[0]),
-                pd.DataFrame(cur_cat_stats[column_name], index=[0]),
+                pd.DataFrame(prod_cat_stats[column_name], index=[0]),
             ]
         ).T
-        feats_df.columns = ["Training", "Testing"]
+        feats_df.columns = ["Reference", "Production"]
         return feats_df
-    if column_name in cur_num_stats.keys() and ref_num_stats.keys():
+    if column_name in prod_num_stats.keys() and ref_num_stats.keys():
         feats_df = pd.concat(
             [
                 pd.DataFrame(ref_num_stats[column_name], index=[0]),
-                pd.DataFrame(cur_num_stats[column_name], index=[0]),
+                pd.DataFrame(prod_num_stats[column_name], index=[0]),
             ]
         ).T
-        feats_df.columns = ["Training", "Testing"]
+        feats_df.columns = ["Reference", "Production"]
         return feats_df

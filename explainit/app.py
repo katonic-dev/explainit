@@ -92,15 +92,15 @@ def build(
     # production_data.rename(columns={target_col_name: "target"}, inplace=True)
 
     # ref_data_columns = reference_data.columns.to_list()
-    # cur_data_columns = production_data.columns.to_list()
+    # prod_data_columns = production_data.columns.to_list()
     # if functools.reduce(
     #     lambda x, y: x and y,
-    #     map(lambda p, q: p == q, sorted(ref_data_columns), sorted(cur_data_columns)),
+    #     map(lambda p, q: p == q, sorted(ref_data_columns), sorted(prod_data_columns)),
     #     True,
     # ):
-    #     print("The lists cur_data_columns and ref_data_columns are the same")
+    #     print("The lists prod_data_columns and ref_data_columns are the same")
     # else:
-    #     print("ERROR: The lists cur_data_columns and ref_data_columns are not the same")
+    #     print("ERROR: The lists prod_data_columns and ref_data_columns are not the same")
 
     print(f"Initiating {Style.BRIGHT + Fore.GREEN}Explainit App{Style.RESET_ALL}...")
 
@@ -121,7 +121,7 @@ def build(
     production_data = production_data[total_columns]
     if target_col_name not in total_columns:
         raise ValueError(
-            f"Given target column name {Style.BRIGHT + Fore.RED}{target_col_name}{Style.RESET_ALL} does not exist in the data..."
+            f"Given target column name {Style.BRIGHT + Fore.RED}{target_col_name}{Style.RESET_ALL} does not exist in the data."
         )
 
     # Finding appropriate Statistical test for Individual feature.
@@ -132,7 +132,7 @@ def build(
         ref_feature = (
             reference_data[num_feature_name].replace([-np.inf, np.inf], np.nan).dropna()
         )
-        cur_feature = (
+        prod_feature = (
             production_data[num_feature_name]
             .replace([-np.inf, np.inf], np.nan)
             .dropna()
@@ -141,7 +141,7 @@ def build(
             get_stattest(
                 feature_type=feature_type,
                 ref_feature=ref_feature,
-                cur_feature=cur_feature,
+                prod_feature=prod_feature,
             ),
             feature_type,
         ]
@@ -151,12 +151,12 @@ def build(
     for cat_feature_name in cat_feature_names:
         feature_type = "cat"
         ref_feature = reference_data[cat_feature_name].dropna()
-        cur_feature = production_data[cat_feature_name].dropna()
+        prod_feature = production_data[cat_feature_name].dropna()
         cat_feature_test[cat_feature_name] = [
             get_stattest(
                 feature_type=feature_type,
                 ref_feature=ref_feature,
-                cur_feature=cur_feature,
+                prod_feature=prod_feature,
             ),
             feature_type,
         ]
@@ -199,10 +199,10 @@ def build(
 
         # Categorical target behaviour based on individual features
         reference_data_copy = reference_data.copy()
-        reference_data_copy["dataset"] = "Training"
+        reference_data_copy["dataset"] = "Reference"
 
         production_data_copy = production_data.copy()
-        production_data_copy["dataset"] = "Testing"
+        production_data_copy["dataset"] = "Production"
 
         merged_data = pd.concat([reference_data_copy, production_data_copy])
         cat_target_behaviour_graphs = {
@@ -214,7 +214,7 @@ def build(
                     # color_discrete_sequence=["goldenrod", "magenta"],
                     facet_col="dataset",
                     barmode="overlay",
-                    category_orders={"dataset": ["Training", "Testing"]},
+                    category_orders={"dataset": ["Reference", "Production"]},
                 )
             )
             for feature in list(feature_test.keys())
@@ -261,26 +261,26 @@ def build(
             pd.DataFrame(production_data_summary, index=[0]),
         ]
     ).T
-    data_summary_df.columns = ["Training", "Testing"]
+    data_summary_df.columns = ["Reference", "Production"]
     data_summary_df.reset_index(inplace=True)
 
     # Feature Summary
-    cur_cat_feature_stats: Dict[str, Dict[str, Any]] = {}
+    prod_cat_feature_stats: Dict[str, Dict[str, Any]] = {}
     ref_cat_feature_stats: Dict[str, Dict[str, Any]] = {}
     for feature in cat_feature_names:
         feature_type = "cat"
-        cur_cat_feature_stats[feature] = feature_summary_stats(
+        prod_cat_feature_stats[feature] = feature_summary_stats(
             production_data[feature], feature_type
         )
         ref_cat_feature_stats[feature] = feature_summary_stats(
             reference_data[feature], feature_type
         )
 
-    cur_num_feature_stats: Dict[str, Dict[str, Any]] = {}
+    prod_num_feature_stats: Dict[str, Dict[str, Any]] = {}
     ref_num_feature_stats: Dict[str, Dict[str, Any]] = {}
     for feature in num_feature_names:
         feature_type = "num"
-        cur_num_feature_stats[feature] = feature_summary_stats(
+        prod_num_feature_stats[feature] = feature_summary_stats(
             production_data[feature], feature_type
         )
         ref_num_feature_stats[feature] = feature_summary_stats(
@@ -288,8 +288,8 @@ def build(
         )
 
     for feature in cat_feature_names:
-        cur_cat_feature_stats[feature] = additional_cat_stats(
-            reference_data[feature], production_data[feature], cur_cat_feature_stats
+        prod_cat_feature_stats[feature] = additional_cat_stats(
+            reference_data[feature], production_data[feature], prod_cat_feature_stats
         )
         ref_cat_feature_stats[feature] = additional_cat_stats(
             reference_data[feature], production_data[feature], ref_cat_feature_stats
@@ -298,8 +298,8 @@ def build(
     feature_stats_dataframes = {
         feature: make_feature_stats_dataframe(
             feature,
-            cur_cat_feature_stats,
-            cur_num_feature_stats,
+            prod_cat_feature_stats,
+            prod_num_feature_stats,
             ref_cat_feature_stats,
             ref_num_feature_stats,
         )
@@ -333,17 +333,17 @@ def build(
             cat_for_corr.append(feature)
 
     reference_correlations = {}
-    current_correlations = {}
+    production_correlations = {}
     for kind in ["pearson", "spearman", "kendall", "cramer_v"]:
         reference_correlations[kind] = calculate_correlations(
             reference_data, num_for_corr, cat_for_corr, kind
         )
         if production_data is not None:
-            current_correlations[kind] = calculate_correlations(
+            production_correlations[kind] = calculate_correlations(
                 production_data, num_for_corr, cat_for_corr, kind
             )
 
-    metrics = make_metrics(reference_correlations, current_correlations)
+    metrics = make_metrics(reference_correlations, production_correlations)
     metrics_values_headers = [
         "top 5 correlation diff category (Cramer_V)",
         "value train",
@@ -367,7 +367,7 @@ def build(
     for kind in ["pearson", "spearman", "kendall", "cramer_v"]:
         if reference_correlations[kind].shape[0] > 1:
             correlation_figure = plot_correlation_figure(
-                kind, reference_correlations, current_correlations
+                kind, reference_correlations, production_correlations
             )
             correlation_graphs[kind] = {
                 "data": correlation_figure["data"],
@@ -392,7 +392,7 @@ def build(
             item: A String column which will be generated from the dropdown.
             std_dropdown: Standard deviation value choosen from the dropdown.
         Return:
-            Returns a Graph which contains a Drift graph and a Distribution graph for the choosen feature based on Current Data.
+            Returns a Graph which contains a Drift graph and a Distribution graph for the choosen feature based on production Data.
         """
 
         fig1: Figure
@@ -447,7 +447,7 @@ def build(
         Args:
             my_dropdown: Column name which will be generated when you change the dropdown.
         Returns:
-            Returns a graph which contains the target behaviour based on the choosen feature for both Reference and Current data.
+            Returns a graph which contains the target behaviour based on the choosen feature for both Reference and production data.
         """
         feature_data = (
             copy.deepcopy(cat_target_behaviour_graphs[dropdown])
@@ -656,7 +656,7 @@ def build(
             correlation-radio-button: value of the choosen correlation type.
 
         Returns:
-            Heatmap which contains the correlation information of the Reference and Current data for the selected correlation type.
+            Heatmap which contains the correlation information of the Reference and production data for the selected correlation type.
         """
         correlation_graph_data = correlation_graphs[radio_item.lower()]
         return html.Div(

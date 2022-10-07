@@ -24,7 +24,7 @@ def fig_to_json(figure: go.Figure):
 
 
 def generate_additional_graph_num_feature(
-    feature_name, reference_data, current_data, date_column=None
+    feature_name, reference_data, production_data, date_column=None
 ):
     fig1 = go.Figure()
 
@@ -35,19 +35,19 @@ def generate_additional_graph_num_feature(
             opacity=0.6,
             xbins=None,
             nbinsx=10,
-            name="Training",
+            name="Reference",
             histnorm="probability",
         )
     )
 
     fig1.add_trace(
         go.Histogram(
-            x=current_data.tolist(),
+            x=production_data.tolist(),
             marker_color="#ed0400",
             opacity=0.6,
             xbins=None,
             nbinsx=10,
-            name="Testing",
+            name="Production",
             histnorm="probability",
         )
     )
@@ -77,10 +77,10 @@ def generate_additional_graph_num_feature(
 
     fig2.add_trace(
         go.Scattergl(
-            x=date_column.to_list() if date_column else current_data.index.tolist(),
-            y=current_data.tolist(),
+            x=date_column.to_list() if date_column else production_data.index.tolist(),
+            y=production_data.tolist(),
             mode="markers",
-            name="Testing Data Points",
+            name="Production Data Points",
             marker=dict(size=6, color="#ed0400"),
         )
     )
@@ -88,7 +88,7 @@ def generate_additional_graph_num_feature(
     if date_column:
         x0 = date_column.sort_values()[1].tolist()
     else:
-        x0 = current_data.index.sort_values()[1].tolist()
+        x0 = production_data.index.sort_values()[1].tolist()
 
     fig2.add_trace(
         go.Scattergl(
@@ -98,7 +98,7 @@ def generate_additional_graph_num_feature(
                 reference_mean + DEFAULT_CONF_INTERVAL_SIZE * reference_std,
             ],
             mode="markers",
-            name="Testing",
+            name="Production",
             marker=dict(size=0.01, color="white", opacity=0.005),
             showlegend=False,
         )
@@ -127,7 +127,7 @@ def generate_additional_graph_num_feature(
             ),
             dict(
                 type="line",
-                name="Training",
+                name="Reference",
                 xref="paper",
                 yref="y",
                 x0=0,  # min(testset_agg_by_date.index),

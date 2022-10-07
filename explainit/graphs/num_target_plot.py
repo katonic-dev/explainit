@@ -15,11 +15,11 @@ import plotly.figure_factory as ff
 from explainit.graphs.additional_num_graphs import fig_to_json
 
 
-def num_target_main_graph(reference_data_to_plot, current_data_to_plot):
+def num_target_main_graph(reference_data_to_plot, production_data_to_plot):
 
     output_distr = ff.create_distplot(
-        [reference_data_to_plot, current_data_to_plot],
-        ["Reference", "Current"],
+        [reference_data_to_plot, production_data_to_plot],
+        ["Reference", "Production"],
         colors=["#4d4d4d", "#ed0400"],
         show_rug=True,
     )

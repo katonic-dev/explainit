@@ -19,11 +19,11 @@ from plotly.subplots import make_subplots
 
 def numerical_target_behaviour_on_features(
     reference_feature_data,
-    current_feature_data,
+    production_feature_data,
     reference_target_data,
-    current_target_data,
+    production_target_data,
 ):
-    fig = make_subplots(rows=1, cols=2, subplot_titles=("Reference", "Current"))
+    fig = make_subplots(rows=1, cols=2, subplot_titles=("Reference", "Production"))
 
     fig.add_trace(
         go.Scattergl(
@@ -39,10 +39,10 @@ def numerical_target_behaviour_on_features(
 
     fig.add_trace(
         go.Scatter(
-            x=current_feature_data.tolist(),
-            y=current_target_data.tolist(),
+            x=production_feature_data.tolist(),
+            y=production_target_data.tolist(),
             mode="markers",
-            name="Target (curr)",
+            name="Target (prod)",
             marker=dict(size=6, color="#ed0400"),
         ),
         row=1,

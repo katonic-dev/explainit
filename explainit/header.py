@@ -37,7 +37,7 @@ def generate_metric_row(key, style, col1, col2, col3, col4, col5, col6, col7, co
         col1: content for the column section.
         col2: content for the type section.
         col3: content for the Reference Distribution section.
-        col4: content for the Current Distribution section.
+        col4: content for the production Distribution section.
         col5: content for the threshld section.
         col6: content for the Stat-test section.
         col7: content for the P-Value section.
@@ -129,8 +129,8 @@ def generate_metric_list_header():
         },
         {"id": "m_header_1", "children": html.Div("Column")},
         {"id": "m_header_2", "children": html.Div("Type")},
-        {"id": "m_header_3", "children": html.Div("Training Distribution")},
-        {"id": "m_header_4", "children": html.Div("Testing Distribution")},
+        {"id": "m_header_3", "children": html.Div("Reference Distribution")},
+        {"id": "m_header_4", "children": html.Div("Production Distribution")},
         {"id": "m_header_5", "children": html.Div("Threshold")},
         {"id": "m_header_6", "children": html.Div("Stat-test")},
         {"id": "m_header_7", "children": html.Div("P-Value")},
@@ -186,12 +186,12 @@ def generate_metric_row_helper(item, stats_info):
             feature_stats_data = feature_data
             ref_x = feature_stats_data["ref_hist_data"][1]
             ref_y = feature_stats_data["ref_hist_data"][0]
-            if len(feature_stats_data["cur_hist_data"]) == 1:
-                cur_x = feature_stats_data["cur_hist_data"][0][1]
-                cur_y = feature_stats_data["cur_hist_data"][0][0]
+            if len(feature_stats_data["prod_hist_data"]) == 1:
+                prod_x = feature_stats_data["prod_hist_data"][0][1]
+                prod_y = feature_stats_data["prod_hist_data"][0][0]
             else:
-                cur_x = feature_stats_data["cur_hist_data"][1]
-                cur_y = feature_stats_data["cur_hist_data"][0]
+                prod_x = feature_stats_data["prod_hist_data"][1]
+                prod_y = feature_stats_data["prod_hist_data"][0]
 
     if "target" not in item:
         div_id = item + SUFFIX_ROW
@@ -291,8 +291,8 @@ def generate_metric_row_helper(item, stats_info):
                         {
                             "data": [
                                 {
-                                    "x": cur_x,
-                                    "y": cur_y,
+                                    "x": prod_x,
+                                    "y": prod_y,
                                     "type": "bar",
                                     "name": item,
                                 },
@@ -320,8 +320,8 @@ def generate_metric_row_helper(item, stats_info):
                     )
                     .add_traces(
                         go.Scatter(
-                            x=cur_x,
-                            y=cur_y,
+                            x=prod_x,
+                            y=prod_y,
                             mode="lines",
                             line=dict(
                                 color="rgba(64, 83, 211,1)",
