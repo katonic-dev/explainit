@@ -12,16 +12,16 @@ from explainit.app import build
 ```
 Explainit requires several parameters to be passed to the function in order to run the application.
  - `reference_data`: The data on which your machine learning model will get trained (training data).
- - `current_data`: The data for which you need the predictions from the model (production data).
- - `target_column_name`: The dependent column name from your dataset.
- - `target_column_type`: What type of category that the target column is, use `cat` if your target column is a categorical or use `num` for continuous column.
- - `datetime_column_name`: Optional datetime column name present in the `reference` & `current` data.
+ - `production_data`: The data for which you need the predictions from the model (production data).
+ - `target_col_name`: The dependent column name from your dataset.
+ - `target_col_type`: What type of category that the target column is, use `cat` if your target column is a categorical or use `num` for continuous column.
+ - `datetime_col_name`: Optional datetime column name present in the `reference` & `production` data.
  - `host`: Optional host address where you want this application to run, in string format (default: 0.0.0.0 or localhost).
  - `port`: Optional port where you want this application to run, in integer format (default: 8050).
 
 Once you define the parameters for the Explainit, simply run the function in order to start the application.
 ```python
-build(reference_data, current_data, target_column_name, target_column_type, datetime_column_name, host, port)
+build(reference_data, production_data, target_col_name, target_col_type, datetime_col_name, host, port)
 ```
 
 **Q2. How to decide the Statistical-tests and their significance?**

@@ -835,7 +835,7 @@ body {
   }
 
   .metric-row>div:nth-of-type(4):before {
-    content: "Current Distribution";
+    content: "Production Distribution";
   }
 
   .metric-row>div:nth-of-type(5) {

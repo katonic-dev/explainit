@@ -96,7 +96,7 @@ from sklearn.model_selection import train_test_split
 cancer_data = datasets.load_breast_cancer()
 cancer_dataframe = pd.DataFrame(cancer_data.data, columns = cancer_data.feature_names)
 cancer_dataframe['target'] = cancer_data.target
-ref_data, cur_data = train_test_split(cancer_dataframe, train_size=0.80, shuffle=True)
+ref_data, prod_data = train_test_split(cancer_dataframe, train_size=0.80, shuffle=True)
 ```
 
 Once you prepared the both training and testing datasets, all you need to do is pass those datasets into the method that we imported along with the target column name and target column type (type should be `cat` for categorical column and `num` for numerical columns).
@@ -104,9 +104,9 @@ Once you prepared the both training and testing datasets, all you need to do is 
 ```python
 build(
   reference_data=ref_data,
-  current_data=cur_data,
-  target_column_name="target",
-  target_column_type="cat",
+  production_data=prod_data,
+  target_col_name="target",
+  target_col_type="cat",
   host="127.0.0.1",
   port=8050
 )
