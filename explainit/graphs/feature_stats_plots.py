@@ -106,7 +106,7 @@ def plot_feature_stats(
                 ),
                 marker_color="#48DD2D",
                 visible=False,
-                name="traininig",
+                name="reference",
             )
             trace3 = go.Histogram(
                 x=production_data[feature_name],
@@ -164,7 +164,7 @@ def plot_feature_stats(
                 go.Histogram(
                     x=reference_data[feature_name],
                     marker_color="#48DD2D",
-                    name="traininig",
+                    name="reference",
                 )
             )
             fig.add_trace(
