@@ -31,37 +31,37 @@ def get_df_corr_features_sorted(df_corr: pd.DataFrame) -> pd.DataFrame:
 
 
 def get_rel_diff_corr_features_sorted(
-    ref_corr: pd.DataFrame, curr_corr: pd.DataFrame
+    ref_corr: pd.DataFrame, prod_corr: pd.DataFrame
 ) -> pd.DataFrame:
     ref_corr = get_df_corr_features_sorted(ref_corr).rename(
         columns={"value": "value_ref"}
     )
-    curr_corr = get_df_corr_features_sorted(curr_corr).rename(
-        columns={"value": "value_curr"}
+    prod_corr = get_df_corr_features_sorted(prod_corr).rename(
+        columns={"value": "value_prod"}
     )
-    com_corr = ref_corr.merge(curr_corr, on="features", how="left")
+    com_corr = ref_corr.merge(prod_corr, on="features", how="left")
     com_corr["value_diff"] = np.round(
-        (com_corr["value_ref"] - com_corr["value_curr"]), 3
+        (com_corr["value_ref"] - com_corr["value_prod"]), 3
     )
     com_corr["abs_value_diff"] = np.abs(com_corr["value_diff"])
     com_corr = com_corr.sort_values("abs_value_diff", ascending=False)
-    return com_corr[["features", "value_ref", "value_curr", "value_diff"]]
+    return com_corr[["features", "value_ref", "value_prod", "value_diff"]]
 
 
 def make_metrics(
     reference_correlations: Dict[str, pd.DataFrame],
-    current_correlations: Dict[str, pd.DataFrame],
+    production_correlations: Dict[str, pd.DataFrame],
 ):
     metrics = []
     if reference_correlations["spearman"].shape[0] > 1:
         com_num_corr = get_rel_diff_corr_features_sorted(
-            reference_correlations["spearman"], current_correlations["spearman"]
+            reference_correlations["spearman"], production_correlations["spearman"]
         )
     else:
         com_num_corr = pd.DataFrame()
     if reference_correlations["cramer_v"].shape[0] > 1:
         com_cat_corr = get_rel_diff_corr_features_sorted(
-            reference_correlations["cramer_v"], current_correlations["cramer_v"]
+            reference_correlations["cramer_v"], production_correlations["cramer_v"]
         )
     else:
         com_cat_corr = pd.DataFrame()

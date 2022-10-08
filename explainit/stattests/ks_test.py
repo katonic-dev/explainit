@@ -18,12 +18,12 @@ from scipy.stats import ks_2samp
 
 
 def ks_stat_test(
-    reference_data: pd.Series, current_data: pd.Series, threshold: float
+    reference_data: pd.Series, production_data: pd.Series, threshold: float
 ) -> Tuple[float, bool, float]:
     """Run the two-sample Kolmogorov-Smirnov test of two samples. Alternative: two-sided
     Args:
         reference_data: reference data
-        current_data: current data
+        production_data: production data
         feature_type: feature type
         threshold: level of significance
     Returns:
@@ -31,5 +31,5 @@ def ks_stat_test(
         test_result: whether the drift is detected
         threshold: threshold for reference
     """
-    p_value = ks_2samp(reference_data, current_data)[1]
+    p_value = ks_2samp(reference_data, production_data)[1]
     return p_value, p_value <= threshold, threshold

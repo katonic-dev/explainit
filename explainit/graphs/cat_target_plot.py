@@ -11,11 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY aIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import pandas as pd
 import plotly.graph_objs as go
 from explainit.graphs.additional_num_graphs import fig_to_json
 
 
-def cat_target_main_graph(ref_target_data, cur_target_data):
+def cat_target_main_graph(ref_target_data: pd.Series, prod_target_data: pd.Series):
     fig = go.Figure()
 
     fig.add_trace(
@@ -24,18 +25,18 @@ def cat_target_main_graph(ref_target_data, cur_target_data):
             marker_color="#48DD2D",
             opacity=0.6,
             nbinsx=10,
-            name="Training",
+            name="Reference",
             histnorm="probability",
         )
     )
 
     fig.add_trace(
         go.Histogram(
-            x=cur_target_data.tolist(),
+            x=prod_target_data.tolist(),
             marker_color="#ed0400",
             opacity=0.6,
             nbinsx=10,
-            name="Testing",
+            name="Production",
             histnorm="probability",
         )
     )

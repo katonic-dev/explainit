@@ -19,12 +19,12 @@ from scipy.stats import wasserstein_distance
 
 
 def wasserstein_distance_stat_test(
-    reference_data: pd.Series, current_data: pd.Series, threshold: float
+    reference_data: pd.Series, production_data: pd.Series, threshold: float
 ) -> Tuple[float, bool, float]:
     """Compute the first Wasserstein distance between two arrays normed by std of reference data
     Args:
         reference_data: reference data
-        current_data: current data
+        production_data: production data
         feature_type: feature type
         threshold: all values above this threshold means data drift
     Returns:
@@ -33,5 +33,5 @@ def wasserstein_distance_stat_test(
         threshold: threshold for reference
     """
     norm = max(np.std(reference_data), 0.001)
-    wd_norm_value = wasserstein_distance(reference_data, current_data) / norm
+    wd_norm_value = wasserstein_distance(reference_data, production_data) / norm
     return wd_norm_value, wd_norm_value >= threshold, threshold

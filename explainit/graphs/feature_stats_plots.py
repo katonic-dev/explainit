@@ -20,7 +20,9 @@ import plotly.graph_objs as go
 
 
 def choose_agg_period(
-    date_column: str, reference_data: pd.DataFrame, current_data: Optional[pd.DataFrame]
+    date_column: str,
+    reference_data: pd.DataFrame,
+    production_data: Optional[pd.DataFrame],
 ) -> str:
     optimal_points = 150
     prefix_dict = {
@@ -32,8 +34,8 @@ def choose_agg_period(
         "H": "hour",
     }
     datetime_feature = reference_data[date_column]
-    if current_data is not None:
-        datetime_feature = datetime_feature.append(current_data[date_column])
+    if production_data is not None:
+        datetime_feature = datetime_feature.append(production_data[date_column])
     days = (datetime_feature.max() - datetime_feature.min()).days
     time_points = pd.Series(
         index=["A", "Q", "M", "W", "D", "H"],
@@ -52,12 +54,12 @@ def choose_agg_period(
 
 def plot_feature_stats(
     reference_data: pd.DataFrame,
-    current_data: pd.DataFrame,
+    production_data: pd.DataFrame,
     feature_name: str,
     feature_type: str,
 ):
     if feature_type == "num":
-        if current_data is None:
+        if production_data is None:
             trace1 = go.Histogram(
                 x=reference_data[feature_name], marker_color="#48DD2D"
             )
@@ -96,7 +98,7 @@ def plot_feature_stats(
             trace1 = go.Histogram(
                 x=reference_data[feature_name],
                 marker_color="#48DD2D",
-                name="training",
+                name="reference",
             )
             trace2 = go.Histogram(
                 x=np.log10(
@@ -107,15 +109,17 @@ def plot_feature_stats(
                 name="traininig",
             )
             trace3 = go.Histogram(
-                x=current_data[feature_name], marker_color="#ed0400", name="current"
+                x=production_data[feature_name],
+                marker_color="#ed0400",
+                name="production",
             )
             trace4 = go.Histogram(
                 x=np.log10(
-                    current_data.loc[current_data[feature_name] > 0, feature_name]
+                    production_data.loc[production_data[feature_name] > 0, feature_name]
                 ),
                 marker_color="#ed0400",
                 visible=False,
-                name="testing",
+                name="production",
             )
             data = [trace1, trace2, trace3, trace4]
 
@@ -151,7 +155,7 @@ def plot_feature_stats(
         if "other" in cats:
             cats.remove("other")
             cats = cats + ["other"]
-        if current_data is None:
+        if production_data is None:
             fig.add_trace(
                 go.Histogram(x=reference_data[feature_name], marker_color="#ed0400")
             )
@@ -165,21 +169,21 @@ def plot_feature_stats(
             )
             fig.add_trace(
                 go.Histogram(
-                    x=current_data[feature_name],
+                    x=production_data[feature_name],
                     marker_color="#ed0400",
-                    name="testing",
+                    name="production",
                 )
             )
         fig.update_xaxes(categoryorder="array", categoryarray=cats)
 
     elif feature_type == "datetime":
-        freq = choose_agg_period(feature_name, reference_data, current_data)
+        freq = choose_agg_period(feature_name, reference_data, production_data)
         tmp_ref = reference_data[feature_name].dt.to_period(freq=freq)
         tmp_ref = tmp_ref.value_counts().reset_index()
         tmp_ref.columns = [feature_name, "number_of_items"]
         tmp_ref[feature_name] = tmp_ref[feature_name].dt.to_timestamp()
         fig = go.Figure()
-        if current_data is None:
+        if production_data is None:
             fig.add_trace(
                 go.Scatter(
                     x=tmp_ref.sort_values(feature_name)[feature_name],
@@ -188,27 +192,27 @@ def plot_feature_stats(
                 )
             )
         else:
-            tmp_curr = current_data[feature_name].dt.to_period(freq=freq)
-            tmp_curr = tmp_curr.value_counts().reset_index()
-            tmp_curr.columns = [feature_name, "number_of_items"]
-            tmp_curr[feature_name] = tmp_curr[feature_name].dt.to_timestamp()
+            tmp_prod = production_data[feature_name].dt.to_period(freq=freq)
+            tmp_prod = tmp_prod.value_counts().reset_index()
+            tmp_prod.columns = [feature_name, "number_of_items"]
+            tmp_prod[feature_name] = tmp_prod[feature_name].dt.to_timestamp()
 
             max_ref_date = tmp_ref[feature_name].max()
-            min_curr_date = tmp_curr[feature_name].min()
-            if max_ref_date == min_curr_date:
+            min_prod_date = tmp_prod[feature_name].min()
+            if max_ref_date == min_prod_date:
                 if (
-                    tmp_curr.loc[
-                        tmp_curr[feature_name] == min_curr_date, "number_of_items"
+                    tmp_prod.loc[
+                        tmp_prod[feature_name] == min_prod_date, "number_of_items"
                     ].iloc[0]
                     > tmp_ref.loc[
                         tmp_ref[feature_name] == max_ref_date, "number_of_items"
                     ].iloc[0]
                 ):
-                    tmp_curr.loc[
-                        tmp_curr[feature_name] == min_curr_date, "number_of_items"
+                    tmp_prod.loc[
+                        tmp_prod[feature_name] == min_prod_date, "number_of_items"
                     ] = (
-                        tmp_curr.loc[
-                            tmp_curr[feature_name] == min_curr_date, "number_of_items"
+                        tmp_prod.loc[
+                            tmp_prod[feature_name] == min_prod_date, "number_of_items"
                         ]
                         + tmp_ref.loc[
                             tmp_ref[feature_name] == max_ref_date, "number_of_items"
@@ -222,26 +226,26 @@ def plot_feature_stats(
                         tmp_ref.loc[
                             tmp_ref[feature_name] == max_ref_date, "number_of_items"
                         ]
-                        + tmp_curr.loc[
-                            tmp_curr[feature_name] == min_curr_date, "number_of_items"
+                        + tmp_prod.loc[
+                            tmp_prod[feature_name] == min_prod_date, "number_of_items"
                         ]
                     )
-                    tmp_curr = tmp_curr[tmp_curr[feature_name] != min_curr_date]
+                    tmp_prod = tmp_prod[tmp_prod[feature_name] != min_prod_date]
 
             fig.add_trace(
                 go.Scatter(
                     x=tmp_ref.sort_values(feature_name)[feature_name],
                     y=tmp_ref.sort_values(feature_name)["number_of_items"],
                     line=dict(color="#4d4d4d", shape="spline"),
-                    name="training",
+                    name="reference",
                 )
             )
             fig.add_trace(
                 go.Scatter(
-                    x=tmp_curr.sort_values(feature_name)[feature_name],
-                    y=tmp_curr.sort_values(feature_name)["number_of_items"],
+                    x=tmp_prod.sort_values(feature_name)[feature_name],
+                    y=tmp_prod.sort_values(feature_name)["number_of_items"],
                     line=dict(color="#ed0400", shape="spline"),
-                    name="testing",
+                    name="production",
                 )
             )
     else:

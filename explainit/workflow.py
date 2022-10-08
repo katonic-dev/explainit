@@ -55,7 +55,7 @@ def generate_workflow():
                         ###### What does this app shows?
                         1. Data Drift
                         2. Target Drift
-                        3. Data Quality, for both Training & Production/Current Data
+                        3. Data Quality, for both Reference & Production Data
                     """
                             )
                         ),
