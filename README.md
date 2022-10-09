@@ -99,7 +99,7 @@ cancer_dataframe['target'] = cancer_data.target
 ref_data, prod_data = train_test_split(cancer_dataframe, train_size=0.80, shuffle=True)
 ```
 
-Once you prepared the both training and testing datasets, all you need to do is pass those datasets into the method that we imported along with the target column name and target column type (type should be `cat` for categorical column and `num` for numerical columns).
+Once you have the both reference and production datasets, all you need to do is pass those datasets into the method that we imported along with the target column name and target column type (type should be `cat` for categorical column and `num` for numerical columns).
 
 ```python
 build(
@@ -131,7 +131,7 @@ Interested in contributing? Check out our [CONTRIBUTING.md](https://github.com/k
 **A**. By this app users can calculate Dataset Drift, Target Drift and Data Quality metrics to understand the Production / Real-World Data along with Training / Reference Data better to come to a decision.
 
 ### Q. What does the input data look like?
-**A**. Input Data is nothing but your training and testing data. The training data will be used for the distribution comparision for the testing data. These input data should be passed as pandas dataframes.
+**A**. Input Data is nothing but your reference/training and production/inference data. The reference data will be used for the distribution comparision for the production data. These input data should be passed as pandas dataframes.
 
 ### Q. What outputs does the app produce?
 **A**. App shows / produces the Statistical Information about the complete data (features + target) for drift analysis, Distribution Plots for each of the features to understand the data better, Contribution of each features on the target along with Correlations metrics.

@@ -348,12 +348,12 @@ def build(
     metrics = make_metrics(reference_correlations, production_correlations)
     metrics_values_headers = [
         "top 5 correlation diff category (Cramer_V)",
-        "value train",
-        "value test",
+        "value ref",
+        "value prod",
         "difference",
         "top 5 correlation diff numerical (Spearman)",
-        "value train",
-        "value test",
+        "value ref",
+        "value prod",
         "difference",
     ]
 
