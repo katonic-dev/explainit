@@ -6,6 +6,10 @@
 
 **Bug Fixes**
 
+- Updated naming convention, typo ([5fc4095]())
+- Fixed typo in feature summary stats graph ([6dd7f9a](https://github.com/katonic-dev/explainit/commit/6dd7f9aa1a64376d460b11b1fe4f0295019d692f))
+- Updated changelog ([6e2d32e](https://github.com/katonic-dev/explainit/commit/6e2d32e915ac1d8e7f3c574bfa69a740a9fb5e63))
+- Updated release version ([29d5965](https://github.com/katonic-dev/explainit/commit/29d59652c3c57ef3e831effedc562f0f3d81f823))
 - Update bug-report template ([9655ded](https://github.com/katonic-dev/explainit/commit/9655ded53bd1cec081841a75c0f97708d05a6cfb))
 - Updated `current` dataset label to `production` ([2b563ed](https://github.com/katonic-dev/explainit/commit/2b563edb276790997f73039eb3cb8bf669fe7780))
 - Updated architecture diagram ([5632a7a](https://github.com/katonic-dev/explainit/commit/5632a7aee061f1e17cc7506996c20c3d401380b0))
@@ -32,6 +36,8 @@
 
 **Merged Pull Requests**
 
+- 21-bug-fix-typo-in-feature-summary-stats ([#22](https://github.com/katonic-dev/explainit/pull/22)) ([40e7154](https://github.com/katonic-dev/explainit/commit/40e7154fb44482d6f91f4631b547df429fc84086))
+- 19-doc-fix-update-release-version ([#20](https://github.com/katonic-dev/explainit/pull/20)) ([8a5f937](https://github.com/katonic-dev/explainit/commit/8a5f937f3a2c3ea9ce67a1ab7ad7ec8c371a4c18))
 - 17-doc-fix-update-the-app-workflow ([#18](https://github.com/katonic-dev/explainit/pull/18)) ([e67edf7](https://github.com/katonic-dev/explainit/commit/e67edf7b15a6f0d7ffc73abd98455703142db826))
 - 14-br-update-build-function-input-parameters ([#16](https://github.com/katonic-dev/explainit/pull/16)) ([59fdba5](https://github.com/katonic-dev/explainit/commit/59fdba5c4f74fc4a8a0c86262c2bad126388205b))
 - 13-doc-fix-update-typo-punctuation ([#15](https://github.com/katonic-dev/explainit/pull/15)) ([812b1c0](https://github.com/katonic-dev/explainit/commit/812b1c0399dfb5c603406289560cbd095c1b4d7f))
