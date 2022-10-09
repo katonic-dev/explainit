@@ -12,7 +12,7 @@ from explainit.app import build
 ```
 Explainit requires several parameters to be passed to the function in order to run the application.
  - `reference_data`: The data on which your machine learning model will get trained (training data).
- - `production_data`: The data for which you need the predictions from the model (production data).
+ - `production_data`: The data for which you need the predictions from the model (inference data).
  - `target_col_name`: The dependent column name from your dataset.
  - `target_col_type`: What type of category that the target column is, use `cat` if your target column is a categorical or use `num` for continuous column.
  - `datetime_col_name`: Optional datetime column name present in the `reference` & `production` data.

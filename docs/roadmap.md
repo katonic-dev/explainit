@@ -9,8 +9,8 @@ The list below contains the functionality that we are planning to develop for Ex
   * [x] Drift detection
   * [x] Data Metric production
   * [x] Data profiling and validation
-  * [x] Training Data
-  * [x] Production Data
+  * [x] Reference/Training Data
+  * [x] Production/Inference Data
   * [ ] Training-serving skew detection
 ## Model Quality Management
   * [ ] Model Drift
