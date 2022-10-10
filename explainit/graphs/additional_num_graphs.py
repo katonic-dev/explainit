@@ -92,7 +92,7 @@ def generate_additional_graph_num_feature(
     if date_column:
         x0 = date_column.sort_values()[1].tolist()
     else:
-        x0 = production_data.index.sort_values()[1].tolist()
+        x0 = production_data.index.sort_values()[1]
 
     fig2.add_trace(
         go.Scattergl(
