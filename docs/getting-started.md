@@ -14,12 +14,12 @@ In this getting started, you will accomplish the following things:
 To install the explainit library you need to run the following command in terminal or Notebook cell.
 
 ```commandline
-$ pip install explainit
+pip install explainit
 ```
 
 Install scikit-learn for example dataset.
 ```commandline
-$ pip install scikit-learn
+pip install scikit-learn
 ```
 
 These dashboards are build on top of Python Dash, So you'll see them inside your browser on the host and port you provided while initializing the Dashboards.

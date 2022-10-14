@@ -70,13 +70,13 @@ There are three main types of model drift:
 ## Installation guide
 Install the Explainit Package:
 ```commandline
-$ pip install explainit
+pip install explainit
 ```
 
 Install the Scikit-learn Package for example dataset:
 
 ```commandline
-$ pip install scikit-learn
+pip install scikit-learn
 ```
 ## Run the App
 

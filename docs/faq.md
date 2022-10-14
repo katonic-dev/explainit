@@ -3,8 +3,8 @@
 **Q1. How to run the Application?**
 
 **A**: In order to run the application you need install the library from the [PyPI](https://pypi.org/project/explainit/).
-```python
-$ pip install explainit
+```commandline
+pip install explainit
 ```
 Once you completed the installation process, import the method in order to run the application.
 ```python
