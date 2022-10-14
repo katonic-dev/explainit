@@ -118,7 +118,7 @@ If you want to run your application in a separate server rather than localhost, 
 Below is a snapshot of the landing page of Explainit Dashboard.
 
 <p align="center">
-      <img src="https://raw.githubusercontent.com/katonic-dev/explainit/master/docs/assets/metrics_row.jpg">
+      <img src="https://raw.githubusercontent.com/katonic-dev/explainit/master/docs/assets/metrics_row.png">
 </p>
 <br />
 

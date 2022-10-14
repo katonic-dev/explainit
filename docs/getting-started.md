@@ -86,7 +86,7 @@ Once your application is up and running. Go to the location that you've provided
 
 ## Initial Application interface:
 
-![initial_tab](./assets/metrics_row.jpg)
+![initial_tab](./assets/metrics_row.png)
 
 You'll get to see three tabs inside the opening interface. The default tab will be data drift.
 
@@ -105,7 +105,7 @@ Following can be found in the above section:
 
 ## Column Drift and Distritution along with the Standard Deviation:
 
-![drift_and_distr_graphs](./assets/drift_dist_graphs.jpg)
+![drift_and_distr_graphs](./assets/drift_dist_graphs.png)
 
 Choose the desired column and the standard deviation from the dropdowns, In order to visualize the Distribution and Drift in comparision with reference data.
 
@@ -115,25 +115,25 @@ More the Red colured points are outside the light green area, that much drift is
 
 
 ## Target Drift:
-![target_graph](./assets/target_graph.jpg)
+![target_graph](./assets/target_graph.png)
 
 This tab gives a bried understanding of the target column. The heading informs whether drift occurs in target column along with the statistical test and p-value.
 
 Apart from the target graph, you'll get to see how the target column is behaving with respect to the individual feature.
 Choose the feature from the Dropdown.
 
-![target_behaviour](./assets/target_behavior_based_on_featurejpg.jpg)
+![target_behaviour](./assets/target_behavior_based_on_feature.png)
 
 ## Data Quality:
 The Data Quality tab contains three sub-tabs consisting of the data summary, feature summary and correlation analysis. The default tab will be Data Summary.
 
-![data_summary](./assets/data_summary.jpg)
+![data_summary](./assets/data_summary.png)
 
 Data Summary helps you understand the basic statistical information regarding your reference and production data. It contains information like total count, missing observations, number of numerical features, number of empty features, etc.
 
 When you choose the feature summary tab:
 
-![feature_summary](./assets/feature_summary.jpg)
+![feature_summary](./assets/feature_summary.png)
 
 Feature Summary provides the insights about the individual feature. You need to select the feature from dropdown in order to choose the desired feature.
 
@@ -141,7 +141,7 @@ It provides count, number of unique values(with the ratio), most common value an
 
 Correlation tab:
 
-![correlation_table](./assets/correlation_table.jpg)
+![correlation_table](./assets/correlation_table.png)
 
 This tab provides the correlation between the feature along with the top 5 correlated features along with the difference.
 
@@ -149,4 +149,4 @@ Apart from the correlation table, there will be correlation heatmaps in three di
 
 Choose the desired correlation method from the radio buttons.
 
-![correlation_heatmaps](./assets/correlation_heatmaps.jpg)
+![correlation_heatmaps](./assets/correlation_heatmaps.png)
