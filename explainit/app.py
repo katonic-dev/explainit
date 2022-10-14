@@ -911,13 +911,9 @@ def build(
                                 config={"displayModeBar": False},
                             ),
                             style={
-                                "width": "150vh",
-                                "height": "60vh",
                                 "display": "flex",
                                 "justify-content": "center",
-                                "margin-left": "230px",
                                 "border": "3px #5c5c5c solid",
-                                "padding-left": "1px",
                                 "overflow": "hidden",
                             },
                         ),
