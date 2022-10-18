@@ -248,14 +248,14 @@ def build(
     reference_data_summary = data_summary_stats(
         reference_data, target_column=target_col_name
     )
-    reference_data_summary["categorical features"] = len(cat_feature_names)
-    reference_data_summary["numeric features"] = len(num_feature_names)
+    reference_data_summary["Categorical features"] = len(cat_feature_names)
+    reference_data_summary["Numeric features"] = len(num_feature_names)
 
     production_data_summary = data_summary_stats(
         production_data, target_column=target_col_name
     )
-    production_data_summary["categorical features"] = len(cat_feature_names)
-    production_data_summary["numeric features"] = len(num_feature_names)
+    production_data_summary["Categorical features"] = len(cat_feature_names)
+    production_data_summary["Numeric features"] = len(num_feature_names)
 
     data_summary_df = pd.concat(
         [
@@ -265,6 +265,7 @@ def build(
     ).T
     data_summary_df.columns = ["Reference", "Production"]
     data_summary_df.reset_index(inplace=True)
+    data_summary_df.rename(columns={"index": "Metrics"}, inplace=True)
 
     # Feature Summary
     prod_cat_feature_stats: Dict[str, Dict[str, Any]] = {}
@@ -326,12 +327,12 @@ def build(
 
     num_for_corr = []
     for feature in num_feature_names:
-        if reference_feature_stats[feature]["unique_count"] > 1:
+        if reference_feature_stats[feature]["Unique_count"] > 1:
             num_for_corr.append(feature)
 
     cat_for_corr = []
     for feature in cat_feature_names:
-        if reference_feature_stats[feature]["unique_count"] > 1:
+        if reference_feature_stats[feature]["Unique_count"] > 1:
             cat_for_corr.append(feature)
 
     reference_correlations = {}
@@ -556,7 +557,6 @@ def build(
         """
 
         feature_df = feature_stats_dataframes[feature_summary_dropdown]
-        feature_df = feature_df.reset_index()
         return [
             html.Div(
                 html.H6(
