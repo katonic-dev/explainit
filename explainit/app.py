@@ -106,15 +106,30 @@ def build(
 
     print(f"Initiating {Style.BRIGHT + Fore.GREEN}Explainit App{Style.RESET_ALL}...")
 
-    num_feature_names: List[str] = sorted(
-        list(set(reference_data.select_dtypes([np.number]).columns))
-    )
-    cat_feature_names: List[str] = sorted(
-        list(
-            set(reference_data.select_dtypes(exclude=[np.number, "datetime"]).columns)
-            - set(num_feature_names)
+    cols = reference_data.select_dtypes(
+        exclude=[
+            np.datetime64,
+            "datetime",
+            "datetime64",
+            np.timedelta64,
+            "timedelta",
+            "timedelta64",
+            "datetimetz",
+            "datetime64[ns, UTC]",
+        ]
+    ).columns
+
+    num_feature_names: List[str] = []
+    cat_feature_names: List[str] = []
+    list(
+        map(
+            lambda x: cat_feature_names.append(x)
+            if reference_data[x].nunique() <= 15
+            else num_feature_names.append(x),
+            cols,
         )
     )
+
     cat_feature_names.remove(
         datetime_col_name
     ) if datetime_col_name else cat_feature_names
