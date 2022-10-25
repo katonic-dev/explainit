@@ -54,12 +54,12 @@ def get_statistical_info(
 
         if feature_test[feature][0] == "jensenshannon_stat_test":
             p_value, drift, threshold = jensenshannon_stat_test(
-                ref_feature, prod_feature, feature_test[feature][1], threshold=0.05
+                ref_feature, prod_feature, feature_test[feature][1], threshold=0.1
             )
 
         if feature_test[feature][0] == "wasserstein_stat_test":
             p_value, drift, threshold = wasserstein_distance_stat_test(
-                ref_feature, prod_feature, threshold=0.05
+                ref_feature, prod_feature, threshold=0.1
             )
         test_info[feature] = {
             "feature_name": feature,
