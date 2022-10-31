@@ -34,13 +34,13 @@ def generate_metric_row(key, style, col1, col2, col3, col4, col5, col6, col7, co
     Args:
         key: id for the html element.
         style: style attribute for the component.
-        col1: content for the column section.
-        col2: content for the type section.
+        col1: content for the Feature section.
+        col2: content for the Type section.
         col3: content for the Reference Distribution section.
-        col4: content for the production Distribution section.
-        col5: content for the threshld section.
+        col4: content for the Production Distribution section.
+        col5: content for the Threshld section.
         col6: content for the Stat-test section.
-        col7: content for the P-Value section.
+        col7: content for the P-Value/Distance section.
         col8: content for the Drift/No Drift section.
 
     Returns:
@@ -99,7 +99,7 @@ def generate_metric_row(key, style, col1, col2, col3, col4, col5, col6, col7, co
             html.Div(
                 id=col7["id"],
                 style={"textAlign": "center"},
-                className="one columns",
+                className="two columns",
                 children=col7["children"],
             ),
             html.Div(
@@ -127,13 +127,13 @@ def generate_metric_list_header():
             "margin-right": "15px",
             "margin-left": "15px",
         },
-        {"id": "m_header_1", "children": html.Div("Column")},
+        {"id": "m_header_1", "children": html.Div("Feature")},
         {"id": "m_header_2", "children": html.Div("Type")},
         {"id": "m_header_3", "children": html.Div("Reference Distribution")},
         {"id": "m_header_4", "children": html.Div("Production Distribution")},
         {"id": "m_header_5", "children": html.Div("Threshold")},
         {"id": "m_header_6", "children": html.Div("Stat-test")},
-        {"id": "m_header_7", "children": html.Div("P-Value")},
+        {"id": "m_header_7", "children": html.Div("P-Value/Distance")},
         {"id": "m_header_8", "children": html.Div("Drift/No Drift")},
     )
 
