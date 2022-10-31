@@ -22,7 +22,7 @@ def cat_target_main_graph(ref_target_data: pd.Series, prod_target_data: pd.Serie
     fig.add_trace(
         go.Histogram(
             x=ref_target_data.tolist(),
-            marker_color="#48DD2D",
+            marker_color="#1C4E80",
             opacity=0.6,
             nbinsx=10,
             name="Reference",
@@ -33,7 +33,7 @@ def cat_target_main_graph(ref_target_data: pd.Series, prod_target_data: pd.Serie
     fig.add_trace(
         go.Histogram(
             x=prod_target_data.tolist(),
-            marker_color="#ed0400",
+            marker_color="#0091D5",
             opacity=0.6,
             nbinsx=10,
             name="Production",
