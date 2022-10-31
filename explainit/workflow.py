@@ -49,15 +49,22 @@ def generate_workflow():
                         children=dcc.Markdown(
                             children=(
                                 """
-                        ###### What is this app about?
-                        This is a Business Intelligence Web Application for Monitoring and Understanding How your Data and Target is.
+                                #### What is this app about?
+                                This is a Business Intelligence Web Application for Drift Detection, Monitoring and Understanding How your Data and Target is.
 
-                        ###### What does this app shows?
-                        1. Data Drift
-                        2. Target Drift
-                        3. Data Quality, for both Reference & Production Data
-                    """
-                            )
+                                #### What does this app shows?
+                                1. Data Drift
+                                2. Target Drift
+                                3. Data Quality, for both Reference & Production Data
+
+                                #### Source Code
+                                You can find the source code of this app on our [Github Repository](https://github.com/katonic-dev/explainit).
+
+                                #### Want to Contribute
+                                If you want to contribute follow our [Contribution Guide](https://github.com/katonic-dev/explainit/blob/master/CONTRIBUTING.md).
+                                """
+                            ),
+                            link_target="_blank",
                         ),
                     ),
                 ],
