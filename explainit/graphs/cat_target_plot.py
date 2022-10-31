@@ -17,7 +17,8 @@ from explainit.graphs.additional_num_graphs import fig_to_json
 
 
 def cat_target_main_graph(ref_target_data: pd.Series, prod_target_data: pd.Series):
-    fig = go.Figure()
+    layout = go.Layout(plot_bgcolor="rgb(232,236,244)")
+    fig = go.Figure(layout=layout)
 
     fig.add_trace(
         go.Histogram(

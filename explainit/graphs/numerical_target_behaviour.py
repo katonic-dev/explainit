@@ -61,4 +61,5 @@ def numerical_target_behaviour_on_features(
     # Update yaxis properties
     fig.update_yaxes(title_text="Value", showgrid=True, row=1, col=1)
     fig.update_yaxes(title_text="Value", showgrid=True, row=1, col=2)
+    fig.update_layout(plot_bgcolor="rgb(232,236,244)")
     return json.loads(fig.to_json())
