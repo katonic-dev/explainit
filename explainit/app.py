@@ -423,6 +423,7 @@ def build(
                     "x": 0.5,
                     "xanchor": "center",
                     "yanchor": "top",
+                    "font": {"family": "Arial"},
                 }
             )
         if item in cat_feature_names:
@@ -561,7 +562,7 @@ def build(
             html.Div(
                 html.H6(
                     f"{feature_summary_dropdown.capitalize()} Summary",
-                    style={"textAlign": "center"},
+                    style={"textAlign": "center", "font-weight": "bold"},
                 )
             ),
             html.Div(
@@ -614,7 +615,7 @@ def build(
                                 id="basic-interactions",
                                 figure=feature_stats_graphs[feature_summary_dropdown],
                                 config={"displayModeBar": False},
-                                style={"width": "110vh", "height": "70vh"},
+                                style={"width": "105vh", "height": "70vh"},
                             )
                         ],
                         style={
@@ -642,8 +643,8 @@ def build(
             HTML header(H6) with the given column name.
         """
         return html.H6(
-            f"{target_col_name.upper()} behaviour based on {dropdown.capitalize()}",
-            style={"textAlign": "center"},
+            f"Target '{target_col_name.upper()}' behaviour based on '{dropdown.capitalize()}' Feature",
+            style={"textAlign": "center", "font-weight": "bold"},
         )
 
     @app.callback(
@@ -665,12 +666,12 @@ def build(
             children=[
                 html.H6(
                     f"{radio_item.capitalize()} Correlation Heatmap",
-                    style={"textAlign": "center"},
+                    style={"textAlign": "center", "font-weight": "bold"},
                 ),
                 dcc.Graph(
                     id="correlation-id",
                     figure=correlation_graph_data,
-                    style={"width": "180vh", "height": "100vh"},
+                    style={"height": "100vh"},
                     config={"displayModeBar": False},
                 ),
             ]
