@@ -1,3 +1,58 @@
+# [1.2.1](https://github.com/katonic-dev/explainit) (2022-11-1)
+
+---
+
+**Explainit 1.2.1 release introduces features & major bug fixes**
+
+**Features**
+
+- chore: Added unique_threshold input param ([5b822d9](https://github.com/katonic-dev/explainit/pull/41/commits/5b822d959531bc0d52010f534d87340f4477c570))
+
+**Bug Fixes**
+
+- build: Updated pkg version ([cfea76d](https://github.com/katonic-dev/explainit/pull/41/commits/cfea76d7c9ad3040e65cef62737b2d2991bd7b16))
+- docs: Updated screenshots ([f194cd5](https://github.com/katonic-dev/explainit/pull/41/commits/f194cd5acf05063af1a48238c3dffbe0bed2419a))
+- docs: Added doc-string to build function ([615b8e3](https://github.com/katonic-dev/explainit/pull/41/commits/615b8e3b2178f3e705c9cb83c3840774e4b91588))
+- fix: Fixed Typo ([fd3b39b](https://github.com/katonic-dev/explainit/pull/41/commits/fd3b39b70007a698fa332c954a08f63eb460441a))
+- fix: Updated doc-string ([ef99f36](https://github.com/katonic-dev/explainit/pull/41/commits/ef99f3615e23725a0b32e638c913ea71ef0ec5bd))
+- fix: Quoted the target name during exception ([3b48608](https://github.com/katonic-dev/explainit/pull/41/commits/3b486087ff15ae043ccc24912cd6d12426228e9e))
+- docs: Added how to deploy on `custom routes` ([bf7761e](https://github.com/katonic-dev/explainit/pull/41/commits/bf7761ec412a42f3b4a21a820233df18a17d020b))
+- docs: Updated getting-started example ([3c10746](https://github.com/katonic-dev/explainit/pull/41/commits/3c10746186b685f8fcd95c90d41d1eb8680dfac5))
+- tutorial: Removed sklearn dependency ([cf7d083](https://github.com/katonic-dev/explainit/pull/41/commits/cf7d08370071b34e831ea61a435b92dbc62446f8))
+- tutorial: Updated getting-started examples ([f1338d2](https://github.com/katonic-dev/explainit/pull/41/commits/f1338d28a6228c468f1783676a93484532279d63))
+- docs: Added reference, production datasets ([b268cbe](https://github.com/katonic-dev/explainit/pull/41/commits/b268cbe55c14ac3063bfdbc6577384cf35183b4d))
+- hooks: Removed large-files check hook ([36f2663](https://github.com/katonic-dev/explainit/pull/41/commits/36f266352fd15d59f9d7abbcde25b85a9509fda6))
+- style: Added bgcolors to graphs ([5a88518](https://github.com/katonic-dev/explainit/pull/41/commits/5a885187b52f63a0278baa0d43c339af8ad87165))
+- style: Updated histogram, scatter plots color, fixed `cat` graph title ([a2823c8](https://github.com/katonic-dev/explainit/pull/41/commits/a2823c8ccb2ea69f1edc8ed8bcb0cba85b081dc5))
+- fix: Updated `correlation` table name ([a5b9352](https://github.com/katonic-dev/explainit/pull/41/commits/a5b9352d90ade1b4044cb691a5e5a499ab192717))
+- fix: Updated title, highlighted graphs title ([b38b449](https://github.com/katonic-dev/explainit/pull/41/commits/b38b4496f8d54027c5ff5623a79ab2bc09ee0280))
+- fix: Fixed the graphs title ([dbf19a7](https://github.com/katonic-dev/explainit/pull/41/commits/dbf19a7aaee64e2959d3a2f270533820e77b4181))
+- fix: Updated P-value column name to P-value/Distance ([7e6f7cb](https://github.com/katonic-dev/explainit/pull/41/commits/7e6f7cb28bc9bfc6021c2e025b482008adf717f5))
+- fix: Updated the stats-info `Column` to `Feature` ([42c628b](https://github.com/katonic-dev/explainit/pull/41/commits/42c628b707682dfe4cff98ed03ba5fefa487ae23))
+- docs: Added repo url, contribution guide ([056537e](https://github.com/katonic-dev/explainit/pull/41/commits/056537e48a136c2ee6d11cd6f4b0426f707bfdbd))
+- fix: Updated the default threshold for jensen, wd tests ([406e3d9](https://github.com/katonic-dev/explainit/pull/41/commits/406e3d9a614494ac33aa5c5150b348e19230241a))
+- fix: Updated the `cat`, `num` filter condition ([3e4154d](https://github.com/katonic-dev/explainit/pull/41/commits/3e4154d7dc0ec041325fa5976f5e0c14bae8dc9b))
+- fix: Fixed the drift logic with threshold ([e0cedec](https://github.com/katonic-dev/explainit/pull/41/commits/e0cedeccf1aadfdc2f16d2c88aaa2f36dcbff1e3))
+- docs: Updated screenshots for data&feat summaries ([6c4cc7d](https://github.com/katonic-dev/explainit/pull/41/commits/6c4cc7d95bea4744832539100de26e89e6951fe4))
+- fix: Capitalized labels ([763de35](https://github.com/katonic-dev/explainit/pull/41/commits/763de356466b760d6a7a7d83a29618b194287517))
+- fix: Capitalized labels ([cd51213](https://github.com/katonic-dev/explainit/pull/41/commits/cd51213a57bbcca5527a5279ed634b02eee46f0a))
+- fix: Capitalized labels for feature & df stats ([a56e395](https://github.com/katonic-dev/explainit/pull/41/commits/a56e39503efdd313a97d8a738ffcd5e8f23279da))
+- fix: Updated app screenshots to latest ([fc32f05](https://github.com/katonic-dev/explainit/pull/41/commits/fc32f05c6b38ae29b73f11c8c935554f8bca5bd9))
+- fix: Fixed the target-drift graph layout ([2a48e45](https://github.com/katonic-dev/explainit/pull/41/commits/2a48e4567d9e52f2dd4b9a2b9c553e46fa8ad0bd))
+- fix: Update pkg installation command ([9b8185c](https://github.com/katonic-dev/explainit/pull/41/commits/9b8185c0f14f0f84e15f16abf64d6cb28fede95e))
+- fix: removed tolist method as it is an integer ([b9a95d5](https://github.com/katonic-dev/explainit/pull/41/commits/b9a95d55bdd0a3ce5c44d97fb9c0525066735e95))
+
+**Merged Pull Requests**
+
+- 38-doc-fix-update-app-screenshots ([#38](https://github.com/katonic-dev/explainit/issues/38))([3a452f5](https://github.com/katonic-dev/explainit/pull/41/commits/3a452f58e9acaaf554f67ff4124a68b50f90f491))
+- 35-fr-add-unique-value-threshold-parameter ([#35](https://github.com/katonic-dev/explainit/issues/35))([2cdd07f](https://github.com/katonic-dev/explainit/pull/41/commits/2cdd07f7d3945275859b933e63bb12ab19fcada9))
+- 27-doc-fix-update-documentation-for-routes ([#27](https://github.com/katonic-dev/explainit/issues/27))([72bd696](https://github.com/katonic-dev/explainit/pull/41/commits/72bd696e4bd2c29be9cbaf1084441b74f0d5395e))
+- 31-bug-fix-the-cat-num-features-in-stats-info ([#31](https://github.com/katonic-dev/explainit/issues/31))([b8913fe](https://github.com/katonic-dev/explainit/pull/41/commits/b8913fe552f8cfd0492eb38ceae721e762009084))
+- 32-bug-fix-the-drift-not-drift-logic-in-jensenshannon-test ([#32](https://github.com/katonic-dev/explainit/issues/32))([f13dcb6](https://github.com/katonic-dev/explainit/pull/41/commits/f13dcb6db8cb889b3936e1ed8447b72353647fee))
+- 25-bug-index-column-issue-in-generating-graphs ([#25](https://github.com/katonic-dev/explainit/issues/25))([502587f](https://github.com/katonic-dev/explainit/pull/41/commits/502587f2edb52486cd69ab7b84b24461a14a95df))
+- update-correlation-table-columns ([#23](https://github.com/katonic-dev/explainit/issues/23))([d23bd27](https://github.com/katonic-dev/explainit/commit/d23bd273e7a55047fa052b396502a8086b2c74b6))
+
+
 # [1.2](https://github.com/katonic-dev/explainit) (2022-10-8)
 
 ---
