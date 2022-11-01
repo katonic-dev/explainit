@@ -47,7 +47,7 @@ In order to Initialize the dash application, you need to pass following paramete
 - `reference_data`: Reference dataset (pandas dataframe)
 - `production_data`: Production dataset (pandas dataframe)
 - `target_col_name`: Target column name
-- `target_col_type`: Target column nype (`"num"`: Numerical or `"cat"`: Categorical)
+- `target_col_type`: Target column type (`"num"`: Numerical or `"cat"`: Categorical)
 - `datetime_col_name`: Optional datetime column name (default: None)
 - `host`: Optional host address where you want to deploy/run the app eg: `"127.0.0.1"` or `"localhost"` (default: `"0.0.0.0"`)
 - `port`: Optional port where you want to deploy/run the app eg: `"8000"` (default: `"8050"`)
