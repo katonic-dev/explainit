@@ -29,16 +29,16 @@ def feature_summary_stats(feature: pd.Series, feature_type: str) -> Dict[str, An
     missing_count = int(feature.isnull().sum())
     value_counts = feature.value_counts(dropna=False)
     missing_percentage = np.round(100 * missing_count / feature.shape[0], 2)
-    result["count"] = int(feature.count())
-    result["missing"] = f"{missing_count} ({missing_percentage}%)"
-    result["unique_count"] = feature.nunique()
-    result["unique_count (%)"] = f"{get_percentage_from_all_values(feature.nunique())}%"
+    result["Count"] = int(feature.count())
+    result["Missing"] = f"{missing_count} ({missing_percentage}%)"
+    result["Unique_count"] = feature.nunique()
+    result["Unique_count (%)"] = f"{get_percentage_from_all_values(feature.nunique())}%"
     most_common_value = value_counts.index[0]
     result[
-        "most_common"
+        "Most_common"
     ] = f"{most_common_value} ({get_percentage_from_all_values(value_counts.iloc[0])}%)"
 
-    if result["count"] > 0 and pd.isnull(most_common_value):
+    if result["Count"] > 0 and pd.isnull(most_common_value):
         result[
             "2nd_most_common"
         ] = f"{value_counts.index[1]} ({get_percentage_from_all_values(value_counts.iloc[1])}%)"
@@ -49,15 +49,15 @@ def feature_summary_stats(feature: pd.Series, feature_type: str) -> Dict[str, An
             feature = feature.astype(float)
         infinite_count = int(np.sum(np.isinf(feature)))
         infinite_percentage = get_percentage_from_all_values(infinite_count)
-        result["infinite"] = f"{infinite_count} ({infinite_percentage}%)"
-        result["max"] = np.round(feature.max(), 4)
-        result["min"] = np.round(feature.min(), 4)
+        result["Infinite"] = f"{infinite_count} ({infinite_percentage}%)"
+        result["Max"] = np.round(feature.max(), 4)
+        result["Min"] = np.round(feature.min(), 4)
         common_stats = dict(feature.describe())
-        result["std"] = np.round(common_stats["std"], 4)
-        result["mean"] = np.round(common_stats["mean"], 4)
-        result["percentile_25"] = np.round(common_stats["25%"], 4)
-        result["percentile_50"] = np.round(common_stats["50%"], 4)
-        result["percentile_75"] = np.round(common_stats["75%"], 4)
+        result["Std"] = np.round(common_stats["std"], 4)
+        result["Mean"] = np.round(common_stats["mean"], 4)
+        result["Percentile_25"] = np.round(common_stats["25%"], 4)
+        result["Percentile_50"] = np.round(common_stats["50%"], 4)
+        result["Percentile_75"] = np.round(common_stats["75%"], 4)
 
     # TODO: Add categorical properties
     return result
@@ -100,7 +100,6 @@ def make_feature_stats_dataframe(
             ]
         ).T
         feats_df.columns = ["Reference", "Production"]
-        return feats_df
     if column_name in prod_num_stats and column_name in ref_num_stats:
         feats_df = pd.concat(
             [
@@ -109,6 +108,8 @@ def make_feature_stats_dataframe(
             ]
         ).T
         feats_df.columns = ["Reference", "Production"]
-        return feats_df
+    feats_df.reset_index(inplace=True)
+    feats_df.rename(columns={"index": "Metrics"}, inplace=True)
+    return feats_df
 
     # TODO: Add else condition for feature stats.

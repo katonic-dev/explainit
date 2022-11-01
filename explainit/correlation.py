@@ -27,7 +27,12 @@ def correlation_data_table(corr_df):
     """
 
     return [
-        html.Div(html.H6("Correlations", style={"textAlign": "center"})),
+        html.Div(
+            html.H6(
+                "Correlations Table",
+                style={"textAlign": "center", "font-weight": "bold"},
+            )
+        ),
         html.Div(
             children=[
                 dash_table.DataTable(

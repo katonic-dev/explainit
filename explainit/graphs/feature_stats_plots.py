@@ -98,7 +98,7 @@ def plot_feature_stats(
             trace1 = go.Histogram(
                 x=reference_data[feature_name],
                 marker_color="#48DD2D",
-                name="reference",
+                name="Reference",
             )
             trace2 = go.Histogram(
                 x=np.log10(
@@ -106,12 +106,12 @@ def plot_feature_stats(
                 ),
                 marker_color="#48DD2D",
                 visible=False,
-                name="reference",
+                name="Reference",
             )
             trace3 = go.Histogram(
                 x=production_data[feature_name],
                 marker_color="#ed0400",
-                name="production",
+                name="Production",
             )
             trace4 = go.Histogram(
                 x=np.log10(
@@ -119,7 +119,7 @@ def plot_feature_stats(
                 ),
                 marker_color="#ed0400",
                 visible=False,
-                name="production",
+                name="Production",
             )
             data = [trace1, trace2, trace3, trace4]
 
@@ -164,14 +164,14 @@ def plot_feature_stats(
                 go.Histogram(
                     x=reference_data[feature_name],
                     marker_color="#48DD2D",
-                    name="reference",
+                    name="Reference",
                 )
             )
             fig.add_trace(
                 go.Histogram(
                     x=production_data[feature_name],
                     marker_color="#ed0400",
-                    name="production",
+                    name="Production",
                 )
             )
         fig.update_xaxes(categoryorder="array", categoryarray=cats)
@@ -237,7 +237,7 @@ def plot_feature_stats(
                     x=tmp_ref.sort_values(feature_name)[feature_name],
                     y=tmp_ref.sort_values(feature_name)["number_of_items"],
                     line=dict(color="#4d4d4d", shape="spline"),
-                    name="reference",
+                    name="Reference",
                 )
             )
             fig.add_trace(
@@ -245,7 +245,7 @@ def plot_feature_stats(
                     x=tmp_prod.sort_values(feature_name)[feature_name],
                     y=tmp_prod.sort_values(feature_name)["number_of_items"],
                     line=dict(color="#ed0400", shape="spline"),
-                    name="production",
+                    name="Production",
                 )
             )
     else:

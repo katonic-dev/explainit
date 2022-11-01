@@ -138,7 +138,7 @@ def build(
     production_data = production_data[total_columns]
     if target_col_name not in total_columns:
         raise ValueError(
-            f"Given target column name {Style.BRIGHT + Fore.RED}{target_col_name}{Style.RESET_ALL} does not exist in the data."
+            f"Given target column name '{Style.BRIGHT + Fore.RED}{target_col_name}{Style.RESET_ALL}' does not exist in the data."
         )
 
     # Finding appropriate Statistical test for Individual feature.
@@ -263,14 +263,14 @@ def build(
     reference_data_summary = data_summary_stats(
         reference_data, target_column=target_col_name
     )
-    reference_data_summary["categorical features"] = len(cat_feature_names)
-    reference_data_summary["numeric features"] = len(num_feature_names)
+    reference_data_summary["Categorical features"] = len(cat_feature_names)
+    reference_data_summary["Numeric features"] = len(num_feature_names)
 
     production_data_summary = data_summary_stats(
         production_data, target_column=target_col_name
     )
-    production_data_summary["categorical features"] = len(cat_feature_names)
-    production_data_summary["numeric features"] = len(num_feature_names)
+    production_data_summary["Categorical features"] = len(cat_feature_names)
+    production_data_summary["Numeric features"] = len(num_feature_names)
 
     data_summary_df = pd.concat(
         [
@@ -280,6 +280,7 @@ def build(
     ).T
     data_summary_df.columns = ["Reference", "Production"]
     data_summary_df.reset_index(inplace=True)
+    data_summary_df.rename(columns={"index": "Metrics"}, inplace=True)
 
     # Feature Summary
     prod_cat_feature_stats: Dict[str, Dict[str, Any]] = {}
@@ -341,12 +342,12 @@ def build(
 
     num_for_corr = []
     for feature in num_feature_names:
-        if reference_feature_stats[feature]["unique_count"] > 1:
+        if reference_feature_stats[feature]["Unique_count"] > 1:
             num_for_corr.append(feature)
 
     cat_for_corr = []
     for feature in cat_feature_names:
-        if reference_feature_stats[feature]["unique_count"] > 1:
+        if reference_feature_stats[feature]["Unique_count"] > 1:
             cat_for_corr.append(feature)
 
     reference_correlations = {}
@@ -437,6 +438,7 @@ def build(
                     "x": 0.5,
                     "xanchor": "center",
                     "yanchor": "top",
+                    "font": {"family": "Arial"},
                 }
             )
         if item in cat_feature_names:
@@ -571,12 +573,11 @@ def build(
         """
 
         feature_df = feature_stats_dataframes[feature_summary_dropdown]
-        feature_df = feature_df.reset_index()
         return [
             html.Div(
                 html.H6(
                     f"{feature_summary_dropdown.capitalize()} Summary",
-                    style={"textAlign": "center"},
+                    style={"textAlign": "center", "font-weight": "bold"},
                 )
             ),
             html.Div(
@@ -629,7 +630,7 @@ def build(
                                 id="basic-interactions",
                                 figure=feature_stats_graphs[feature_summary_dropdown],
                                 config={"displayModeBar": False},
-                                style={"width": "110vh", "height": "70vh"},
+                                style={"width": "105vh", "height": "70vh"},
                             )
                         ],
                         style={
@@ -657,8 +658,8 @@ def build(
             HTML header(H6) with the given column name.
         """
         return html.H6(
-            f"{target_col_name.upper()} behaviour based on {dropdown.capitalize()}",
-            style={"textAlign": "center"},
+            f"Target '{target_col_name.upper()}' behaviour based on '{dropdown.capitalize()}' Feature",
+            style={"textAlign": "center", "font-weight": "bold"},
         )
 
     @app.callback(
@@ -680,12 +681,12 @@ def build(
             children=[
                 html.H6(
                     f"{radio_item.capitalize()} Correlation Heatmap",
-                    style={"textAlign": "center"},
+                    style={"textAlign": "center", "font-weight": "bold"},
                 ),
                 dcc.Graph(
                     id="correlation-id",
                     figure=correlation_graph_data,
-                    style={"width": "180vh", "height": "100vh"},
+                    style={"height": "100vh"},
                     config={"displayModeBar": False},
                 ),
             ]

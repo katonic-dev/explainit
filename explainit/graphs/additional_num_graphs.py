@@ -35,7 +35,7 @@ def generate_additional_graph_num_feature(
     fig1.add_trace(
         go.Histogram(
             x=reference_data.tolist(),
-            marker_color="#48DD2D",
+            marker_color="#1C4E80",
             opacity=0.6,
             xbins=None,
             nbinsx=10,
@@ -47,7 +47,7 @@ def generate_additional_graph_num_feature(
     fig1.add_trace(
         go.Histogram(
             x=production_data.tolist(),
-            marker_color="#ed0400",
+            marker_color="#0091D5",
             opacity=0.6,
             xbins=None,
             nbinsx=10,
@@ -68,6 +68,7 @@ def generate_additional_graph_num_feature(
             "x": 0.5,
             "xanchor": "center",
             "yanchor": "top",
+            "font": {"family": "Arial"},
         }
     )
 
@@ -85,7 +86,7 @@ def generate_additional_graph_num_feature(
             y=production_data.tolist(),
             mode="markers",
             name="Production Data Points",
-            marker=dict(size=6, color="#ed0400"),
+            marker=dict(size=6, color="#488A99"),
         )
     )
 

@@ -17,29 +17,21 @@ To install the explainit library you need to run the following command in termin
 pip install explainit
 ```
 
-Install scikit-learn for example dataset.
-```commandline
-pip install scikit-learn
-```
-
 These dashboards are build on top of Python Dash, So you'll see them inside your browser on the host and port you provided while initializing the Dashboards.
 
 # 2. Import Explainit
 Once you installed the Library, you'll need to import the functionalities inside your work environment i.e, python .py file or Jupyter Notebook.
 ```python
-import pandas as pd
-from sklearn import datasets
-
 from explainit.app import build
 ```
-Once you imported the required libraries, you need to preprocess the data in a format so that it'll get suited with the library.
+Once you imported the required libraries, you need to preprocess the data to get most out of it from explainit.
 
 # 3. Data Preparation.
 ```python
-cancer_data = datasets.load_breast_cancer()
-cancer_dataframe = pd.DataFrame(cancer_data.data, columns = cancer_data.feature_names)
-cancer_dataframe['target'] = iris.target
-ref_data, prod_data = train_test_split(cancer_dataframe, train_size=0.80, shuffle=True)
+import pandas as pd
+
+ref_data = pd.read_csv("https://raw.githubusercontent.com/katonic-dev/explainit/master/examples/data/reference_data.csv", index_col=None)
+prod_data = pd.read_csv("https://raw.githubusercontent.com/katonic-dev/explainit/master/examples/data/production_data.csv", index_col=None)
 ```
 
 You need to pass two dataframes in order to analyze the drift inside your data. First dataframe is used for the reference which is nothing but the data that you'll use for model training. The second dataframe is your production data on which you want to perform the drift and quality analysis.
@@ -50,7 +42,7 @@ Apart from the two dataframes, we also need couple of parameters you need to pas
 
 You can add your custom host id and port to the function in order to run the application on different locations.
 
-# 4.Generate Dashboards.
+# 4. Generate Dashboards.
 In order to Initialize the dash application, you need to pass following parameters in `build` function:
 - `reference_data`: Reference dataset (pandas dataframe)
 - `production_data`: Production dataset (pandas dataframe)
@@ -60,11 +52,14 @@ In order to Initialize the dash application, you need to pass following paramete
 - `host`: Optional host address where you want to deploy/run the app eg: `"127.0.0.1"` or `"localhost"` (default: `"0.0.0.0"`)
 - `port`: Optional port where you want to deploy/run the app eg: `"8000"` (default: `"8050"`)
 
+### 4.1. Deploy the app on the `CUSTOM ROUTES`:
+If you are trying to deploy or run this application on the custom routes/path you can simply set a `ROUTE` environment variable in that running python environment, it will automatically deploy/run on that route.
+
 ```python
 build(
     reference_data=ref_data,
     production_data=prod_data,
-    target_col_name="target",
+    target_col_name="bad_loan",
     target_col_type="cat",
     host='127.0.0.1',
     port='8000'
