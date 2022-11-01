@@ -79,6 +79,22 @@ def build(
     host: str = "0.0.0.0",
     port: int = 8050,
 ):
+    """
+    Creates and Run the ExplainIT Drift Detection, Data Quality Management Dash Application.
+
+    Args:
+        reference_data (DataFrame): Reference or Training dataset whom which you want to compare with.
+        production_data (DataFrame): Production or Inference dataset which comes from the user and compare with reference.
+        target_col_name (str): Target or Label name.
+        target_col_type (str): Target or Label type (`"num"`: Numerical or `"cat"`: Categorical).
+        datetime_col_name (str): Datetime column name (default: None).
+        unique_threshold (int): Unique value threshold to separate `"Numerical"` and `"Categorical"` features (default: 15).
+        host (str): Host address where you want to deploy/run the app eg: `"127.0.0.1"` or `"localhost"` (default: `"0.0.0.0"`).
+        port (int): Port where you want to deploy/run the app eg: `"8000"` (default: `"8050"`).
+
+    Return:
+        Returns the app instance with app url.
+    """
     app = dash.Dash(
         __name__,
         url_base_pathname=os.getenv("ROUTE") or "/",
