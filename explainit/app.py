@@ -75,6 +75,7 @@ def build(
     target_col_name: str,
     target_col_type: str,
     datetime_col_name: Optional[str] = "",
+    unique_threshold: Optional[int] = 15,
     host: str = "0.0.0.0",
     port: int = 8050,
 ):
@@ -124,7 +125,7 @@ def build(
     list(
         map(
             lambda x: cat_feature_names.append(x)
-            if reference_data[x].nunique() <= 15
+            if reference_data[x].nunique() <= unique_threshold
             else num_feature_names.append(x),
             cols,
         )
