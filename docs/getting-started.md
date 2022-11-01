@@ -42,7 +42,7 @@ Apart from the two dataframes, we also need couple of parameters you need to pas
 
 You can add your custom host id and port to the function in order to run the application on different locations.
 
-# 4.Generate Dashboards.
+# 4. Generate Dashboards.
 In order to Initialize the dash application, you need to pass following parameters in `build` function:
 - `reference_data`: Reference dataset (pandas dataframe)
 - `production_data`: Production dataset (pandas dataframe)
@@ -51,6 +51,9 @@ In order to Initialize the dash application, you need to pass following paramete
 - `datetime_col_name`: Optional datetime column name (default: None)
 - `host`: Optional host address where you want to deploy/run the app eg: `"127.0.0.1"` or `"localhost"` (default: `"0.0.0.0"`)
 - `port`: Optional port where you want to deploy/run the app eg: `"8000"` (default: `"8050"`)
+
+### 4.1. Deploy the app on the `CUSTOM ROUTES`:
+If you are trying to deploy or run this application on the custom routes/path you can simply set a `ROUTE` environment variable in that running python environment, it will automatically deploy/run on that route.
 
 ```python
 build(
