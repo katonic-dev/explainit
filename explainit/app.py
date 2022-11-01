@@ -75,9 +75,26 @@ def build(
     target_col_name: str,
     target_col_type: str,
     datetime_col_name: Optional[str] = "",
+    unique_threshold: Optional[int] = 15,
     host: str = "0.0.0.0",
     port: int = 8050,
 ):
+    """
+    Creates and Run the ExplainIT Drift Detection, Data Quality Management Dash Application.
+
+    Args:
+        reference_data (DataFrame): Reference or Training dataset whom which you want to compare with.
+        production_data (DataFrame): Production or Inference dataset which comes from the user and compare with reference.
+        target_col_name (str): Target or Label name.
+        target_col_type (str): Target or Label type (`"num"`: Numerical or `"cat"`: Categorical).
+        datetime_col_name (str): Datetime column name (default: None).
+        unique_threshold (int): Unique value threshold to separate `"Numerical"` and `"Categorical"` features (default: 15).
+        host (str): Host address where you want to deploy/run the app eg: `"127.0.0.1"` or `"localhost"` (default: `"0.0.0.0"`).
+        port (int): Port where you want to deploy/run the app eg: `"8000"` (default: `"8050"`).
+
+    Return:
+        Returns the app instance with app url.
+    """
     app = dash.Dash(
         __name__,
         url_base_pathname=os.getenv("ROUTE") or "/",
@@ -106,15 +123,30 @@ def build(
 
     print(f"Initiating {Style.BRIGHT + Fore.GREEN}Explainit App{Style.RESET_ALL}...")
 
-    num_feature_names: List[str] = sorted(
-        list(set(reference_data.select_dtypes([np.number]).columns))
-    )
-    cat_feature_names: List[str] = sorted(
-        list(
-            set(reference_data.select_dtypes(exclude=[np.number, "datetime"]).columns)
-            - set(num_feature_names)
+    cols = reference_data.select_dtypes(
+        exclude=[
+            np.datetime64,
+            "datetime",
+            "datetime64",
+            np.timedelta64,
+            "timedelta",
+            "timedelta64",
+            "datetimetz",
+            "datetime64[ns, UTC]",
+        ]
+    ).columns
+
+    num_feature_names: List[str] = []
+    cat_feature_names: List[str] = []
+    list(
+        map(
+            lambda x: cat_feature_names.append(x)
+            if reference_data[x].nunique() <= unique_threshold
+            else num_feature_names.append(x),
+            cols,
         )
     )
+
     cat_feature_names.remove(
         datetime_col_name
     ) if datetime_col_name else cat_feature_names
@@ -123,7 +155,7 @@ def build(
     production_data = production_data[total_columns]
     if target_col_name not in total_columns:
         raise ValueError(
-            f"Given target column name {Style.BRIGHT + Fore.RED}{target_col_name}{Style.RESET_ALL} does not exist in the data."
+            f"Given target column name '{Style.BRIGHT + Fore.RED}{target_col_name}{Style.RESET_ALL}' does not exist in the data."
         )
 
     # Finding appropriate Statistical test for Individual feature.
@@ -248,14 +280,14 @@ def build(
     reference_data_summary = data_summary_stats(
         reference_data, target_column=target_col_name
     )
-    reference_data_summary["categorical features"] = len(cat_feature_names)
-    reference_data_summary["numeric features"] = len(num_feature_names)
+    reference_data_summary["Categorical features"] = len(cat_feature_names)
+    reference_data_summary["Numeric features"] = len(num_feature_names)
 
     production_data_summary = data_summary_stats(
         production_data, target_column=target_col_name
     )
-    production_data_summary["categorical features"] = len(cat_feature_names)
-    production_data_summary["numeric features"] = len(num_feature_names)
+    production_data_summary["Categorical features"] = len(cat_feature_names)
+    production_data_summary["Numeric features"] = len(num_feature_names)
 
     data_summary_df = pd.concat(
         [
@@ -265,6 +297,7 @@ def build(
     ).T
     data_summary_df.columns = ["Reference", "Production"]
     data_summary_df.reset_index(inplace=True)
+    data_summary_df.rename(columns={"index": "Metrics"}, inplace=True)
 
     # Feature Summary
     prod_cat_feature_stats: Dict[str, Dict[str, Any]] = {}
@@ -326,12 +359,12 @@ def build(
 
     num_for_corr = []
     for feature in num_feature_names:
-        if reference_feature_stats[feature]["unique_count"] > 1:
+        if reference_feature_stats[feature]["Unique_count"] > 1:
             num_for_corr.append(feature)
 
     cat_for_corr = []
     for feature in cat_feature_names:
-        if reference_feature_stats[feature]["unique_count"] > 1:
+        if reference_feature_stats[feature]["Unique_count"] > 1:
             cat_for_corr.append(feature)
 
     reference_correlations = {}
@@ -422,6 +455,7 @@ def build(
                     "x": 0.5,
                     "xanchor": "center",
                     "yanchor": "top",
+                    "font": {"family": "Arial"},
                 }
             )
         if item in cat_feature_names:
@@ -556,12 +590,11 @@ def build(
         """
 
         feature_df = feature_stats_dataframes[feature_summary_dropdown]
-        feature_df = feature_df.reset_index()
         return [
             html.Div(
                 html.H6(
                     f"{feature_summary_dropdown.capitalize()} Summary",
-                    style={"textAlign": "center"},
+                    style={"textAlign": "center", "font-weight": "bold"},
                 )
             ),
             html.Div(
@@ -614,7 +647,7 @@ def build(
                                 id="basic-interactions",
                                 figure=feature_stats_graphs[feature_summary_dropdown],
                                 config={"displayModeBar": False},
-                                style={"width": "110vh", "height": "70vh"},
+                                style={"width": "105vh", "height": "70vh"},
                             )
                         ],
                         style={
@@ -642,8 +675,8 @@ def build(
             HTML header(H6) with the given column name.
         """
         return html.H6(
-            f"{target_col_name.upper()} behaviour based on {dropdown.capitalize()}",
-            style={"textAlign": "center"},
+            f"Target '{target_col_name.upper()}' behaviour based on '{dropdown.capitalize()}' Feature",
+            style={"textAlign": "center", "font-weight": "bold"},
         )
 
     @app.callback(
@@ -665,12 +698,12 @@ def build(
             children=[
                 html.H6(
                     f"{radio_item.capitalize()} Correlation Heatmap",
-                    style={"textAlign": "center"},
+                    style={"textAlign": "center", "font-weight": "bold"},
                 ),
                 dcc.Graph(
                     id="correlation-id",
                     figure=correlation_graph_data,
-                    style={"width": "180vh", "height": "100vh"},
+                    style={"height": "100vh"},
                     config={"displayModeBar": False},
                 ),
             ]
@@ -911,13 +944,9 @@ def build(
                                 config={"displayModeBar": False},
                             ),
                             style={
-                                "width": "150vh",
-                                "height": "60vh",
                                 "display": "flex",
                                 "justify-content": "center",
-                                "margin-left": "230px",
                                 "border": "3px #5c5c5c solid",
-                                "padding-left": "1px",
                                 "overflow": "hidden",
                             },
                         ),

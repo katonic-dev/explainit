@@ -70,14 +70,9 @@ There are three main types of model drift:
 ## Installation guide
 Install the Explainit Package:
 ```commandline
-$ pip install explainit
+pip install explainit
 ```
 
-Install the Scikit-learn Package for example dataset:
-
-```commandline
-$ pip install scikit-learn
-```
 ## Run the App
 
 In order to generate the dashboards inside the application, you need to run the following commands.
@@ -85,18 +80,14 @@ In order to generate the dashboards inside the application, you need to run the 
 from explainit.app import build
 ```
 
-Apart from importing the methods, we need some data that should be passed to the application in order to generate the dashboards.
-We'll use the toy datasets that are available in scikit-learn library.
+After importing the methods, we need some data that should be passed to the application in order to generate the dashboards.
+We'll use the `Default Loan` dataset.
 
 ```python
 import pandas as pd
-from sklearn import datasets
-from sklearn.model_selection import train_test_split
 
-cancer_data = datasets.load_breast_cancer()
-cancer_dataframe = pd.DataFrame(cancer_data.data, columns = cancer_data.feature_names)
-cancer_dataframe['target'] = cancer_data.target
-ref_data, prod_data = train_test_split(cancer_dataframe, train_size=0.80, shuffle=True)
+ref_data = pd.read_csv("https://raw.githubusercontent.com/katonic-dev/explainit/master/examples/data/reference_data.csv", index_col=None)
+prod_data = pd.read_csv("https://raw.githubusercontent.com/katonic-dev/explainit/master/examples/data/production_data.csv", index_col=None)
 ```
 
 Once you have the both reference and production datasets, all you need to do is pass those datasets into the method that we imported along with the target column name and target column type (type should be `cat` for categorical column and `num` for numerical columns).
@@ -105,10 +96,10 @@ Once you have the both reference and production datasets, all you need to do is 
 build(
   reference_data=ref_data,
   production_data=prod_data,
-  target_col_name="target",
+  target_col_name="bad_loan",
   target_col_type="cat",
   host="127.0.0.1",
-  port=8050
+  port=8000
 )
 ```
 
@@ -118,7 +109,7 @@ If you want to run your application in a separate server rather than localhost, 
 Below is a snapshot of the landing page of Explainit Dashboard.
 
 <p align="center">
-      <img src="https://raw.githubusercontent.com/katonic-dev/explainit/master/docs/assets/metrics_row.jpg">
+      <img src="https://raw.githubusercontent.com/katonic-dev/explainit/master/docs/assets/metrics_row.png">
 </p>
 <br />
 

@@ -92,4 +92,4 @@ def jensenshannon_stat_test(
     jensenshannon_value = distance.jensenshannon(
         reference_percents, production_percents
     )
-    return jensenshannon_value, jensenshannon_value <= threshold, threshold
+    return jensenshannon_value, jensenshannon_value >= threshold, threshold

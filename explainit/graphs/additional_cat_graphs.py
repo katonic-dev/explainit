@@ -31,7 +31,7 @@ def generate_additional_graph_cat_feature(name, reference_data, production_data)
         go.Bar(
             x=reference_data_to_plot[1],
             y=reference_data_to_plot[0],
-            marker_color="#2ECC71",
+            marker_color="#1C4E80",
             opacity=0.6,
             name="Reference",
         )
@@ -41,7 +41,7 @@ def generate_additional_graph_cat_feature(name, reference_data, production_data)
         go.Bar(
             x=production_data_to_plot[1],
             y=production_data_to_plot[0],
-            marker_color="#ed0400",
+            marker_color="#0091D5",
             opacity=0.6,
             name="Production",
         )
@@ -58,6 +58,7 @@ def generate_additional_graph_cat_feature(name, reference_data, production_data)
             "x": 0.5,
             "xanchor": "center",
             "yanchor": "top",
+            "font": {"family": "Arial"},
         }
     )
 
@@ -70,22 +71,15 @@ def generate_additional_graph_cat_feature(name, reference_data, production_data)
     fig2 = make_subplots(
         rows=1, cols=2, specs=[[{"type": "domain"}, {"type": "domain"}]]
     )
-    fig2.add_trace(go.Pie(labels=ref_labels, values=ref_values, name="Reference"), 1, 1)
     fig2.add_trace(
-        go.Pie(labels=prod_labels, values=prod_values, name="Production"), 1, 2
+        go.Pie(labels=ref_labels, values=ref_values, title="Reference"), 1, 1
+    )
+    fig2.add_trace(
+        go.Pie(labels=prod_labels, values=prod_values, title="Production"), 1, 2
     )
 
     # Use `hole` to create a donut-like pie chart
-    fig2.update_traces(hole=0.4, hoverinfo="label+percent+name")
-
-    fig2.update_layout(
-        #     title_text="Grade ",
-        # Add annotations in the center of the donut pies.
-        annotations=[
-            dict(text="Reference", x=0.16, y=0.5, font_size=20, showarrow=False),
-            dict(text="Production", x=0.825, y=0.5, font_size=20, showarrow=False),
-        ]
-    )
+    fig2.update_traces(hole=0.4, hoverinfo="label+percent")
 
     # distr_graph, pie_graph
     return fig_to_json(fig1), fig_to_json(fig2)

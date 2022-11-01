@@ -26,17 +26,17 @@ def data_summary_stats(data: pd.DataFrame, target_column=None, date_column=None)
         all_values_count = data.shape[0]
         return np.round(100 * value / all_values_count, 2)
 
-    result["target column"] = target_column
-    result["date column"] = date_column
-    result["number of variables"] = len(data.columns)
-    result["number of observations"] = data.shape[0]
+    result["Target column"] = target_column
+    result["Date column"] = date_column
+    result["Number of variables"] = len(data.columns)
+    result["Number of observations"] = data.shape[0]
     missing_cells = data.isnull().sum().sum()
     missing_cells_percentage = np.round(
         missing_cells
-        / (result["number of variables"] * result["number of observations"]),
+        / (result["Number of variables"] * result["Number of observations"]),
         2,
     )
-    result["missing cells"] = f"{missing_cells} ({missing_cells_percentage}%)"
+    result["Missing cells"] = f"{missing_cells} ({missing_cells_percentage}%)"
 
     constant_values = pd.Series(
         [
@@ -47,8 +47,8 @@ def data_summary_stats(data: pd.DataFrame, target_column=None, date_column=None)
     empty_values = pd.Series(
         [data[x].isnull().sum() / data.shape[0] * 100 for x in data.columns]
     )
-    result["constant features"] = (constant_values == 100).sum()
-    result["empty features"] = (empty_values == 100).sum()
-    result["almost constant features"] = (constant_values >= 95).sum()
-    result["almost empty features"] = (empty_values >= 95).sum()
+    result["Constant features"] = (constant_values == 100).sum()
+    result["Empty features"] = (empty_values == 100).sum()
+    result["Almost constant features"] = (constant_values >= 95).sum()
+    result["Almost empty features"] = (empty_values >= 95).sum()
     return result

@@ -851,7 +851,7 @@ body {
   }
 
   .metric-row>div:nth-of-type(7):before {
-    content: "P-value";
+    content: "P-value/Distance";
   }
 
   .metric-row>div:nth-of-type(8):before {

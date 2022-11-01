@@ -29,8 +29,9 @@ def select_features_for_corr(
             unique values;
         - for kramer_v correlation matrix, we select categorical features which have > 1 unique values.
     Args:
-        reference_features_stats: all features data quality metrics.
-        target_name: name of target column.
+        num_feats: all numeric features
+        cat_feats: all categorical features
+        ref_feat_stats: all features data quality metrics.
     Returns:
         num_for_corr: list of feature names for pearson, spearman, and kendall correlation matrices.
         cat_for_corr: list of feature names for kramer_v correlation matrix.
