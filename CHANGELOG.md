@@ -1,4 +1,4 @@
-# [1.2.1](https://github.com/katonic-dev/explainit) (2022-11-1)
+# [1.2.1](https://github.com/katonic-dev/explainit) (2022-11-2)
 
 ---
 
