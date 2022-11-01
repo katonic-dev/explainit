@@ -123,7 +123,7 @@ def build(
     production_data = production_data[total_columns]
     if target_col_name not in total_columns:
         raise ValueError(
-            f"Given target column name {Style.BRIGHT + Fore.RED}{target_col_name}{Style.RESET_ALL} does not exist in the data."
+            f"Given target column name '{Style.BRIGHT + Fore.RED}{target_col_name}{Style.RESET_ALL}' does not exist in the data."
         )
 
     # Finding appropriate Statistical test for Individual feature.
