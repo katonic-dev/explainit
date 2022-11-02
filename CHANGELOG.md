@@ -1,8 +1,8 @@
-# [1.2.1](https://github.com/katonic-dev/explainit) (2022-11-2)
+# [1.3](https://github.com/katonic-dev/explainit) (2022-11-3)
 
 ---
 
-**Explainit 1.2.1 release introduces features & major bug fixes**
+**Explainit 1.3 release introduces features & major bug fixes**
 
 **Features**
 
@@ -10,6 +10,7 @@
 
 **Bug Fixes**
 
+- docs: Updated the port in docs ([dbc4617](https://github.com/katonic-dev/explainit/commit/dbc4617e9801290a29ad75a2c2cf51a08ab1afd0))
 - build: Updated pkg version ([cfea76d](https://github.com/katonic-dev/explainit/pull/41/commits/cfea76d7c9ad3040e65cef62737b2d2991bd7b16))
 - docs: Updated screenshots ([f194cd5](https://github.com/katonic-dev/explainit/pull/41/commits/f194cd5acf05063af1a48238c3dffbe0bed2419a))
 - docs: Added doc-string to build function ([615b8e3](https://github.com/katonic-dev/explainit/pull/41/commits/615b8e3b2178f3e705c9cb83c3840774e4b91588))
@@ -44,6 +45,7 @@
 
 **Merged Pull Requests**
 
+- update-ports ([5b1fcd8](https://github.com/katonic-dev/explainit/commit/5b1fcd8bd9421fb236ef6ea1ed91b34235d31edb))
 - 38-doc-fix-update-app-screenshots ([#38](https://github.com/katonic-dev/explainit/issues/38))([3a452f5](https://github.com/katonic-dev/explainit/pull/41/commits/3a452f58e9acaaf554f67ff4124a68b50f90f491))
 - 35-fr-add-unique-value-threshold-parameter ([#35](https://github.com/katonic-dev/explainit/issues/35))([2cdd07f](https://github.com/katonic-dev/explainit/pull/41/commits/2cdd07f7d3945275859b933e63bb12ab19fcada9))
 - 27-doc-fix-update-documentation-for-routes ([#27](https://github.com/katonic-dev/explainit/issues/27))([72bd696](https://github.com/katonic-dev/explainit/pull/41/commits/72bd696e4bd2c29be9cbaf1084441b74f0d5395e))
