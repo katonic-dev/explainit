@@ -49,8 +49,9 @@ In order to Initialize the dash application, you need to pass following paramete
 - `target_col_name`: Target column name
 - `target_col_type`: Target column type (`"num"`: Numerical or `"cat"`: Categorical)
 - `datetime_col_name`: Optional datetime column name (default: None)
-- `host`: Optional host address where you want to deploy/run the app eg: `"127.0.0.1"` or `"localhost"` (default: `"0.0.0.0"`)
-- `port`: Optional port where you want to deploy/run the app eg: `"8000"` (default: `"8050"`)
+- `unique_threshold`: Optional unique value threshold to separate `"Numerical"` and `"Categorical"` features (default: 15)
+- `host`: Optional host address where you want to deploy/run the app, eg: `"127.0.0.1"` or `"localhost"` (default: `"0.0.0.0"`)
+- `port`: Optional port where you want to deploy/run the app, eg: `"8050"` (default: `"8050"`)
 
 ### 4.1. Deploy the app on the `CUSTOM ROUTES`:
 If you are trying to deploy or run this application on the custom routes/path you can simply set a `ROUTE` environment variable in that running python environment, it will automatically deploy/run on that route.
@@ -62,14 +63,14 @@ build(
     target_col_name="bad_loan",
     target_col_type="cat",
     host='127.0.0.1',
-    port='8000'
+    port='8050'
 )
 ```
 Once you run the above cell you'll get to see the following output.
 
 ```bash
 Initiating Explainit App...
-Dash is running on http://127.0.0.1:8000/
+Dash is running on http://127.0.0.1:8050/
 
  * Serving Flask app "explainit.app" (lazy loading)
  * Environment: production
