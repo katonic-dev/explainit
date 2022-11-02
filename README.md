@@ -99,7 +99,7 @@ build(
   target_col_name="bad_loan",
   target_col_type="cat",
   host="127.0.0.1",
-  port=8000
+  port=8050
 )
 ```
 
