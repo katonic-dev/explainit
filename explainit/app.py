@@ -89,8 +89,8 @@ def build(
         target_col_type (str): Target or Label type (`"num"`: Numerical or `"cat"`: Categorical).
         datetime_col_name (str): Datetime column name (default: None).
         unique_threshold (int): Unique value threshold to separate `"Numerical"` and `"Categorical"` features (default: 15).
-        host (str): Host address where you want to deploy/run the app eg: `"127.0.0.1"` or `"localhost"` (default: `"0.0.0.0"`).
-        port (int): Port where you want to deploy/run the app eg: `"8000"` (default: `"8050"`).
+        host (str): Host address where you want to deploy/run the app, eg: `"127.0.0.1"` or `"localhost"` (default: `"0.0.0.0"`).
+        port (int): Port where you want to deploy/run the app, eg: `"8050"` (default: `"8050"`).
 
     Return:
         Returns the app instance with app url.
