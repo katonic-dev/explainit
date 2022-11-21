@@ -31,7 +31,7 @@ under the License.
 [![PyPI version](https://img.shields.io/pypi/v/explainit.svg)](https://pypi.python.org/pypi/explainit)
 [![PyPI](https://img.shields.io/pypi/pyversions/explainit.svg?maxAge=2592000)](https://pypi.python.org/pypi/explainit)
 [![test](https://github.com/katonic-dev/explainit/actions/workflows/tests.yml/badge.svg?branch=master&event=push)](https://github.com/katonic-dev/explainit/actions/workflows/tests.yml)
-[![Docs Latest](https://img.shields.io/badge/docs-latest-blue.svg)](https://docs.katonic.ai/)
+[![Docs Latest](https://img.shields.io/badge/docs-latest-blue.svg)](https://docs.katonic.ai/ExplainIT/introduction)
 
 ## What is Explainit?
 Explainit is a modern, enterprise-ready business intelligence web application that re-uses existing frameworks to manage and serve dashboard features to machine learning project lifecycle.
